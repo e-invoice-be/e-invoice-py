@@ -8,8 +8,8 @@ from datetime import datetime
 import httpx
 
 from ..types import (
+    DocumentType,
     DocumentState,
-    DocumentTypeInput,
     outbox_list_draft_documents_params,
     outbox_list_received_documents_params,
 )
@@ -24,8 +24,8 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
+from ..types.document_type import DocumentType
 from ..types.document_state import DocumentState
-from ..types.document_type_input import DocumentTypeInput
 from ..types.paginated_document_response import PaginatedDocumentResponse
 
 __all__ = ["OutboxResource", "AsyncOutboxResource"]
@@ -107,7 +107,7 @@ class OutboxResource(SyncAPIResource):
         search: Optional[str] | NotGiven = NOT_GIVEN,
         sender: Optional[str] | NotGiven = NOT_GIVEN,
         state: Optional[DocumentState] | NotGiven = NOT_GIVEN,
-        type: Optional[DocumentTypeInput] | NotGiven = NOT_GIVEN,
+        type: Optional[DocumentType] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -244,7 +244,7 @@ class AsyncOutboxResource(AsyncAPIResource):
         search: Optional[str] | NotGiven = NOT_GIVEN,
         sender: Optional[str] | NotGiven = NOT_GIVEN,
         state: Optional[DocumentState] | NotGiven = NOT_GIVEN,
-        type: Optional[DocumentTypeInput] | NotGiven = NOT_GIVEN,
+        type: Optional[DocumentType] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from .certificate import Certificate as Certificate
 from .currency_code import CurrencyCode as CurrencyCode
+from .document_type import DocumentType as DocumentType
 from .document_state import DocumentState as DocumentState
 from .webhook_response import WebhookResponse as WebhookResponse
 from .document_response import DocumentResponse as DocumentResponse
 from .inbox_list_params import InboxListParams as InboxListParams
 from .document_direction import DocumentDirection as DocumentDirection
-from .document_type_input import DocumentTypeInput as DocumentTypeInput
 from .document_send_params import DocumentSendParams as DocumentSendParams
 from .unit_of_measure_code import UnitOfMeasureCode as UnitOfMeasureCode
 from .webhook_create_params import WebhookCreateParams as WebhookCreateParams

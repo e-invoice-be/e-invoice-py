@@ -7,8 +7,8 @@ from datetime import datetime
 from typing_extensions import Annotated, TypedDict
 
 from .._utils import PropertyInfo
+from .document_type import DocumentType
 from .document_state import DocumentState
-from .document_type_input import DocumentTypeInput
 
 __all__ = ["InboxListParams"]
 
@@ -35,5 +35,5 @@ class InboxListParams(TypedDict, total=False):
     state: Optional[DocumentState]
     """Filter by document state"""
 
-    type: Optional[DocumentTypeInput]
+    type: Optional[DocumentType]
     """Filter by document type"""
