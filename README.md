@@ -1,12 +1,11 @@
-# E Invoice Python API library
+# e-invoice.be Python API library
 
 [![PyPI version](https://img.shields.io/pypi/v/e_invoice_api.svg)](https://pypi.org/project/e_invoice_api/)
 
-The E Invoice Python library provides convenient access to the E Invoice REST API from any Python 3.8+
+The e-invoice.be Python library provides convenient access to the e-invoice.be REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
-It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
