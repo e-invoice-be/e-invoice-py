@@ -8,9 +8,9 @@ from typing_extensions import Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .currency_code import CurrencyCode
+from .document_type import DocumentType
 from .document_state import DocumentState
 from .document_direction import DocumentDirection
-from .document_type_input import DocumentTypeInput
 from .unit_of_measure_code import UnitOfMeasureCode
 from .payment_detail_create_param import PaymentDetailCreateParam
 from .document_attachment_create_param import DocumentAttachmentCreateParam
@@ -44,7 +44,7 @@ class DocumentCreateParams(TypedDict, total=False):
 
     direction: DocumentDirection
 
-    document_type: DocumentTypeInput
+    document_type: DocumentType
 
     due_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
 

@@ -17,9 +17,9 @@ from .ubl import (
 )
 from ...types import (
     CurrencyCode,
+    DocumentType,
     DocumentState,
     DocumentDirection,
-    DocumentTypeInput,
     document_send_params,
     document_create_params,
 )
@@ -43,10 +43,10 @@ from .attachments import (
 )
 from ..._base_client import make_request_options
 from ...types.currency_code import CurrencyCode
+from ...types.document_type import DocumentType
 from ...types.document_state import DocumentState
 from ...types.document_response import DocumentResponse
 from ...types.document_direction import DocumentDirection
-from ...types.document_type_input import DocumentTypeInput
 from ...types.document_delete_response import DocumentDeleteResponse
 from ...types.payment_detail_create_param import PaymentDetailCreateParam
 from ...types.document_attachment_create_param import DocumentAttachmentCreateParam
@@ -97,7 +97,7 @@ class DocumentsResource(SyncAPIResource):
         customer_name: Optional[str] | NotGiven = NOT_GIVEN,
         customer_tax_id: Optional[str] | NotGiven = NOT_GIVEN,
         direction: DocumentDirection | NotGiven = NOT_GIVEN,
-        document_type: DocumentTypeInput | NotGiven = NOT_GIVEN,
+        document_type: DocumentType | NotGiven = NOT_GIVEN,
         due_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -362,7 +362,7 @@ class AsyncDocumentsResource(AsyncAPIResource):
         customer_name: Optional[str] | NotGiven = NOT_GIVEN,
         customer_tax_id: Optional[str] | NotGiven = NOT_GIVEN,
         direction: DocumentDirection | NotGiven = NOT_GIVEN,
-        document_type: DocumentTypeInput | NotGiven = NOT_GIVEN,
+        document_type: DocumentType | NotGiven = NOT_GIVEN,
         due_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_id: Optional[str] | NotGiven = NOT_GIVEN,

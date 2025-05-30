@@ -9,6 +9,7 @@ from e_invoice_api.types import (
     DocumentCreate,
     DocumentDirection,
     DocumentResponse,
+    DocumentType,
     PaymentDetailCreate,
     UnitOfMeasureCode,
     DocumentDeleteResponse,
@@ -58,7 +59,7 @@ Methods:
 Types:
 
 ```python
-from e_invoice_api.types import DocumentState, DocumentTypeInput, PaginatedDocumentResponse
+from e_invoice_api.types import DocumentState, PaginatedDocumentResponse
 ```
 
 Methods:

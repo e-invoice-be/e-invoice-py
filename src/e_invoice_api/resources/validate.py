@@ -9,9 +9,9 @@ import httpx
 
 from ..types import (
     CurrencyCode,
+    DocumentType,
     DocumentState,
     DocumentDirection,
-    DocumentTypeInput,
     validate_validate_ubl_params,
     validate_validate_json_params,
     validate_validate_peppol_id_params,
@@ -28,9 +28,9 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.currency_code import CurrencyCode
+from ..types.document_type import DocumentType
 from ..types.document_state import DocumentState
 from ..types.document_direction import DocumentDirection
-from ..types.document_type_input import DocumentTypeInput
 from ..types.ubl_document_validation import UblDocumentValidation
 from ..types.payment_detail_create_param import PaymentDetailCreateParam
 from ..types.document_attachment_create_param import DocumentAttachmentCreateParam
@@ -74,7 +74,7 @@ class ValidateResource(SyncAPIResource):
         customer_name: Optional[str] | NotGiven = NOT_GIVEN,
         customer_tax_id: Optional[str] | NotGiven = NOT_GIVEN,
         direction: DocumentDirection | NotGiven = NOT_GIVEN,
-        document_type: DocumentTypeInput | NotGiven = NOT_GIVEN,
+        document_type: DocumentType | NotGiven = NOT_GIVEN,
         due_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -298,7 +298,7 @@ class AsyncValidateResource(AsyncAPIResource):
         customer_name: Optional[str] | NotGiven = NOT_GIVEN,
         customer_tax_id: Optional[str] | NotGiven = NOT_GIVEN,
         direction: DocumentDirection | NotGiven = NOT_GIVEN,
-        document_type: DocumentTypeInput | NotGiven = NOT_GIVEN,
+        document_type: DocumentType | NotGiven = NOT_GIVEN,
         due_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_date: Union[str, date, None] | NotGiven = NOT_GIVEN,
         invoice_id: Optional[str] | NotGiven = NOT_GIVEN,

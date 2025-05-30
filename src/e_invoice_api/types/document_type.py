@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["DocumentTypeInput"]
+__all__ = ["DocumentType"]
 
-DocumentTypeInput: TypeAlias = Literal["INVOICE", "CREDIT_NOTE"]
+DocumentType: TypeAlias = Literal["INVOICE", "CREDIT_NOTE"]

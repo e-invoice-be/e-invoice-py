@@ -27,7 +27,7 @@ class Issue(BaseModel):
 class UblDocumentValidation(BaseModel):
     id: str
 
-    file_name: str
+    file_name: Optional[str] = None
 
     is_valid: bool
 
