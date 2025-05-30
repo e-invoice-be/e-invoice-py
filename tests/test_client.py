@@ -21,12 +21,12 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI, APIResponseValidationError
+from e_invoice_api import EInvoice, AsyncEInvoice, APIResponseValidationError
 from e_invoice_api._types import Omit
 from e_invoice_api._utils import maybe_transform
 from e_invoice_api._models import BaseModel, FinalRequestOptions
 from e_invoice_api._constants import RAW_RESPONSE_HEADER
-from e_invoice_api._exceptions import APIStatusError, APITimeoutError, EInvoiceAPIError, APIResponseValidationError
+from e_invoice_api._exceptions import EInvoiceError, APIStatusError, APITimeoutError, APIResponseValidationError
 from e_invoice_api._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -51,7 +51,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
 
 
-def _get_open_connections(client: EInvoiceAPI | AsyncEInvoiceAPI) -> int:
+def _get_open_connections(client: EInvoice | AsyncEInvoice) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -59,8 +59,8 @@ def _get_open_connections(client: EInvoiceAPI | AsyncEInvoiceAPI) -> int:
     return len(pool._requests)
 
 
-class TestEInvoiceAPI:
-    client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+class TestEInvoice:
+    client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -107,7 +107,7 @@ class TestEInvoiceAPI:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = EInvoiceAPI(
+        client = EInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -141,7 +141,7 @@ class TestEInvoiceAPI:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = EInvoiceAPI(
+        client = EInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -266,7 +266,7 @@ class TestEInvoiceAPI:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = EInvoiceAPI(
+        client = EInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -277,7 +277,7 @@ class TestEInvoiceAPI:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = EInvoiceAPI(
+            client = EInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -287,7 +287,7 @@ class TestEInvoiceAPI:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = EInvoiceAPI(
+            client = EInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -297,7 +297,7 @@ class TestEInvoiceAPI:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = EInvoiceAPI(
+            client = EInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -308,7 +308,7 @@ class TestEInvoiceAPI:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                EInvoiceAPI(
+                EInvoice(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -316,14 +316,14 @@ class TestEInvoiceAPI:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = EInvoiceAPI(
+        client = EInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = EInvoiceAPI(
+        client2 = EInvoice(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -337,17 +337,17 @@ class TestEInvoiceAPI:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EInvoiceAPIError):
+        with pytest.raises(EInvoiceError):
             with update_env(**{"E_INVOICE_API_KEY": Omit()}):
-                client2 = EInvoiceAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
+                client2 = EInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
-        client = EInvoiceAPI(
+        client = EInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -461,7 +461,7 @@ class TestEInvoiceAPI:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: EInvoiceAPI) -> None:
+    def test_multipart_repeating_array(self, client: EInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -548,9 +548,7 @@ class TestEInvoiceAPI:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = EInvoiceAPI(
-            base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
-        )
+        client = EInvoice(base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -558,17 +556,25 @@ class TestEInvoiceAPI:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(E_INVOICE_API_BASE_URL="http://localhost:5000/from/env"):
-            client = EInvoiceAPI(api_key=api_key, _strict_response_validation=True)
+        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
+            client = EInvoice(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
+        # explicit environment arg requires explicitness
+        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                EInvoice(api_key=api_key, _strict_response_validation=True, environment="production")
+
+            client = EInvoice(
+                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
+            )
+            assert str(client.base_url).startswith("https://api.e-invoice.be")
+
     @pytest.mark.parametrize(
         "client",
         [
-            EInvoiceAPI(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EInvoiceAPI(
+            EInvoice(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -577,7 +583,7 @@ class TestEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: EInvoiceAPI) -> None:
+    def test_base_url_trailing_slash(self, client: EInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -590,10 +596,8 @@ class TestEInvoiceAPI:
     @pytest.mark.parametrize(
         "client",
         [
-            EInvoiceAPI(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EInvoiceAPI(
+            EInvoice(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -602,7 +606,7 @@ class TestEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: EInvoiceAPI) -> None:
+    def test_base_url_no_trailing_slash(self, client: EInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -615,10 +619,8 @@ class TestEInvoiceAPI:
     @pytest.mark.parametrize(
         "client",
         [
-            EInvoiceAPI(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EInvoiceAPI(
+            EInvoice(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -627,7 +629,7 @@ class TestEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: EInvoiceAPI) -> None:
+    def test_absolute_request_url(self, client: EInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -638,7 +640,7 @@ class TestEInvoiceAPI:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -649,7 +651,7 @@ class TestEInvoiceAPI:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -670,9 +672,7 @@ class TestEInvoiceAPI:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            EInvoiceAPI(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
-            )
+            EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -681,12 +681,12 @@ class TestEInvoiceAPI:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -714,7 +714,7 @@ class TestEInvoiceAPI:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -757,7 +757,7 @@ class TestEInvoiceAPI:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
         self,
-        client: EInvoiceAPI,
+        client: EInvoice,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -786,7 +786,7 @@ class TestEInvoiceAPI:
     @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
-        self, client: EInvoiceAPI, failures_before_success: int, respx_mock: MockRouter
+        self, client: EInvoice, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -809,7 +809,7 @@ class TestEInvoiceAPI:
     @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
-        self, client: EInvoiceAPI, failures_before_success: int, respx_mock: MockRouter
+        self, client: EInvoice, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -829,8 +829,8 @@ class TestEInvoiceAPI:
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
-class TestAsyncEInvoiceAPI:
-    client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+class TestAsyncEInvoice:
+    client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -879,7 +879,7 @@ class TestAsyncEInvoiceAPI:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -913,7 +913,7 @@ class TestAsyncEInvoiceAPI:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -1038,7 +1038,7 @@ class TestAsyncEInvoiceAPI:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -1049,7 +1049,7 @@ class TestAsyncEInvoiceAPI:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncEInvoiceAPI(
+            client = AsyncEInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1059,7 +1059,7 @@ class TestAsyncEInvoiceAPI:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncEInvoiceAPI(
+            client = AsyncEInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1069,7 +1069,7 @@ class TestAsyncEInvoiceAPI:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncEInvoiceAPI(
+            client = AsyncEInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1080,7 +1080,7 @@ class TestAsyncEInvoiceAPI:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncEInvoiceAPI(
+                AsyncEInvoice(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -1088,14 +1088,14 @@ class TestAsyncEInvoiceAPI:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = AsyncEInvoiceAPI(
+        client2 = AsyncEInvoice(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -1109,17 +1109,17 @@ class TestAsyncEInvoiceAPI:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EInvoiceAPIError):
+        with pytest.raises(EInvoiceError):
             with update_env(**{"E_INVOICE_API_KEY": Omit()}):
-                client2 = AsyncEInvoiceAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
+                client2 = AsyncEInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1233,7 +1233,7 @@ class TestAsyncEInvoiceAPI:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncEInvoiceAPI) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncEInvoice) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -1320,7 +1320,7 @@ class TestAsyncEInvoiceAPI:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = AsyncEInvoiceAPI(
+        client = AsyncEInvoice(
             base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -1330,17 +1330,27 @@ class TestAsyncEInvoiceAPI:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(E_INVOICE_API_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncEInvoiceAPI(api_key=api_key, _strict_response_validation=True)
+        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncEInvoice(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
+        # explicit environment arg requires explicitness
+        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                AsyncEInvoice(api_key=api_key, _strict_response_validation=True, environment="production")
+
+            client = AsyncEInvoice(
+                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
+            )
+            assert str(client.base_url).startswith("https://api.e-invoice.be")
+
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1349,7 +1359,7 @@ class TestAsyncEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: AsyncEInvoiceAPI) -> None:
+    def test_base_url_trailing_slash(self, client: AsyncEInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1362,10 +1372,10 @@ class TestAsyncEInvoiceAPI:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1374,7 +1384,7 @@ class TestAsyncEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: AsyncEInvoiceAPI) -> None:
+    def test_base_url_no_trailing_slash(self, client: AsyncEInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1387,10 +1397,10 @@ class TestAsyncEInvoiceAPI:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1399,7 +1409,7 @@ class TestAsyncEInvoiceAPI:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: AsyncEInvoiceAPI) -> None:
+    def test_absolute_request_url(self, client: AsyncEInvoice) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1410,7 +1420,7 @@ class TestAsyncEInvoiceAPI:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1422,7 +1432,7 @@ class TestAsyncEInvoiceAPI:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1444,7 +1454,7 @@ class TestAsyncEInvoiceAPI:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncEInvoiceAPI(
+            AsyncEInvoice(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
             )
 
@@ -1456,12 +1466,12 @@ class TestAsyncEInvoiceAPI:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1490,7 +1500,7 @@ class TestAsyncEInvoiceAPI:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -1534,7 +1544,7 @@ class TestAsyncEInvoiceAPI:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
         self,
-        async_client: AsyncEInvoiceAPI,
+        async_client: AsyncEInvoice,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -1564,7 +1574,7 @@ class TestAsyncEInvoiceAPI:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
-        self, async_client: AsyncEInvoiceAPI, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncEInvoice, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1588,7 +1598,7 @@ class TestAsyncEInvoiceAPI:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncEInvoiceAPI, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncEInvoice, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 

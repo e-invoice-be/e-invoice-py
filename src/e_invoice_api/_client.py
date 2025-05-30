@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
-from typing_extensions import Self, override
+from typing import Any, Dict, Union, Mapping, cast
+from typing_extensions import Self, Literal, override
 
 import httpx
 
@@ -23,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._version import __version__
 from .resources import inbox, lookup, outbox, validate, webhooks
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError, EInvoiceAPIError
+from ._exceptions import EInvoiceError, APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -32,35 +32,44 @@ from ._base_client import (
 from .resources.documents import documents
 
 __all__ = [
+    "ENVIRONMENTS",
     "Timeout",
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "EInvoiceAPI",
-    "AsyncEInvoiceAPI",
+    "EInvoice",
+    "AsyncEInvoice",
     "Client",
     "AsyncClient",
 ]
 
+ENVIRONMENTS: Dict[str, str] = {
+    "production": "https://api.e-invoice.be",
+    "development": "https://api-dev.e-invoice.be",
+}
 
-class EInvoiceAPI(SyncAPIClient):
+
+class EInvoice(SyncAPIClient):
     documents: documents.DocumentsResource
     inbox: inbox.InboxResource
     outbox: outbox.OutboxResource
     validate: validate.ValidateResource
     lookup: lookup.LookupResource
     webhooks: webhooks.WebhooksResource
-    with_raw_response: EInvoiceAPIWithRawResponse
-    with_streaming_response: EInvoiceAPIWithStreamedResponse
+    with_raw_response: EInvoiceWithRawResponse
+    with_streaming_response: EInvoiceWithStreamedResponse
 
     # client options
     api_key: str
+
+    _environment: Literal["production", "development"] | NotGiven
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        environment: Literal["production", "development"] | NotGiven = NOT_GIVEN,
+        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -79,22 +88,43 @@ class EInvoiceAPI(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous EInvoiceAPI client instance.
+        """Construct a new synchronous EInvoice client instance.
 
         This automatically infers the `api_key` argument from the `E_INVOICE_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
             api_key = os.environ.get("E_INVOICE_API_KEY")
         if api_key is None:
-            raise EInvoiceAPIError(
+            raise EInvoiceError(
                 "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_KEY environment variable"
             )
         self.api_key = api_key
 
-        if base_url is None:
-            base_url = os.environ.get("E_INVOICE_API_BASE_URL")
-        if base_url is None:
-            base_url = f"https://api.example.com"
+        self._environment = environment
+
+        base_url_env = os.environ.get("E_INVOICE_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `E_INVOICE_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -113,8 +143,8 @@ class EInvoiceAPI(SyncAPIClient):
         self.validate = validate.ValidateResource(self)
         self.lookup = lookup.LookupResource(self)
         self.webhooks = webhooks.WebhooksResource(self)
-        self.with_raw_response = EInvoiceAPIWithRawResponse(self)
-        self.with_streaming_response = EInvoiceAPIWithStreamedResponse(self)
+        self.with_raw_response = EInvoiceWithRawResponse(self)
+        self.with_streaming_response = EInvoiceWithStreamedResponse(self)
 
     @property
     @override
@@ -140,6 +170,7 @@ class EInvoiceAPI(SyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        environment: Literal["production", "development"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -175,6 +206,7 @@ class EInvoiceAPI(SyncAPIClient):
         return self.__class__(
             api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -221,24 +253,27 @@ class EInvoiceAPI(SyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class AsyncEInvoiceAPI(AsyncAPIClient):
+class AsyncEInvoice(AsyncAPIClient):
     documents: documents.AsyncDocumentsResource
     inbox: inbox.AsyncInboxResource
     outbox: outbox.AsyncOutboxResource
     validate: validate.AsyncValidateResource
     lookup: lookup.AsyncLookupResource
     webhooks: webhooks.AsyncWebhooksResource
-    with_raw_response: AsyncEInvoiceAPIWithRawResponse
-    with_streaming_response: AsyncEInvoiceAPIWithStreamedResponse
+    with_raw_response: AsyncEInvoiceWithRawResponse
+    with_streaming_response: AsyncEInvoiceWithStreamedResponse
 
     # client options
     api_key: str
+
+    _environment: Literal["production", "development"] | NotGiven
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        environment: Literal["production", "development"] | NotGiven = NOT_GIVEN,
+        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -257,22 +292,43 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncEInvoiceAPI client instance.
+        """Construct a new async AsyncEInvoice client instance.
 
         This automatically infers the `api_key` argument from the `E_INVOICE_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
             api_key = os.environ.get("E_INVOICE_API_KEY")
         if api_key is None:
-            raise EInvoiceAPIError(
+            raise EInvoiceError(
                 "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_KEY environment variable"
             )
         self.api_key = api_key
 
-        if base_url is None:
-            base_url = os.environ.get("E_INVOICE_API_BASE_URL")
-        if base_url is None:
-            base_url = f"https://api.example.com"
+        self._environment = environment
+
+        base_url_env = os.environ.get("E_INVOICE_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `E_INVOICE_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -291,8 +347,8 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         self.validate = validate.AsyncValidateResource(self)
         self.lookup = lookup.AsyncLookupResource(self)
         self.webhooks = webhooks.AsyncWebhooksResource(self)
-        self.with_raw_response = AsyncEInvoiceAPIWithRawResponse(self)
-        self.with_streaming_response = AsyncEInvoiceAPIWithStreamedResponse(self)
+        self.with_raw_response = AsyncEInvoiceWithRawResponse(self)
+        self.with_streaming_response = AsyncEInvoiceWithStreamedResponse(self)
 
     @property
     @override
@@ -318,6 +374,7 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        environment: Literal["production", "development"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -353,6 +410,7 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         return self.__class__(
             api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -399,8 +457,8 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class EInvoiceAPIWithRawResponse:
-    def __init__(self, client: EInvoiceAPI) -> None:
+class EInvoiceWithRawResponse:
+    def __init__(self, client: EInvoice) -> None:
         self.documents = documents.DocumentsResourceWithRawResponse(client.documents)
         self.inbox = inbox.InboxResourceWithRawResponse(client.inbox)
         self.outbox = outbox.OutboxResourceWithRawResponse(client.outbox)
@@ -409,8 +467,8 @@ class EInvoiceAPIWithRawResponse:
         self.webhooks = webhooks.WebhooksResourceWithRawResponse(client.webhooks)
 
 
-class AsyncEInvoiceAPIWithRawResponse:
-    def __init__(self, client: AsyncEInvoiceAPI) -> None:
+class AsyncEInvoiceWithRawResponse:
+    def __init__(self, client: AsyncEInvoice) -> None:
         self.documents = documents.AsyncDocumentsResourceWithRawResponse(client.documents)
         self.inbox = inbox.AsyncInboxResourceWithRawResponse(client.inbox)
         self.outbox = outbox.AsyncOutboxResourceWithRawResponse(client.outbox)
@@ -419,8 +477,8 @@ class AsyncEInvoiceAPIWithRawResponse:
         self.webhooks = webhooks.AsyncWebhooksResourceWithRawResponse(client.webhooks)
 
 
-class EInvoiceAPIWithStreamedResponse:
-    def __init__(self, client: EInvoiceAPI) -> None:
+class EInvoiceWithStreamedResponse:
+    def __init__(self, client: EInvoice) -> None:
         self.documents = documents.DocumentsResourceWithStreamingResponse(client.documents)
         self.inbox = inbox.InboxResourceWithStreamingResponse(client.inbox)
         self.outbox = outbox.OutboxResourceWithStreamingResponse(client.outbox)
@@ -429,8 +487,8 @@ class EInvoiceAPIWithStreamedResponse:
         self.webhooks = webhooks.WebhooksResourceWithStreamingResponse(client.webhooks)
 
 
-class AsyncEInvoiceAPIWithStreamedResponse:
-    def __init__(self, client: AsyncEInvoiceAPI) -> None:
+class AsyncEInvoiceWithStreamedResponse:
+    def __init__(self, client: AsyncEInvoice) -> None:
         self.documents = documents.AsyncDocumentsResourceWithStreamingResponse(client.documents)
         self.inbox = inbox.AsyncInboxResourceWithStreamingResponse(client.inbox)
         self.outbox = outbox.AsyncOutboxResourceWithStreamingResponse(client.outbox)
@@ -439,6 +497,6 @@ class AsyncEInvoiceAPIWithStreamedResponse:
         self.webhooks = webhooks.AsyncWebhooksResourceWithStreamingResponse(client.webhooks)
 
 
-Client = EInvoiceAPI
+Client = EInvoice
 
-AsyncClient = AsyncEInvoiceAPI
+AsyncClient = AsyncEInvoice

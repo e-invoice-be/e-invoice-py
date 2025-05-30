@@ -9,7 +9,6 @@ from e_invoice_api.types import (
     DocumentCreate,
     DocumentDirection,
     DocumentResponse,
-    DocumentType,
     PaymentDetailCreate,
     UnitOfMeasureCode,
     DocumentDeleteResponse,

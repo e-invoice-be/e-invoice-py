@@ -1,8 +1,8 @@
-# E Invoice API Python API library
+# E Invoice Python API library
 
 [![PyPI version](https://img.shields.io/pypi/v/e_invoice_api.svg)](https://pypi.org/project/e_invoice_api/)
 
-The E Invoice API Python library provides convenient access to the E Invoice API REST API from any Python 3.8+
+The E Invoice Python library provides convenient access to the E Invoice REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -28,10 +28,12 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
-client = EInvoiceAPI(
+client = EInvoice(
     api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="development",
 )
 
 document_response = client.documents.create()
@@ -45,15 +47,17 @@ so that your API Key is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncEInvoiceAPI` instead of `EInvoiceAPI` and use `await` with each API call:
+Simply import `AsyncEInvoice` instead of `EInvoice` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from e_invoice_api import AsyncEInvoiceAPI
+from e_invoice_api import AsyncEInvoice
 
-client = AsyncEInvoiceAPI(
+client = AsyncEInvoice(
     api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="development",
 )
 
 
@@ -82,9 +86,9 @@ Request parameters that correspond to file uploads can be passed as `bytes`, or 
 
 ```python
 from pathlib import Path
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
-client = EInvoiceAPI()
+client = EInvoice()
 
 client.documents.attachments.add(
     document_id="document_id",
@@ -105,9 +109,9 @@ All errors inherit from `e_invoice_api.APIError`.
 
 ```python
 import e_invoice_api
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
-client = EInvoiceAPI()
+client = EInvoice()
 
 try:
     client.documents.create()
@@ -144,10 +148,10 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
 # Configure the default for all requests:
-client = EInvoiceAPI(
+client = EInvoice(
     # default is 2
     max_retries=0,
 )
@@ -162,16 +166,16 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
 # Configure the default for all requests:
-client = EInvoiceAPI(
+client = EInvoice(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = EInvoiceAPI(
+client = EInvoice(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -189,10 +193,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `E_INVOICE_API_LOG` to `info`.
+You can enable logging by setting the environment variable `E_INVOICE_LOG` to `info`.
 
 ```shell
-$ export E_INVOICE_API_LOG=info
+$ export E_INVOICE_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -214,9 +218,9 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
-client = EInvoiceAPI()
+client = EInvoice()
 response = client.documents.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
@@ -288,10 +292,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from e_invoice_api import EInvoiceAPI, DefaultHttpxClient
+from e_invoice_api import EInvoice, DefaultHttpxClient
 
-client = EInvoiceAPI(
-    # Or use the `E_INVOICE_API_BASE_URL` env var
+client = EInvoice(
+    # Or use the `E_INVOICE_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -311,9 +315,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from e_invoice_api import EInvoiceAPI
+from e_invoice_api import EInvoice
 
-with EInvoiceAPI() as client:
+with EInvoice() as client:
   # make requests here
   ...
 

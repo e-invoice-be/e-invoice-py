@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Iterator, AsyncIterator
 import pytest
 from pytest_asyncio import is_async_test
 
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest  # pyright: ignore[reportPrivateImportUsage]
@@ -32,20 +32,20 @@ api_key = "My API Key"
 
 
 @pytest.fixture(scope="session")
-def client(request: FixtureRequest) -> Iterator[EInvoiceAPI]:
+def client(request: FixtureRequest) -> Iterator[EInvoice]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    with EInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=strict) as client:
+    with EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=strict) as client:
         yield client
 
 
 @pytest.fixture(scope="session")
-async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncEInvoiceAPI]:
+async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncEInvoice]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    async with AsyncEInvoiceAPI(base_url=base_url, api_key=api_key, _strict_response_validation=strict) as client:
+    async with AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=strict) as client:
         yield client

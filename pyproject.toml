@@ -1,11 +1,11 @@
 [project]
 name = "e_invoice_api"
 version = "0.0.1-alpha.0"
-description = "The official Python library for the e-invoice-api API"
+description = "The official Python library for the e-invoice API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "E Invoice API", email = "support@e-invoice.be" },
+{ name = "E Invoice", email = "support@e-invoice.be" },
 ]
 dependencies = [
     "httpx>=0.23.0, <1",

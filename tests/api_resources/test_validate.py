@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
     UblDocumentValidation,
     ValidateValidatePeppolIDResponse,
@@ -23,13 +23,13 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_validate_json(self, client: EInvoiceAPI) -> None:
+    def test_method_validate_json(self, client: EInvoice) -> None:
         validate = client.validate.validate_json()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_validate_json_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_validate_json_with_all_params(self, client: EInvoice) -> None:
         validate = client.validate.validate_json(
             amount_due=0,
             attachments=[
@@ -108,7 +108,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_validate_json(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_validate_json(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_json()
 
         assert response.is_closed is True
@@ -118,7 +118,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_validate_json(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_validate_json(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_json() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -130,7 +130,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_validate_peppol_id(self, client: EInvoiceAPI) -> None:
+    def test_method_validate_peppol_id(self, client: EInvoice) -> None:
         validate = client.validate.validate_peppol_id(
             peppol_id="peppol_id",
         )
@@ -138,7 +138,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_validate_peppol_id(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_validate_peppol_id(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_peppol_id(
             peppol_id="peppol_id",
         )
@@ -150,7 +150,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_validate_peppol_id(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_validate_peppol_id(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_peppol_id(
             peppol_id="peppol_id",
         ) as response:
@@ -164,7 +164,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_validate_ubl(self, client: EInvoiceAPI) -> None:
+    def test_method_validate_ubl(self, client: EInvoice) -> None:
         validate = client.validate.validate_ubl(
             file=b"raw file contents",
         )
@@ -172,7 +172,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_validate_ubl(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_validate_ubl(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_ubl(
             file=b"raw file contents",
         )
@@ -184,7 +184,7 @@ class TestValidate:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_validate_ubl(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_validate_ubl(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_ubl(
             file=b"raw file contents",
         ) as response:
@@ -202,13 +202,13 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_validate_json(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_validate_json(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_json()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_validate_json_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_validate_json_with_all_params(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_json(
             amount_due=0,
             attachments=[
@@ -287,7 +287,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_validate_json(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_validate_json(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_json()
 
         assert response.is_closed is True
@@ -297,7 +297,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_validate_json(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_validate_json(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_json() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -309,7 +309,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_validate_peppol_id(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_peppol_id(
             peppol_id="peppol_id",
         )
@@ -317,7 +317,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_validate_peppol_id(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_peppol_id(
             peppol_id="peppol_id",
         )
@@ -329,7 +329,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_validate_peppol_id(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_peppol_id(
             peppol_id="peppol_id",
         ) as response:
@@ -343,7 +343,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_validate_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_ubl(
             file=b"raw file contents",
         )
@@ -351,7 +351,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_validate_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_ubl(
             file=b"raw file contents",
         )
@@ -363,7 +363,7 @@ class TestAsyncValidate:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_validate_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_ubl(
             file=b"raw file contents",
         ) as response:
