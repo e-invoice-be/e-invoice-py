@@ -15,8 +15,8 @@ The REST API documentation can be found on [api.e-invoice.be](https://api.e-invo
 ## Installation
 
 ```sh
-# install from this staging repo
-pip install git+ssh://git@github.com/stainless-sdks/e-invoice-api-python.git
+# install from the production repo
+pip install git+ssh://git@github.com/e-invoice-be/e-invoice-api-sdk-py.git
 ```
 
 > [!NOTE]
@@ -79,6 +79,69 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
+
+## Pagination
+
+List methods in the E Invoice API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from e_invoice_api import EInvoice
+
+client = EInvoice()
+
+all_inboxes = []
+# Automatically fetches more pages as needed.
+for inbox in client.inbox.list():
+    # Do something with inbox here
+    all_inboxes.append(inbox)
+print(all_inboxes)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from e_invoice_api import AsyncEInvoice
+
+client = AsyncEInvoice()
+
+
+async def main() -> None:
+    all_inboxes = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for inbox in client.inbox.list():
+        all_inboxes.append(inbox)
+    print(all_inboxes)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.inbox.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.items)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.inbox.list()
+
+print(f"page number: {first_page.page}")  # => "page number: 1"
+for inbox in first_page.items:
+    print(inbox.id)
+
+# Remove `await` for non-async usage.
+```
 
 ## File uploads
 
@@ -228,9 +291,9 @@ document = response.parse()  # get the object that `documents.create()` would ha
 print(document.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/e-invoice-api-python/tree/main/src/e_invoice_api/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/e-invoice-be/e-invoice-api-sdk-py/tree/main/src/e_invoice_api/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/e-invoice-api-python/tree/main/src/e_invoice_api/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/e-invoice-be/e-invoice-api-sdk-py/tree/main/src/e_invoice_api/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -334,7 +397,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/e-invoice-api-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/e-invoice-be/e-invoice-api-sdk-py/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
