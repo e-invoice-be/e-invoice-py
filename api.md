@@ -59,7 +59,7 @@ Methods:
 Types:
 
 ```python
-from e_invoice_api.types import DocumentState, PaginatedDocumentResponse
+from e_invoice_api.types import DocumentState, DocumentTypeInput, PaginatedDocumentResponse
 ```
 
 Methods:
