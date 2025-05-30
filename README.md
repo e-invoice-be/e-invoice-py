@@ -10,7 +10,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [api.e-invoice.be](https://api.e-invoice.be). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -31,7 +31,7 @@ import os
 from e_invoice_api import EInvoiceAPI
 
 client = EInvoiceAPI(
-    api_key=os.environ.get("E_INVOICE_API_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
 )
 
 document_response = client.documents.create()
@@ -40,7 +40,7 @@ print(document_response.id)
 
 While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `E_INVOICE_API_API_KEY="My API Key"` to your `.env` file
+to add `E_INVOICE_API_KEY="My API Key"` to your `.env` file
 so that your API Key is not stored in source control.
 
 ## Async usage
@@ -53,7 +53,7 @@ import asyncio
 from e_invoice_api import AsyncEInvoiceAPI
 
 client = AsyncEInvoiceAPI(
-    api_key=os.environ.get("E_INVOICE_API_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
 )
 
 
@@ -86,7 +86,8 @@ from e_invoice_api import EInvoiceAPI
 
 client = EInvoiceAPI()
 
-client.documents.create_from_pdf(
+client.documents.attachments.add(
+    document_id="document_id",
     file=Path("/path/to/file"),
 )
 ```

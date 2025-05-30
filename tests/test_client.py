@@ -342,7 +342,7 @@ class TestEInvoiceAPI:
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
         with pytest.raises(EInvoiceAPIError):
-            with update_env(**{"E_INVOICE_API_API_KEY": Omit()}):
+            with update_env(**{"E_INVOICE_API_KEY": Omit()}):
                 client2 = EInvoiceAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
@@ -1114,7 +1114,7 @@ class TestAsyncEInvoiceAPI:
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
         with pytest.raises(EInvoiceAPIError):
-            with update_env(**{"E_INVOICE_API_API_KEY": Omit()}):
+            with update_env(**{"E_INVOICE_API_KEY": Omit()}):
                 client2 = AsyncEInvoiceAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 

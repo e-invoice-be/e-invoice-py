@@ -21,7 +21,6 @@ from .._base_client import make_request_options
 from ..types.webhook_response import WebhookResponse
 from ..types.webhook_list_response import WebhookListResponse
 from ..types.webhook_delete_response import WebhookDeleteResponse
-from ..types.webhook_history_response import WebhookHistoryResponse
 
 __all__ = ["WebhooksResource", "AsyncWebhooksResource"]
 
@@ -216,39 +215,6 @@ class WebhooksResource(SyncAPIResource):
             cast_to=WebhookDeleteResponse,
         )
 
-    def history(
-        self,
-        webhook_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> WebhookHistoryResponse:
-        """
-        Get the history of a webhook
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not webhook_id:
-            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
-        return self._get(
-            f"/api/webhooks/{webhook_id}/history",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=WebhookHistoryResponse,
-        )
-
 
 class AsyncWebhooksResource(AsyncAPIResource):
     @cached_property
@@ -440,39 +406,6 @@ class AsyncWebhooksResource(AsyncAPIResource):
             cast_to=WebhookDeleteResponse,
         )
 
-    async def history(
-        self,
-        webhook_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> WebhookHistoryResponse:
-        """
-        Get the history of a webhook
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not webhook_id:
-            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
-        return await self._get(
-            f"/api/webhooks/{webhook_id}/history",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=WebhookHistoryResponse,
-        )
-
 
 class WebhooksResourceWithRawResponse:
     def __init__(self, webhooks: WebhooksResource) -> None:
@@ -492,9 +425,6 @@ class WebhooksResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             webhooks.delete,
-        )
-        self.history = to_raw_response_wrapper(
-            webhooks.history,
         )
 
 
@@ -517,9 +447,6 @@ class AsyncWebhooksResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             webhooks.delete,
         )
-        self.history = async_to_raw_response_wrapper(
-            webhooks.history,
-        )
 
 
 class WebhooksResourceWithStreamingResponse:
@@ -541,9 +468,6 @@ class WebhooksResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             webhooks.delete,
         )
-        self.history = to_streamed_response_wrapper(
-            webhooks.history,
-        )
 
 
 class AsyncWebhooksResourceWithStreamingResponse:
@@ -564,7 +488,4 @@ class AsyncWebhooksResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             webhooks.delete,
-        )
-        self.history = async_to_streamed_response_wrapper(
-            webhooks.history,
         )

@@ -21,7 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import me, inbox, lookup, outbox, validate, webhooks
+from .resources import inbox, lookup, outbox, validate, webhooks
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, EInvoiceAPIError
 from ._base_client import (
@@ -49,7 +49,6 @@ class EInvoiceAPI(SyncAPIClient):
     outbox: outbox.OutboxResource
     validate: validate.ValidateResource
     lookup: lookup.LookupResource
-    me: me.MeResource
     webhooks: webhooks.WebhooksResource
     with_raw_response: EInvoiceAPIWithRawResponse
     with_streaming_response: EInvoiceAPIWithStreamedResponse
@@ -82,13 +81,13 @@ class EInvoiceAPI(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous EInvoiceAPI client instance.
 
-        This automatically infers the `api_key` argument from the `E_INVOICE_API_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `E_INVOICE_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("E_INVOICE_API_API_KEY")
+            api_key = os.environ.get("E_INVOICE_API_KEY")
         if api_key is None:
             raise EInvoiceAPIError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_KEY environment variable"
             )
         self.api_key = api_key
 
@@ -113,7 +112,6 @@ class EInvoiceAPI(SyncAPIClient):
         self.outbox = outbox.OutboxResource(self)
         self.validate = validate.ValidateResource(self)
         self.lookup = lookup.LookupResource(self)
-        self.me = me.MeResource(self)
         self.webhooks = webhooks.WebhooksResource(self)
         self.with_raw_response = EInvoiceAPIWithRawResponse(self)
         self.with_streaming_response = EInvoiceAPIWithStreamedResponse(self)
@@ -229,7 +227,6 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
     outbox: outbox.AsyncOutboxResource
     validate: validate.AsyncValidateResource
     lookup: lookup.AsyncLookupResource
-    me: me.AsyncMeResource
     webhooks: webhooks.AsyncWebhooksResource
     with_raw_response: AsyncEInvoiceAPIWithRawResponse
     with_streaming_response: AsyncEInvoiceAPIWithStreamedResponse
@@ -262,13 +259,13 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncEInvoiceAPI client instance.
 
-        This automatically infers the `api_key` argument from the `E_INVOICE_API_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `E_INVOICE_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("E_INVOICE_API_API_KEY")
+            api_key = os.environ.get("E_INVOICE_API_KEY")
         if api_key is None:
             raise EInvoiceAPIError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the E_INVOICE_API_KEY environment variable"
             )
         self.api_key = api_key
 
@@ -293,7 +290,6 @@ class AsyncEInvoiceAPI(AsyncAPIClient):
         self.outbox = outbox.AsyncOutboxResource(self)
         self.validate = validate.AsyncValidateResource(self)
         self.lookup = lookup.AsyncLookupResource(self)
-        self.me = me.AsyncMeResource(self)
         self.webhooks = webhooks.AsyncWebhooksResource(self)
         self.with_raw_response = AsyncEInvoiceAPIWithRawResponse(self)
         self.with_streaming_response = AsyncEInvoiceAPIWithStreamedResponse(self)
@@ -410,7 +406,6 @@ class EInvoiceAPIWithRawResponse:
         self.outbox = outbox.OutboxResourceWithRawResponse(client.outbox)
         self.validate = validate.ValidateResourceWithRawResponse(client.validate)
         self.lookup = lookup.LookupResourceWithRawResponse(client.lookup)
-        self.me = me.MeResourceWithRawResponse(client.me)
         self.webhooks = webhooks.WebhooksResourceWithRawResponse(client.webhooks)
 
 
@@ -421,7 +416,6 @@ class AsyncEInvoiceAPIWithRawResponse:
         self.outbox = outbox.AsyncOutboxResourceWithRawResponse(client.outbox)
         self.validate = validate.AsyncValidateResourceWithRawResponse(client.validate)
         self.lookup = lookup.AsyncLookupResourceWithRawResponse(client.lookup)
-        self.me = me.AsyncMeResourceWithRawResponse(client.me)
         self.webhooks = webhooks.AsyncWebhooksResourceWithRawResponse(client.webhooks)
 
 
@@ -432,7 +426,6 @@ class EInvoiceAPIWithStreamedResponse:
         self.outbox = outbox.OutboxResourceWithStreamingResponse(client.outbox)
         self.validate = validate.ValidateResourceWithStreamingResponse(client.validate)
         self.lookup = lookup.LookupResourceWithStreamingResponse(client.lookup)
-        self.me = me.MeResourceWithStreamingResponse(client.me)
         self.webhooks = webhooks.WebhooksResourceWithStreamingResponse(client.webhooks)
 
 
@@ -443,7 +436,6 @@ class AsyncEInvoiceAPIWithStreamedResponse:
         self.outbox = outbox.AsyncOutboxResourceWithStreamingResponse(client.outbox)
         self.validate = validate.AsyncValidateResourceWithStreamingResponse(client.validate)
         self.lookup = lookup.AsyncLookupResourceWithStreamingResponse(client.lookup)
-        self.me = me.AsyncMeResourceWithStreamingResponse(client.me)
         self.webhooks = webhooks.AsyncWebhooksResourceWithStreamingResponse(client.webhooks)
 
 
