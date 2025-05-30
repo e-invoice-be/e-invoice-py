@@ -14,7 +14,7 @@ from ..types import (
     outbox_list_received_documents_params,
 )
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -23,10 +23,11 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.document_type import DocumentType
 from ..types.document_state import DocumentState
-from ..types.paginated_document_response import PaginatedDocumentResponse
+from ..types.document_response import DocumentResponse
 
 __all__ = ["OutboxResource", "AsyncOutboxResource"]
 
@@ -62,7 +63,7 @@ class OutboxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of draft documents with filtering options.
 
@@ -79,8 +80,9 @@ class OutboxResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/outbox/drafts",
+            page=SyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -94,7 +96,7 @@ class OutboxResource(SyncAPIResource):
                     outbox_list_draft_documents_params.OutboxListDraftDocumentsParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
     def list_received_documents(
@@ -114,7 +116,7 @@ class OutboxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received documents with filtering options.
 
@@ -143,8 +145,9 @@ class OutboxResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/outbox/",
+            page=SyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -164,7 +167,7 @@ class OutboxResource(SyncAPIResource):
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
 
@@ -188,7 +191,7 @@ class AsyncOutboxResource(AsyncAPIResource):
         """
         return AsyncOutboxResourceWithStreamingResponse(self)
 
-    async def list_draft_documents(
+    def list_draft_documents(
         self,
         *,
         page: int | NotGiven = NOT_GIVEN,
@@ -199,7 +202,7 @@ class AsyncOutboxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of draft documents with filtering options.
 
@@ -216,14 +219,15 @@ class AsyncOutboxResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/outbox/drafts",
+            page=AsyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "page": page,
                         "page_size": page_size,
@@ -231,10 +235,10 @@ class AsyncOutboxResource(AsyncAPIResource):
                     outbox_list_draft_documents_params.OutboxListDraftDocumentsParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
-    async def list_received_documents(
+    def list_received_documents(
         self,
         *,
         date_from: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
@@ -251,7 +255,7 @@ class AsyncOutboxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received documents with filtering options.
 
@@ -280,14 +284,15 @@ class AsyncOutboxResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/outbox/",
+            page=AsyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "date_from": date_from,
                         "date_to": date_to,
@@ -301,7 +306,7 @@ class AsyncOutboxResource(AsyncAPIResource):
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
 

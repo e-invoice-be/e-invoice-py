@@ -59,21 +59,21 @@ Methods:
 Types:
 
 ```python
-from e_invoice_api.types import DocumentState, DocumentTypeInput, PaginatedDocumentResponse
+from e_invoice_api.types import DocumentState, PaginatedDocumentResponse
 ```
 
 Methods:
 
-- <code title="get /api/inbox/">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_params.py">params</a>) -> <a href="./src/e_invoice_api/types/paginated_document_response.py">PaginatedDocumentResponse</a></code>
-- <code title="get /api/inbox/credit-notes">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list_credit_notes</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_credit_notes_params.py">params</a>) -> <a href="./src/e_invoice_api/types/paginated_document_response.py">PaginatedDocumentResponse</a></code>
-- <code title="get /api/inbox/invoices">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list_invoices</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_invoices_params.py">params</a>) -> <a href="./src/e_invoice_api/types/paginated_document_response.py">PaginatedDocumentResponse</a></code>
+- <code title="get /api/inbox/">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">SyncDocumentsNumberPage[DocumentResponse]</a></code>
+- <code title="get /api/inbox/credit-notes">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list_credit_notes</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_credit_notes_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">SyncDocumentsNumberPage[DocumentResponse]</a></code>
+- <code title="get /api/inbox/invoices">client.inbox.<a href="./src/e_invoice_api/resources/inbox.py">list_invoices</a>(\*\*<a href="src/e_invoice_api/types/inbox_list_invoices_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">SyncDocumentsNumberPage[DocumentResponse]</a></code>
 
 # Outbox
 
 Methods:
 
-- <code title="get /api/outbox/drafts">client.outbox.<a href="./src/e_invoice_api/resources/outbox.py">list_draft_documents</a>(\*\*<a href="src/e_invoice_api/types/outbox_list_draft_documents_params.py">params</a>) -> <a href="./src/e_invoice_api/types/paginated_document_response.py">PaginatedDocumentResponse</a></code>
-- <code title="get /api/outbox/">client.outbox.<a href="./src/e_invoice_api/resources/outbox.py">list_received_documents</a>(\*\*<a href="src/e_invoice_api/types/outbox_list_received_documents_params.py">params</a>) -> <a href="./src/e_invoice_api/types/paginated_document_response.py">PaginatedDocumentResponse</a></code>
+- <code title="get /api/outbox/drafts">client.outbox.<a href="./src/e_invoice_api/resources/outbox.py">list_draft_documents</a>(\*\*<a href="src/e_invoice_api/types/outbox_list_draft_documents_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">SyncDocumentsNumberPage[DocumentResponse]</a></code>
+- <code title="get /api/outbox/">client.outbox.<a href="./src/e_invoice_api/resources/outbox.py">list_received_documents</a>(\*\*<a href="src/e_invoice_api/types/outbox_list_received_documents_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">SyncDocumentsNumberPage[DocumentResponse]</a></code>
 
 # Validate
 
