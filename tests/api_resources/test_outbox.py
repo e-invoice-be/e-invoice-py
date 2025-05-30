@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
     PaginatedDocumentResponse,
 )
@@ -22,13 +22,13 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list_draft_documents(self, client: EInvoiceAPI) -> None:
+    def test_method_list_draft_documents(self, client: EInvoice) -> None:
         outbox = client.outbox.list_draft_documents()
         assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list_draft_documents_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_list_draft_documents_with_all_params(self, client: EInvoice) -> None:
         outbox = client.outbox.list_draft_documents(
             page=1,
             page_size=1,
@@ -37,7 +37,7 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list_draft_documents(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_list_draft_documents(self, client: EInvoice) -> None:
         response = client.outbox.with_raw_response.list_draft_documents()
 
         assert response.is_closed is True
@@ -47,7 +47,7 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list_draft_documents(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_list_draft_documents(self, client: EInvoice) -> None:
         with client.outbox.with_streaming_response.list_draft_documents() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -59,13 +59,13 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list_received_documents(self, client: EInvoiceAPI) -> None:
+    def test_method_list_received_documents(self, client: EInvoice) -> None:
         outbox = client.outbox.list_received_documents()
         assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list_received_documents_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_list_received_documents_with_all_params(self, client: EInvoice) -> None:
         outbox = client.outbox.list_received_documents(
             date_from=parse_datetime("2019-12-27T18:11:19.117Z"),
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -80,7 +80,7 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list_received_documents(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_list_received_documents(self, client: EInvoice) -> None:
         response = client.outbox.with_raw_response.list_received_documents()
 
         assert response.is_closed is True
@@ -90,7 +90,7 @@ class TestOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list_received_documents(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_list_received_documents(self, client: EInvoice) -> None:
         with client.outbox.with_streaming_response.list_received_documents() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -106,13 +106,13 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list_draft_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_draft_documents()
         assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list_draft_documents_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_list_draft_documents_with_all_params(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_draft_documents(
             page=1,
             page_size=1,
@@ -121,7 +121,7 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list_draft_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.outbox.with_raw_response.list_draft_documents()
 
         assert response.is_closed is True
@@ -131,7 +131,7 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list_draft_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         async with async_client.outbox.with_streaming_response.list_draft_documents() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -143,13 +143,13 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list_received_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_received_documents()
         assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list_received_documents_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_list_received_documents_with_all_params(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_received_documents(
             date_from=parse_datetime("2019-12-27T18:11:19.117Z"),
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -164,7 +164,7 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list_received_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.outbox.with_raw_response.list_received_documents()
 
         assert response.is_closed is True
@@ -174,7 +174,7 @@ class TestAsyncOutbox:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list_received_documents(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         async with async_client.outbox.with_streaming_response.list_received_documents() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

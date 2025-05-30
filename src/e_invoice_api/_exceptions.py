@@ -18,11 +18,11 @@ __all__ = [
 ]
 
 
-class EInvoiceAPIError(Exception):
+class EInvoiceError(Exception):
     pass
 
 
-class APIError(EInvoiceAPIError):
+class APIError(EInvoiceError):
     message: str
     request: httpx.Request
 

@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
     WebhookResponse,
     WebhookListResponse,
@@ -23,7 +23,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create(self, client: EInvoiceAPI) -> None:
+    def test_method_create(self, client: EInvoice) -> None:
         webhook = client.webhooks.create(
             events=["string"],
             url="https://example.com",
@@ -32,7 +32,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_create_with_all_params(self, client: EInvoice) -> None:
         webhook = client.webhooks.create(
             events=["string"],
             url="https://example.com",
@@ -42,7 +42,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_create(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_create(self, client: EInvoice) -> None:
         response = client.webhooks.with_raw_response.create(
             events=["string"],
             url="https://example.com",
@@ -55,7 +55,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_create(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_create(self, client: EInvoice) -> None:
         with client.webhooks.with_streaming_response.create(
             events=["string"],
             url="https://example.com",
@@ -70,7 +70,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_method_retrieve(self, client: EInvoice) -> None:
         webhook = client.webhooks.retrieve(
             "webhook_id",
         )
@@ -78,7 +78,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_retrieve(self, client: EInvoice) -> None:
         response = client.webhooks.with_raw_response.retrieve(
             "webhook_id",
         )
@@ -90,7 +90,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_retrieve(self, client: EInvoice) -> None:
         with client.webhooks.with_streaming_response.retrieve(
             "webhook_id",
         ) as response:
@@ -104,7 +104,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_path_params_retrieve(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             client.webhooks.with_raw_response.retrieve(
                 "",
@@ -112,7 +112,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_update(self, client: EInvoiceAPI) -> None:
+    def test_method_update(self, client: EInvoice) -> None:
         webhook = client.webhooks.update(
             webhook_id="webhook_id",
         )
@@ -120,7 +120,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_update_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_update_with_all_params(self, client: EInvoice) -> None:
         webhook = client.webhooks.update(
             webhook_id="webhook_id",
             enabled=True,
@@ -131,7 +131,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_update(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_update(self, client: EInvoice) -> None:
         response = client.webhooks.with_raw_response.update(
             webhook_id="webhook_id",
         )
@@ -143,7 +143,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_update(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_update(self, client: EInvoice) -> None:
         with client.webhooks.with_streaming_response.update(
             webhook_id="webhook_id",
         ) as response:
@@ -157,7 +157,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_update(self, client: EInvoiceAPI) -> None:
+    def test_path_params_update(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             client.webhooks.with_raw_response.update(
                 webhook_id="",
@@ -165,13 +165,13 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: EInvoiceAPI) -> None:
+    def test_method_list(self, client: EInvoice) -> None:
         webhook = client.webhooks.list()
         assert_matches_type(WebhookListResponse, webhook, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_list(self, client: EInvoice) -> None:
         response = client.webhooks.with_raw_response.list()
 
         assert response.is_closed is True
@@ -181,7 +181,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_list(self, client: EInvoice) -> None:
         with client.webhooks.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -193,7 +193,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_delete(self, client: EInvoiceAPI) -> None:
+    def test_method_delete(self, client: EInvoice) -> None:
         webhook = client.webhooks.delete(
             "webhook_id",
         )
@@ -201,7 +201,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_delete(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_delete(self, client: EInvoice) -> None:
         response = client.webhooks.with_raw_response.delete(
             "webhook_id",
         )
@@ -213,7 +213,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_delete(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_delete(self, client: EInvoice) -> None:
         with client.webhooks.with_streaming_response.delete(
             "webhook_id",
         ) as response:
@@ -227,7 +227,7 @@ class TestWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_delete(self, client: EInvoiceAPI) -> None:
+    def test_path_params_delete(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             client.webhooks.with_raw_response.delete(
                 "",
@@ -239,7 +239,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_create(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.create(
             events=["string"],
             url="https://example.com",
@@ -248,7 +248,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.create(
             events=["string"],
             url="https://example.com",
@@ -258,7 +258,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_create(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.webhooks.with_raw_response.create(
             events=["string"],
             url="https://example.com",
@@ -271,7 +271,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncEInvoice) -> None:
         async with async_client.webhooks.with_streaming_response.create(
             events=["string"],
             url="https://example.com",
@@ -286,7 +286,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_retrieve(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.retrieve(
             "webhook_id",
         )
@@ -294,7 +294,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.webhooks.with_raw_response.retrieve(
             "webhook_id",
         )
@@ -306,7 +306,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         async with async_client.webhooks.with_streaming_response.retrieve(
             "webhook_id",
         ) as response:
@@ -320,7 +320,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_retrieve(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.with_raw_response.retrieve(
                 "",
@@ -328,7 +328,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_update(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_update(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.update(
             webhook_id="webhook_id",
         )
@@ -336,7 +336,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_update_with_all_params(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.update(
             webhook_id="webhook_id",
             enabled=True,
@@ -347,7 +347,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_update(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_update(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.webhooks.with_raw_response.update(
             webhook_id="webhook_id",
         )
@@ -359,7 +359,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_update(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_update(self, async_client: AsyncEInvoice) -> None:
         async with async_client.webhooks.with_streaming_response.update(
             webhook_id="webhook_id",
         ) as response:
@@ -373,7 +373,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_update(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_update(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.with_raw_response.update(
                 webhook_id="",
@@ -381,13 +381,13 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_list(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.list()
         assert_matches_type(WebhookListResponse, webhook, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_list(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.webhooks.with_raw_response.list()
 
         assert response.is_closed is True
@@ -397,7 +397,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncEInvoice) -> None:
         async with async_client.webhooks.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -409,7 +409,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_delete(self, async_client: AsyncEInvoice) -> None:
         webhook = await async_client.webhooks.delete(
             "webhook_id",
         )
@@ -417,7 +417,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_delete(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.webhooks.with_raw_response.delete(
             "webhook_id",
         )
@@ -429,7 +429,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_delete(self, async_client: AsyncEInvoice) -> None:
         async with async_client.webhooks.with_streaming_response.delete(
             "webhook_id",
         ) as response:
@@ -443,7 +443,7 @@ class TestAsyncWebhooks:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_delete(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.with_raw_response.delete(
                 "",

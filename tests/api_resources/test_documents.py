@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
     DocumentResponse,
     DocumentDeleteResponse,
@@ -23,13 +23,13 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create(self, client: EInvoiceAPI) -> None:
+    def test_method_create(self, client: EInvoice) -> None:
         document = client.documents.create()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_create_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create(
             amount_due=0,
             attachments=[
@@ -108,7 +108,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_create(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_create(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.create()
 
         assert response.is_closed is True
@@ -118,7 +118,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_create(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_create(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -130,7 +130,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_method_retrieve(self, client: EInvoice) -> None:
         document = client.documents.retrieve(
             "document_id",
         )
@@ -138,7 +138,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_retrieve(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.retrieve(
             "document_id",
         )
@@ -150,7 +150,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_retrieve(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.retrieve(
             "document_id",
         ) as response:
@@ -164,7 +164,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_path_params_retrieve(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             client.documents.with_raw_response.retrieve(
                 "",
@@ -172,7 +172,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_delete(self, client: EInvoiceAPI) -> None:
+    def test_method_delete(self, client: EInvoice) -> None:
         document = client.documents.delete(
             "document_id",
         )
@@ -180,7 +180,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_delete(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_delete(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.delete(
             "document_id",
         )
@@ -192,7 +192,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_delete(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_delete(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.delete(
             "document_id",
         ) as response:
@@ -206,7 +206,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_delete(self, client: EInvoiceAPI) -> None:
+    def test_path_params_delete(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             client.documents.with_raw_response.delete(
                 "",
@@ -214,7 +214,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_send(self, client: EInvoiceAPI) -> None:
+    def test_method_send(self, client: EInvoice) -> None:
         document = client.documents.send(
             document_id="document_id",
         )
@@ -222,7 +222,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_send_with_all_params(self, client: EInvoiceAPI) -> None:
+    def test_method_send_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.send(
             document_id="document_id",
             email="email",
@@ -235,7 +235,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_send(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_send(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.send(
             document_id="document_id",
         )
@@ -247,7 +247,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_send(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_send(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.send(
             document_id="document_id",
         ) as response:
@@ -261,7 +261,7 @@ class TestDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_send(self, client: EInvoiceAPI) -> None:
+    def test_path_params_send(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             client.documents.with_raw_response.send(
                 document_id="",
@@ -273,13 +273,13 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_create(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create(
             amount_due=0,
             attachments=[
@@ -358,7 +358,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_create(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.create()
 
         assert response.is_closed is True
@@ -368,7 +368,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -380,7 +380,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_retrieve(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.retrieve(
             "document_id",
         )
@@ -388,7 +388,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.retrieve(
             "document_id",
         )
@@ -400,7 +400,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.retrieve(
             "document_id",
         ) as response:
@@ -414,7 +414,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_retrieve(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             await async_client.documents.with_raw_response.retrieve(
                 "",
@@ -422,7 +422,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_delete(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.delete(
             "document_id",
         )
@@ -430,7 +430,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_delete(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.delete(
             "document_id",
         )
@@ -442,7 +442,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_delete(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.delete(
             "document_id",
         ) as response:
@@ -456,7 +456,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_delete(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             await async_client.documents.with_raw_response.delete(
                 "",
@@ -464,7 +464,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_send(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_send(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.send(
             document_id="document_id",
         )
@@ -472,7 +472,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_send_with_all_params(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_send_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.send(
             document_id="document_id",
             email="email",
@@ -485,7 +485,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_send(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_send(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.send(
             document_id="document_id",
         )
@@ -497,7 +497,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_send(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_send(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.send(
             document_id="document_id",
         ) as response:
@@ -511,7 +511,7 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_send(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_path_params_send(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             await async_client.documents.with_raw_response.send(
                 document_id="",

@@ -2,10 +2,10 @@
 
 from typing import List, Optional
 from datetime import date
+from typing_extensions import Literal
 
 from .._models import BaseModel
 from .currency_code import CurrencyCode
-from .document_type import DocumentType
 from .document_state import DocumentState
 from .document_direction import DocumentDirection
 from .unit_of_measure_code import UnitOfMeasureCode
@@ -79,7 +79,7 @@ class DocumentResponse(BaseModel):
 
     direction: Optional[DocumentDirection] = None
 
-    document_type: Optional[DocumentType] = None
+    document_type: Optional[Literal["INVOICE", "CREDIT_NOTE"]] = None
 
     due_date: Optional[date] = None
 

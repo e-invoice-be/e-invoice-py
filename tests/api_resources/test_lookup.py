@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import LookupRetrieveResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -19,7 +19,7 @@ class TestLookup:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_method_retrieve(self, client: EInvoice) -> None:
         lookup = client.lookup.retrieve(
             peppol_id="peppol_id",
         )
@@ -27,7 +27,7 @@ class TestLookup:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_raw_response_retrieve(self, client: EInvoice) -> None:
         response = client.lookup.with_raw_response.retrieve(
             peppol_id="peppol_id",
         )
@@ -39,7 +39,7 @@ class TestLookup:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_retrieve(self, client: EInvoiceAPI) -> None:
+    def test_streaming_response_retrieve(self, client: EInvoice) -> None:
         with client.lookup.with_streaming_response.retrieve(
             peppol_id="peppol_id",
         ) as response:
@@ -57,7 +57,7 @@ class TestAsyncLookup:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_method_retrieve(self, async_client: AsyncEInvoice) -> None:
         lookup = await async_client.lookup.retrieve(
             peppol_id="peppol_id",
         )
@@ -65,7 +65,7 @@ class TestAsyncLookup:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_raw_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.lookup.with_raw_response.retrieve(
             peppol_id="peppol_id",
         )
@@ -77,7 +77,7 @@ class TestAsyncLookup:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoiceAPI) -> None:
+    async def test_streaming_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         async with async_client.lookup.with_streaming_response.retrieve(
             peppol_id="peppol_id",
         ) as response:

@@ -6,15 +6,16 @@ from . import types
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes
 from ._utils import file_from_path
 from ._client import (
+    ENVIRONMENTS,
     Client,
     Stream,
     Timeout,
+    EInvoice,
     Transport,
     AsyncClient,
     AsyncStream,
-    EInvoiceAPI,
+    AsyncEInvoice,
     RequestOptions,
-    AsyncEInvoiceAPI,
 )
 from ._models import BaseModel
 from ._version import __title__, __version__
@@ -23,12 +24,12 @@ from ._constants import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_CONNECTION
 from ._exceptions import (
     APIError,
     ConflictError,
+    EInvoiceError,
     NotFoundError,
     APIStatusError,
     RateLimitError,
     APITimeoutError,
     BadRequestError,
-    EInvoiceAPIError,
     APIConnectionError,
     AuthenticationError,
     InternalServerError,
@@ -49,7 +50,7 @@ __all__ = [
     "NotGiven",
     "NOT_GIVEN",
     "Omit",
-    "EInvoiceAPIError",
+    "EInvoiceError",
     "APIError",
     "APIStatusError",
     "APITimeoutError",
@@ -69,8 +70,9 @@ __all__ = [
     "AsyncClient",
     "Stream",
     "AsyncStream",
-    "EInvoiceAPI",
-    "AsyncEInvoiceAPI",
+    "EInvoice",
+    "AsyncEInvoice",
+    "ENVIRONMENTS",
     "file_from_path",
     "BaseModel",
     "DEFAULT_TIMEOUT",
