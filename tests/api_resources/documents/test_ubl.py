@@ -9,7 +9,6 @@ import pytest
 
 from tests.utils import assert_matches_type
 from e_invoice_api import EInvoiceAPI, AsyncEInvoiceAPI
-from e_invoice_api.types import DocumentResponse
 from e_invoice_api.types.documents import UblGetResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -17,40 +16,6 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 class TestUbl:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_create_from_ubl(self, client: EInvoiceAPI) -> None:
-        ubl = client.documents.ubl.create_from_ubl(
-            file=b"raw file contents",
-        )
-        assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_create_from_ubl(self, client: EInvoiceAPI) -> None:
-        response = client.documents.ubl.with_raw_response.create_from_ubl(
-            file=b"raw file contents",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        ubl = response.parse()
-        assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_create_from_ubl(self, client: EInvoiceAPI) -> None:
-        with client.documents.ubl.with_streaming_response.create_from_ubl(
-            file=b"raw file contents",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            ubl = response.parse()
-            assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
@@ -97,40 +62,6 @@ class TestUbl:
 
 class TestAsyncUbl:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_create_from_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
-        ubl = await async_client.documents.ubl.create_from_ubl(
-            file=b"raw file contents",
-        )
-        assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_create_from_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
-        response = await async_client.documents.ubl.with_raw_response.create_from_ubl(
-            file=b"raw file contents",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        ubl = await response.parse()
-        assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_create_from_ubl(self, async_client: AsyncEInvoiceAPI) -> None:
-        async with async_client.documents.ubl.with_streaming_response.create_from_ubl(
-            file=b"raw file contents",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            ubl = await response.parse()
-            assert_matches_type(DocumentResponse, ubl, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize

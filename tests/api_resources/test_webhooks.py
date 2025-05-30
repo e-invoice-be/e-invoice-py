@@ -13,7 +13,6 @@ from e_invoice_api.types import (
     WebhookResponse,
     WebhookListResponse,
     WebhookDeleteResponse,
-    WebhookHistoryResponse,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -234,48 +233,6 @@ class TestWebhooks:
                 "",
             )
 
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_history(self, client: EInvoiceAPI) -> None:
-        webhook = client.webhooks.history(
-            "webhook_id",
-        )
-        assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_history(self, client: EInvoiceAPI) -> None:
-        response = client.webhooks.with_raw_response.history(
-            "webhook_id",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        webhook = response.parse()
-        assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_history(self, client: EInvoiceAPI) -> None:
-        with client.webhooks.with_streaming_response.history(
-            "webhook_id",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            webhook = response.parse()
-            assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_path_params_history(self, client: EInvoiceAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
-            client.webhooks.with_raw_response.history(
-                "",
-            )
-
 
 class TestAsyncWebhooks:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -489,47 +446,5 @@ class TestAsyncWebhooks:
     async def test_path_params_delete(self, async_client: AsyncEInvoiceAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.with_raw_response.delete(
-                "",
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_history(self, async_client: AsyncEInvoiceAPI) -> None:
-        webhook = await async_client.webhooks.history(
-            "webhook_id",
-        )
-        assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_history(self, async_client: AsyncEInvoiceAPI) -> None:
-        response = await async_client.webhooks.with_raw_response.history(
-            "webhook_id",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        webhook = await response.parse()
-        assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_history(self, async_client: AsyncEInvoiceAPI) -> None:
-        async with async_client.webhooks.with_streaming_response.history(
-            "webhook_id",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            webhook = await response.parse()
-            assert_matches_type(WebhookHistoryResponse, webhook, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_history(self, async_client: AsyncEInvoiceAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
-            await async_client.webhooks.with_raw_response.history(
                 "",
             )
