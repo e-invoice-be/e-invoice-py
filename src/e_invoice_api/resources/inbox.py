@@ -15,7 +15,7 @@ from ..types import (
     inbox_list_credit_notes_params,
 )
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -24,10 +24,11 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.document_type import DocumentType
 from ..types.document_state import DocumentState
-from ..types.paginated_document_response import PaginatedDocumentResponse
+from ..types.document_response import DocumentResponse
 
 __all__ = ["InboxResource", "AsyncInboxResource"]
 
@@ -69,7 +70,7 @@ class InboxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received documents with filtering options.
 
@@ -98,8 +99,9 @@ class InboxResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/inbox/",
+            page=SyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -119,7 +121,7 @@ class InboxResource(SyncAPIResource):
                     inbox_list_params.InboxListParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
     def list_credit_notes(
@@ -133,7 +135,7 @@ class InboxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received credit notes with filtering options.
 
@@ -150,8 +152,9 @@ class InboxResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/inbox/credit-notes",
+            page=SyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -165,7 +168,7 @@ class InboxResource(SyncAPIResource):
                     inbox_list_credit_notes_params.InboxListCreditNotesParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
     def list_invoices(
@@ -179,7 +182,7 @@ class InboxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received invoices with filtering options.
 
@@ -196,8 +199,9 @@ class InboxResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/inbox/invoices",
+            page=SyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -211,7 +215,7 @@ class InboxResource(SyncAPIResource):
                     inbox_list_invoices_params.InboxListInvoicesParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
 
@@ -235,7 +239,7 @@ class AsyncInboxResource(AsyncAPIResource):
         """
         return AsyncInboxResourceWithStreamingResponse(self)
 
-    async def list(
+    def list(
         self,
         *,
         date_from: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
@@ -252,7 +256,7 @@ class AsyncInboxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received documents with filtering options.
 
@@ -281,14 +285,15 @@ class AsyncInboxResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/inbox/",
+            page=AsyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "date_from": date_from,
                         "date_to": date_to,
@@ -302,10 +307,10 @@ class AsyncInboxResource(AsyncAPIResource):
                     inbox_list_params.InboxListParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
-    async def list_credit_notes(
+    def list_credit_notes(
         self,
         *,
         page: int | NotGiven = NOT_GIVEN,
@@ -316,7 +321,7 @@ class AsyncInboxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received credit notes with filtering options.
 
@@ -333,14 +338,15 @@ class AsyncInboxResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/inbox/credit-notes",
+            page=AsyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "page": page,
                         "page_size": page_size,
@@ -348,10 +354,10 @@ class AsyncInboxResource(AsyncAPIResource):
                     inbox_list_credit_notes_params.InboxListCreditNotesParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
-    async def list_invoices(
+    def list_invoices(
         self,
         *,
         page: int | NotGiven = NOT_GIVEN,
@@ -362,7 +368,7 @@ class AsyncInboxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PaginatedDocumentResponse:
+    ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received invoices with filtering options.
 
@@ -379,14 +385,15 @@ class AsyncInboxResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/inbox/invoices",
+            page=AsyncDocumentsNumberPage[DocumentResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "page": page,
                         "page_size": page_size,
@@ -394,7 +401,7 @@ class AsyncInboxResource(AsyncAPIResource):
                     inbox_list_invoices_params.InboxListInvoicesParams,
                 ),
             ),
-            cast_to=PaginatedDocumentResponse,
+            model=DocumentResponse,
         )
 
 

@@ -10,9 +10,10 @@ import pytest
 from tests.utils import assert_matches_type
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
-    PaginatedDocumentResponse,
+    DocumentResponse,
 )
 from e_invoice_api._utils import parse_datetime
+from e_invoice_api.pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -24,7 +25,7 @@ class TestOutbox:
     @parametrize
     def test_method_list_draft_documents(self, client: EInvoice) -> None:
         outbox = client.outbox.list_draft_documents()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -33,7 +34,7 @@ class TestOutbox:
             page=1,
             page_size=1,
         )
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -43,7 +44,7 @@ class TestOutbox:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         outbox = response.parse()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -53,7 +54,7 @@ class TestOutbox:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             outbox = response.parse()
-            assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+            assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -61,7 +62,7 @@ class TestOutbox:
     @parametrize
     def test_method_list_received_documents(self, client: EInvoice) -> None:
         outbox = client.outbox.list_received_documents()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -76,7 +77,7 @@ class TestOutbox:
             state="DRAFT",
             type="INVOICE",
         )
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -86,7 +87,7 @@ class TestOutbox:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         outbox = response.parse()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -96,7 +97,7 @@ class TestOutbox:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             outbox = response.parse()
-            assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+            assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -108,7 +109,7 @@ class TestAsyncOutbox:
     @parametrize
     async def test_method_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_draft_documents()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -117,7 +118,7 @@ class TestAsyncOutbox:
             page=1,
             page_size=1,
         )
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -127,7 +128,7 @@ class TestAsyncOutbox:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         outbox = await response.parse()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -137,7 +138,7 @@ class TestAsyncOutbox:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             outbox = await response.parse()
-            assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+            assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -145,7 +146,7 @@ class TestAsyncOutbox:
     @parametrize
     async def test_method_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_received_documents()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -160,7 +161,7 @@ class TestAsyncOutbox:
             state="DRAFT",
             type="INVOICE",
         )
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -170,7 +171,7 @@ class TestAsyncOutbox:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         outbox = await response.parse()
-        assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+        assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -180,6 +181,6 @@ class TestAsyncOutbox:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             outbox = await response.parse()
-            assert_matches_type(PaginatedDocumentResponse, outbox, path=["response"])
+            assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
