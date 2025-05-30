@@ -34,8 +34,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/stainless-sdks/e-invoice-api-python"
-Repository = "https://github.com/stainless-sdks/e-invoice-api-python"
+Homepage = "https://github.com/e-invoice-be/e-invoice-api-sdk-py"
+Repository = "https://github.com/e-invoice-be/e-invoice-api-sdk-py"
 
 
 [tool.rye]
@@ -121,7 +121,7 @@ path = "README.md"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # replace relative links with absolute links
 pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/stainless-sdks/e-invoice-api-python/tree/main/\g<2>)'
+replacement = '[\1](https://github.com/e-invoice-be/e-invoice-api-sdk-py/tree/main/\g<2>)'
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
