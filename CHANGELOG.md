@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-05-30)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/e-invoice-be/e-invoice-py/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** manual updates ([b0954e1](https://github.com/e-invoice-be/e-invoice-py/commit/b0954e1357427a7573685d1e14eb8f7007085568))
+
+
+### Chores
+
+* sync repo ([d7d024c](https://github.com/e-invoice-be/e-invoice-py/commit/d7d024c67978e805e5fa7c34bda753dd5ca84868))
+* update SDK settings ([15f7d70](https://github.com/e-invoice-be/e-invoice-py/commit/15f7d7061d77d0d8f3adc51196fcf11ef1845e1b))
+
 ## 0.1.0-alpha.1 (2025-05-30)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/e-invoice-be/e-invoice-api-sdk-py/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)

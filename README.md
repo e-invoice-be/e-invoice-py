@@ -1,11 +1,12 @@
-# e-invoice.be Python API library
+# e-invoice.be Pepppol API library
 
 [![PyPI version](https://img.shields.io/pypi/v/e_invoice_api.svg)](https://pypi.org/project/e_invoice_api/)
 
-The e-invoice.be Python library provides convenient access to the e-invoice.be REST API from any Python 3.8+
+The e-invoice.be Pepppol library provides convenient access to the E Invoice REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
+It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
@@ -15,7 +16,7 @@ The REST API documentation can be found on [api.e-invoice.be](https://api.e-invo
 
 ```sh
 # install from the production repo
-pip install git+ssh://git@github.com/e-invoice-be/e-invoice-api-sdk-py.git
+pip install git+ssh://git@github.com/e-invoice-be/e-invoice-py.git
 ```
 
 > [!NOTE]
@@ -290,9 +291,9 @@ document = response.parse()  # get the object that `documents.create()` would ha
 print(document.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/e-invoice-be/e-invoice-api-sdk-py/tree/main/src/e_invoice_api/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/e-invoice-be/e-invoice-py/tree/main/src/e_invoice_api/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/e-invoice-be/e-invoice-api-sdk-py/tree/main/src/e_invoice_api/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/e-invoice-be/e-invoice-py/tree/main/src/e_invoice_api/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -396,7 +397,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/e-invoice-be/e-invoice-api-sdk-py/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/e-invoice-be/e-invoice-py/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
