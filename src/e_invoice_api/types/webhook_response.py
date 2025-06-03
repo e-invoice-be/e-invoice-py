@@ -12,6 +12,8 @@ class WebhookResponse(BaseModel):
 
     events: List[str]
 
+    secret: str
+
     url: str
 
     enabled: Optional[bool] = None
