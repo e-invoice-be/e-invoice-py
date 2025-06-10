@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2025-06-10)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/e-invoice-be/e-invoice-py/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### Features
+
+* **api:** api update ([f5a8196](https://github.com/e-invoice-be/e-invoice-py/commit/f5a81964419d8777b472990f56365ebdea34c029))
+* **client:** add follow_redirects request option ([c395968](https://github.com/e-invoice-be/e-invoice-py/commit/c39596814d57ad3db090a24ff148429679b03f27))
+
+
+### Chores
+
+* **docs:** remove reference to rye shell ([0dc05f6](https://github.com/e-invoice-be/e-invoice-py/commit/0dc05f6c1c1a8346862155ae23422bd60fee7df3))
+
 ## 0.1.0-alpha.2 (2025-05-30)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/e-invoice-be/e-invoice-py/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
