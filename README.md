@@ -1,6 +1,6 @@
 # e-invoice.be Pepppol API library
 
-[![PyPI version](https://img.shields.io/pypi/v/e_invoice_api.svg)](https://pypi.org/project/e_invoice_api/)
+[![PyPI version](https://img.shields.io/pypi/v/e-invoice-api.svg)](https://pypi.org/project/e-invoice-api/)
 
 The e-invoice.be Pepppol library provides convenient access to the E Invoice REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -15,12 +15,9 @@ The REST API documentation can be found on [api.e-invoice.be](https://api.e-invo
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/e-invoice-be/e-invoice-py.git
+# install from PyPI
+pip install --pre e-invoice-api
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre e_invoice_api`
 
 ## Usage
 
