@@ -16,7 +16,7 @@ The REST API documentation can be found on [api.e-invoice.be](https://api.e-invo
 
 ```sh
 # install from PyPI
-pip install --pre e-invoice-api
+pip install e-invoice-api
 ```
 
 ## Usage
