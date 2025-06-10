@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0 (2025-06-10)
+
+Full Changelog: [v0.1.0-alpha.3...v1.0.0](https://github.com/e-invoice-be/e-invoice-py/compare/v0.1.0-alpha.3...v1.0.0)
+
+### Chores
+
+* update SDK settings ([65f8ae5](https://github.com/e-invoice-be/e-invoice-py/commit/65f8ae52060c066d6d88d8b32d0e1437a8cb61cc))
+
 ## 0.1.0-alpha.3 (2025-06-10)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/e-invoice-be/e-invoice-py/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
