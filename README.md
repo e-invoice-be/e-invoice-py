@@ -29,8 +29,6 @@ from e_invoice_api import EInvoice
 
 client = EInvoice(
     api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
-    # defaults to "production".
-    environment="development",
 )
 
 document_response = client.documents.create()
@@ -53,8 +51,6 @@ from e_invoice_api import AsyncEInvoice
 
 client = AsyncEInvoice(
     api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
-    # defaults to "production".
-    environment="development",
 )
 
 
