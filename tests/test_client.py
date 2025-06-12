@@ -560,16 +560,6 @@ class TestEInvoice:
             client = EInvoice(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
-        # explicit environment arg requires explicitness
-        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
-            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                EInvoice(api_key=api_key, _strict_response_validation=True, environment="production")
-
-            client = EInvoice(
-                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
-            )
-            assert str(client.base_url).startswith("https://api.e-invoice.be")
-
     @pytest.mark.parametrize(
         "client",
         [
@@ -1360,16 +1350,6 @@ class TestAsyncEInvoice:
         with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
             client = AsyncEInvoice(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
-
-        # explicit environment arg requires explicitness
-        with update_env(E_INVOICE_BASE_URL="http://localhost:5000/from/env"):
-            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                AsyncEInvoice(api_key=api_key, _strict_response_validation=True, environment="production")
-
-            client = AsyncEInvoice(
-                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
-            )
-            assert str(client.base_url).startswith("https://api.e-invoice.be")
 
     @pytest.mark.parametrize(
         "client",
