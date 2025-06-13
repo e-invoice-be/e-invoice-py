@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.1 (2025-06-13)
+
+Full Changelog: [v1.2.0...v1.2.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.0...v1.2.1)
+
+### Bug Fixes
+
+* **client:** correctly parse binary response | stream ([ed989c6](https://github.com/e-invoice-be/e-invoice-py/commit/ed989c6ca76282b848a9eb63644fc473b936d86a))
+* **pagination:** correct next page check ([37e2dce](https://github.com/e-invoice-be/e-invoice-py/commit/37e2dcebbdf5074a8dfc8d8ccad88c4d11f8c346))
+
+
+### Chores
+
+* **tests:** run tests in parallel ([0228226](https://github.com/e-invoice-be/e-invoice-py/commit/02282265dfc4e68be31952864fc68eb651117006))
+
 ## 1.2.0 (2025-06-12)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.1.0...v1.2.0)
