@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.2 (2025-06-17)
+
+Full Changelog: [v1.2.1...v1.2.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.1...v1.2.2)
+
+### Chores
+
+* **ci:** enable for pull requests ([4a70384](https://github.com/e-invoice-be/e-invoice-py/commit/4a70384eebb606b75838dd0fd659961c609dc6c1))
+* **internal:** update conftest.py ([6366369](https://github.com/e-invoice-be/e-invoice-py/commit/6366369219a041ea2f7d71adff7612c4bb7ac973))
+* **tests:** add tests for httpx client instantiation & proxies ([6fef8c6](https://github.com/e-invoice-be/e-invoice-py/commit/6fef8c6ccd5d4521e66dba0d9ef3d4898728d829))
+
 ## 1.2.1 (2025-06-13)
 
 Full Changelog: [v1.2.0...v1.2.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.0...v1.2.1)
