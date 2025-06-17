@@ -6,11 +6,11 @@ The e-invoice.be Peppol library provides convenient access to the E Invoice REST
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
-It is generated with [Stainless](https://www.stainless.com/).
+To get an API key, [make a free account](https://app.e-invoice.be/register?ref=python) and register your company.
 
 ## Documentation
 
-The REST API documentation can be found on [api.e-invoice.be](https://api.e-invoice.be). The full API of this library can be found in [api.md](api.md).
+The full REST API documentation can be found on [api.e-invoice.be](https://api.e-invoice.be/api/redoc). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
