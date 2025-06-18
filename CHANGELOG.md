@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.5 (2025-06-18)
+
+Full Changelog: [v1.2.4...v1.2.5](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.4...v1.2.5)
+
+### Bug Fixes
+
+* **tests:** fix: tests which call HTTP endpoints directly with the example parameters ([d6e5d85](https://github.com/e-invoice-be/e-invoice-py/commit/d6e5d851f2026007b07fc5315232acf9fe29c310))
+
+
+### Chores
+
+* **readme:** update badges ([4cd10bf](https://github.com/e-invoice-be/e-invoice-py/commit/4cd10bf54c1333a55efbf55b3cffa5c364869ee0))
+
 ## 1.2.4 (2025-06-17)
 
 Full Changelog: [v1.2.3...v1.2.4](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.3...v1.2.4)
