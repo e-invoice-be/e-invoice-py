@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2025-06-23)
+
+Full Changelog: [v1.2.5...v1.3.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.5...v1.3.0)
+
+### Features
+
+* **api:** api update ([58cabf2](https://github.com/e-invoice-be/e-invoice-py/commit/58cabf2574d9485df337393cbaca4b3ba62b74ad))
+* **client:** add support for aiohttp ([3b4cd43](https://github.com/e-invoice-be/e-invoice-py/commit/3b4cd43d7e5e8db43f3e10313b23644d4ec36ac3))
+
+
+### Documentation
+
+* **client:** fix httpx.Timeout documentation reference ([541b277](https://github.com/e-invoice-be/e-invoice-py/commit/541b2776250952e18c6c7d8dc7435e4edbc46027))
+
 ## 1.2.5 (2025-06-18)
 
 Full Changelog: [v1.2.4...v1.2.5](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.4...v1.2.5)
