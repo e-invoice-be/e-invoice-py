@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1 (2025-06-24)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.0...v1.3.1)
+
+### Chores
+
+* **tests:** skip some failing tests on the latest python versions ([4d9aec8](https://github.com/e-invoice-be/e-invoice-py/commit/4d9aec8c5c7934371dde06daa21af5d11aa64eda))
+
 ## 1.3.0 (2025-06-23)
 
 Full Changelog: [v1.2.5...v1.3.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.2.5...v1.3.0)
