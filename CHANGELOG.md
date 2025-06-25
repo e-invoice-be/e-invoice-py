@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.2 (2025-06-25)
+
+Full Changelog: [v1.3.1...v1.3.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.1...v1.3.2)
+
+### Chores
+
+* **internal:** codegen related update ([8bdc2f9](https://github.com/e-invoice-be/e-invoice-py/commit/8bdc2f97fcc5a33a18f14295d34188ac3eac1874))
+* **internal:** version bump ([8c7a087](https://github.com/e-invoice-be/e-invoice-py/commit/8c7a087843e1a7dde1587da65d8cf505f34d61de))
+
 ## 1.3.1 (2025-06-24)
 
 Full Changelog: [v1.3.0...v1.3.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.0...v1.3.1)
