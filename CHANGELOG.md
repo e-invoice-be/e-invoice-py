@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.4 (2025-06-30)
+
+Full Changelog: [v1.3.3...v1.3.4](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.3...v1.3.4)
+
+### Bug Fixes
+
+* **ci:** correct conditional ([b2fc172](https://github.com/e-invoice-be/e-invoice-py/commit/b2fc1729d01858664d066ad7bb90ff49283fb75f))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([a2656c6](https://github.com/e-invoice-be/e-invoice-py/commit/a2656c64c2ebc027ecad4cf574afc513031ce459))
+
 ## 1.3.3 (2025-06-27)
 
 Full Changelog: [v1.3.2...v1.3.3](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.2...v1.3.3)
