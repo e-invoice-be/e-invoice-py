@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.5 (2025-07-02)
+
+Full Changelog: [v1.3.4...v1.3.5](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.4...v1.3.5)
+
+### Chores
+
+* **ci:** change upload type ([bcd6ac8](https://github.com/e-invoice-be/e-invoice-py/commit/bcd6ac855035693ce19312953d8aaf44500065a3))
+
 ## 1.3.4 (2025-06-30)
 
 Full Changelog: [v1.3.3...v1.3.4](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.3...v1.3.4)
