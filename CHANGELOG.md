@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.6 (2025-07-10)
+
+Full Changelog: [v1.3.5...v1.3.6](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.5...v1.3.6)
+
+### Bug Fixes
+
+* **parsing:** correctly handle nested discriminated unions ([630bd57](https://github.com/e-invoice-be/e-invoice-py/commit/630bd57b4da7fc008a826f38fead3abae23cb865))
+
+
+### Chores
+
+* **internal:** bump pinned h11 dep ([92fb15f](https://github.com/e-invoice-be/e-invoice-py/commit/92fb15f6eb150c3b8d0169f2bc20686092f6f33e))
+* **internal:** codegen related update ([76ca3ed](https://github.com/e-invoice-be/e-invoice-py/commit/76ca3eddfd71f21424ee9bbcabda6f8c6dd46214))
+* **package:** mark python 3.13 as supported ([34f3d13](https://github.com/e-invoice-be/e-invoice-py/commit/34f3d130f8def66ce0c8ec3d9ea9c1b0a6a1c961))
+
 ## 1.3.5 (2025-07-02)
 
 Full Changelog: [v1.3.4...v1.3.5](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.4...v1.3.5)
