@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.7 (2025-07-11)
+
+Full Changelog: [v1.3.6...v1.3.7](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.6...v1.3.7)
+
+### Bug Fixes
+
+* **client:** don't send Content-Type header on GET requests ([ba60b4e](https://github.com/e-invoice-be/e-invoice-py/commit/ba60b4e67962745385da6dd8a26d60df18af5de0))
+
+
+### Chores
+
+* **readme:** fix version rendering on pypi ([ceee7c9](https://github.com/e-invoice-be/e-invoice-py/commit/ceee7c97b1a66e52af5d7ebca18a92f7f15c6025))
+
 ## 1.3.6 (2025-07-10)
 
 Full Changelog: [v1.3.5...v1.3.6](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.5...v1.3.6)
