@@ -94,12 +94,17 @@ Methods:
 Types:
 
 ```python
-from e_invoice_api.types import Certificate, LookupRetrieveResponse
+from e_invoice_api.types import (
+    Certificate,
+    LookupRetrieveResponse,
+    LookupRetrieveParticipantsResponse,
+)
 ```
 
 Methods:
 
 - <code title="get /api/lookup">client.lookup.<a href="./src/e_invoice_api/resources/lookup.py">retrieve</a>(\*\*<a href="src/e_invoice_api/types/lookup_retrieve_params.py">params</a>) -> <a href="./src/e_invoice_api/types/lookup_retrieve_response.py">LookupRetrieveResponse</a></code>
+- <code title="get /api/lookup/participants">client.lookup.<a href="./src/e_invoice_api/resources/lookup.py">retrieve_participants</a>(\*\*<a href="src/e_invoice_api/types/lookup_retrieve_participants_params.py">params</a>) -> <a href="./src/e_invoice_api/types/lookup_retrieve_participants_response.py">LookupRetrieveParticipantsResponse</a></code>
 
 # Webhooks
 
