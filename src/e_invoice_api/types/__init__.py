@@ -30,7 +30,11 @@ from .inbox_list_credit_notes_params import InboxListCreditNotesParams as InboxL
 from .document_attachment_create_param import DocumentAttachmentCreateParam as DocumentAttachmentCreateParam
 from .outbox_list_draft_documents_params import OutboxListDraftDocumentsParams as OutboxListDraftDocumentsParams
 from .validate_validate_peppol_id_params import ValidateValidatePeppolIDParams as ValidateValidatePeppolIDParams
+from .lookup_retrieve_participants_params import LookupRetrieveParticipantsParams as LookupRetrieveParticipantsParams
 from .validate_validate_peppol_id_response import ValidateValidatePeppolIDResponse as ValidateValidatePeppolIDResponse
+from .lookup_retrieve_participants_response import (
+    LookupRetrieveParticipantsResponse as LookupRetrieveParticipantsResponse,
+)
 from .outbox_list_received_documents_params import (
     OutboxListReceivedDocumentsParams as OutboxListReceivedDocumentsParams,
 )
