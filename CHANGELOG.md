@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0 (2025-07-15)
+
+Full Changelog: [v1.3.7...v1.4.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.7...v1.4.0)
+
+### Features
+
+* **api:** manual updates ([001d484](https://github.com/e-invoice-be/e-invoice-py/commit/001d484c462bd0aab6b3a618def015f5fe090abd))
+* clean up environment call outs ([4e0d005](https://github.com/e-invoice-be/e-invoice-py/commit/4e0d005d458af9096176a27fec12cd310d84f96d))
+
 ## 1.3.7 (2025-07-11)
 
 Full Changelog: [v1.3.6...v1.3.7](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.6...v1.3.7)
