@@ -79,7 +79,6 @@ pip install e-invoice-api[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from e_invoice_api import DefaultAioHttpClient
 from e_invoice_api import AsyncEInvoice
@@ -87,7 +86,7 @@ from e_invoice_api import AsyncEInvoice
 
 async def main() -> None:
     async with AsyncEInvoice(
-        api_key=os.environ.get("E_INVOICE_API_KEY"),  # This is the default and can be omitted
+        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         document_response = await client.documents.create()
