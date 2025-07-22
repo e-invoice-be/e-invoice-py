@@ -1,6 +1,6 @@
 [project]
 name = "e-invoice-api"
-version = "1.4.0"
+version = "1.4.1"
 description = "The official Python library for the e-invoice API"
 dynamic = ["readme"]
 license = "Apache-2.0"

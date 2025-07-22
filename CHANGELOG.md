@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (2025-07-22)
+
+Full Changelog: [v1.4.0...v1.4.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.0...v1.4.1)
+
+### Bug Fixes
+
+* **parsing:** ignore empty metadata ([69c7659](https://github.com/e-invoice-be/e-invoice-py/commit/69c7659042fca8ef93f4a12b053a28e7e303c218))
+
 ## 1.4.0 (2025-07-15)
 
 Full Changelog: [v1.3.7...v1.4.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.3.7...v1.4.0)
