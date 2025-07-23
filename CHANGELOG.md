@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.2 (2025-07-23)
+
+Full Changelog: [v1.4.1...v1.4.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.1...v1.4.2)
+
+### Bug Fixes
+
+* **parsing:** parse extra field types ([e954db0](https://github.com/e-invoice-be/e-invoice-py/commit/e954db0daa9f76703e2f76ad58eb5865018f0c72))
+
 ## 1.4.1 (2025-07-22)
 
 Full Changelog: [v1.4.0...v1.4.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.0...v1.4.1)
