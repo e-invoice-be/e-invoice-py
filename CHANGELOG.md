@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.3 (2025-07-25)
+
+Full Changelog: [v1.4.2...v1.4.3](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.2...v1.4.3)
+
+### Chores
+
+* **project:** add settings file for vscode ([10c5d7a](https://github.com/e-invoice-be/e-invoice-py/commit/10c5d7a8ea652c0eb9bc9cba89da026fcf1cde1b))
+
 ## 1.4.2 (2025-07-23)
 
 Full Changelog: [v1.4.1...v1.4.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.1...v1.4.2)
