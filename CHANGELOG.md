@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.0 (2025-08-08)
+
+Full Changelog: [v1.4.2...v1.5.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.2...v1.5.0)
+
+### Features
+
+* **api:** api update ([1314de4](https://github.com/e-invoice-be/e-invoice-py/commit/1314de4da9421d3aae9893a52384a932c2cafdbe))
+* **client:** support file upload requests ([0addd75](https://github.com/e-invoice-be/e-invoice-py/commit/0addd75076181bc078e4b3ca36fac51a0995fb8f))
+
+
+### Chores
+
+* **internal:** fix ruff target version ([5a9912e](https://github.com/e-invoice-be/e-invoice-py/commit/5a9912efc3fe690afc8b6c2be03733843cb15d7e))
+* **project:** add settings file for vscode ([10c5d7a](https://github.com/e-invoice-be/e-invoice-py/commit/10c5d7a8ea652c0eb9bc9cba89da026fcf1cde1b))
+
 ## 1.4.2 (2025-07-23)
 
 Full Changelog: [v1.4.1...v1.4.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.1...v1.4.2)
