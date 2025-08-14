@@ -21,13 +21,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestValidate:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_validate_json(self, client: EInvoice) -> None:
         validate = client.validate.validate_json()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_validate_json_with_all_params(self, client: EInvoice) -> None:
         validate = client.validate.validate_json(
@@ -106,7 +106,7 @@ class TestValidate:
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_validate_json(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_json()
@@ -116,7 +116,7 @@ class TestValidate:
         validate = response.parse()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_validate_json(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_json() as response:
@@ -128,7 +128,7 @@ class TestValidate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_validate_peppol_id(self, client: EInvoice) -> None:
         validate = client.validate.validate_peppol_id(
@@ -136,7 +136,7 @@ class TestValidate:
         )
         assert_matches_type(ValidateValidatePeppolIDResponse, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_validate_peppol_id(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_peppol_id(
@@ -148,7 +148,7 @@ class TestValidate:
         validate = response.parse()
         assert_matches_type(ValidateValidatePeppolIDResponse, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_validate_peppol_id(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_peppol_id(
@@ -162,7 +162,7 @@ class TestValidate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_validate_ubl(self, client: EInvoice) -> None:
         validate = client.validate.validate_ubl(
@@ -170,7 +170,7 @@ class TestValidate:
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_validate_ubl(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_ubl(
@@ -182,7 +182,7 @@ class TestValidate:
         validate = response.parse()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_validate_ubl(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_ubl(
@@ -202,13 +202,13 @@ class TestAsyncValidate:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_validate_json(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_json()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_validate_json_with_all_params(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_json(
@@ -287,7 +287,7 @@ class TestAsyncValidate:
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_validate_json(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_json()
@@ -297,7 +297,7 @@ class TestAsyncValidate:
         validate = await response.parse()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_validate_json(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_json() as response:
@@ -309,7 +309,7 @@ class TestAsyncValidate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_peppol_id(
@@ -317,7 +317,7 @@ class TestAsyncValidate:
         )
         assert_matches_type(ValidateValidatePeppolIDResponse, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_peppol_id(
@@ -329,7 +329,7 @@ class TestAsyncValidate:
         validate = await response.parse()
         assert_matches_type(ValidateValidatePeppolIDResponse, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_validate_peppol_id(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_peppol_id(
@@ -343,7 +343,7 @@ class TestAsyncValidate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_ubl(
@@ -351,7 +351,7 @@ class TestAsyncValidate:
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_ubl(
@@ -363,7 +363,7 @@ class TestAsyncValidate:
         validate = await response.parse()
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_ubl(

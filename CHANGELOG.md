@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.1 (2025-08-12)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.0...v1.5.1)
+
+### Chores
+
+* **internal:** codegen related update ([267c580](https://github.com/e-invoice-be/e-invoice-py/commit/267c580508c1ed14f893c3bc51290429e324c938))
+* **internal:** update comment in script ([d094c98](https://github.com/e-invoice-be/e-invoice-py/commit/d094c98404eb3cb780b88a36f008e7d15723d51f))
+* update @stainless-api/prism-cli to v5.15.0 ([0a5faff](https://github.com/e-invoice-be/e-invoice-py/commit/0a5faff67bdeebee5ecfc2ddea3f8e0e04ffb50b))
+
 ## 1.5.0 (2025-08-08)
 
 Full Changelog: [v1.4.2...v1.5.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.4.2...v1.5.0)
