@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.2 (2025-08-27)
+
+Full Changelog: [v1.5.1...v1.5.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.1...v1.5.2)
+
+### Bug Fixes
+
+* avoid newer type syntax ([ea94154](https://github.com/e-invoice-be/e-invoice-py/commit/ea94154de4f824f35864a0d60c7749d0964c9b7f))
+
+
+### Chores
+
+* **internal:** change ci workflow machines ([fd408d1](https://github.com/e-invoice-be/e-invoice-py/commit/fd408d10ca6538abc22a5b490adb5730e064ff63))
+* **internal:** update pyright exclude list ([1ffaa1b](https://github.com/e-invoice-be/e-invoice-py/commit/1ffaa1bcb7dec84e69d7bb7f6fb064940430ec61))
+* update github action ([a980eec](https://github.com/e-invoice-be/e-invoice-py/commit/a980eec5b88135e0024646394e9174804f80fa60))
+
 ## 1.5.1 (2025-08-12)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.0...v1.5.1)
