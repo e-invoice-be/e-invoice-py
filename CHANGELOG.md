@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.3 (2025-08-30)
+
+Full Changelog: [v1.5.2...v1.5.3](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.2...v1.5.3)
+
+### Chores
+
+* **internal:** add Sequence related utils ([1216641](https://github.com/e-invoice-be/e-invoice-py/commit/1216641e3bf60194b65c0010dcf5c3a4c40efc26))
+
 ## 1.5.2 (2025-08-27)
 
 Full Changelog: [v1.5.1...v1.5.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.1...v1.5.2)
