@@ -12,6 +12,7 @@ class DocumentAttachmentCreateParam(TypedDict, total=False):
     file_name: Required[str]
 
     file_data: Optional[str]
+    """Base64 encoded file data"""
 
     file_size: int
 
