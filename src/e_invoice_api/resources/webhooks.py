@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 
 import httpx
 
 from ..types import webhook_create_params, webhook_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -48,7 +48,7 @@ class WebhooksResource(SyncAPIResource):
     def create(
         self,
         *,
-        events: List[str],
+        events: SequenceNotStr[str],
         url: str,
         enabled: bool | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -124,7 +124,7 @@ class WebhooksResource(SyncAPIResource):
         webhook_id: str,
         *,
         enabled: Optional[bool] | NotGiven = NOT_GIVEN,
-        events: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        events: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         url: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -239,7 +239,7 @@ class AsyncWebhooksResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        events: List[str],
+        events: SequenceNotStr[str],
         url: str,
         enabled: bool | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -315,7 +315,7 @@ class AsyncWebhooksResource(AsyncAPIResource):
         webhook_id: str,
         *,
         enabled: Optional[bool] | NotGiven = NOT_GIVEN,
-        events: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        events: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         url: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
