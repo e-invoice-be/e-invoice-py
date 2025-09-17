@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.7.0 (2025-09-17)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* **api:** api update ([5ef87d2](https://github.com/e-invoice-be/e-invoice-py/commit/5ef87d2a6d86e8251108d9c406fe09a1d1898b31))
+* improve future compat with pydantic v3 ([feadf8b](https://github.com/e-invoice-be/e-invoice-py/commit/feadf8b3eb3fd183651f53779fd045bc22e5a170))
+* **types:** replace List[str] with SequenceNotStr in params ([ac2abc2](https://github.com/e-invoice-be/e-invoice-py/commit/ac2abc2710ef198e99ce36d076830d53d3d00fa3))
+
+
+### Chores
+
+* **internal:** move mypy configurations to `pyproject.toml` file ([8237446](https://github.com/e-invoice-be/e-invoice-py/commit/8237446ba1104e6d6d42b98d8137b1307e400ef5))
+* **internal:** update pydantic dependency ([e4393f6](https://github.com/e-invoice-be/e-invoice-py/commit/e4393f60093e0a4f5d31d2bb85e1db4686e0b08e))
+* **tests:** simplify `get_platform` test ([5802895](https://github.com/e-invoice-be/e-invoice-py/commit/5802895b9d6ce3947f3da0622cf8718c2ee5103d))
+
 ## 1.6.0 (2025-09-02)
 
 Full Changelog: [v1.5.2...v1.6.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.5.2...v1.6.0)
