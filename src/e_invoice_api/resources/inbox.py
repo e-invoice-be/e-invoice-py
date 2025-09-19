@@ -14,7 +14,7 @@ from ..types import (
     inbox_list_invoices_params,
     inbox_list_credit_notes_params,
 )
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -56,20 +56,20 @@ class InboxResource(SyncAPIResource):
     def list(
         self,
         *,
-        date_from: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
-        date_to: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
-        search: Optional[str] | NotGiven = NOT_GIVEN,
-        sender: Optional[str] | NotGiven = NOT_GIVEN,
-        state: Optional[DocumentState] | NotGiven = NOT_GIVEN,
-        type: Optional[DocumentType] | NotGiven = NOT_GIVEN,
+        date_from: Union[str, datetime, None] | Omit = omit,
+        date_to: Union[str, datetime, None] | Omit = omit,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
+        search: Optional[str] | Omit = omit,
+        sender: Optional[str] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
+        type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received documents with filtering options.
@@ -127,14 +127,14 @@ class InboxResource(SyncAPIResource):
     def list_credit_notes(
         self,
         *,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received credit notes with filtering options.
@@ -174,14 +174,14 @@ class InboxResource(SyncAPIResource):
     def list_invoices(
         self,
         *,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
         Retrieve a paginated list of received invoices with filtering options.
@@ -242,20 +242,20 @@ class AsyncInboxResource(AsyncAPIResource):
     def list(
         self,
         *,
-        date_from: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
-        date_to: Union[str, datetime, None] | NotGiven = NOT_GIVEN,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
-        search: Optional[str] | NotGiven = NOT_GIVEN,
-        sender: Optional[str] | NotGiven = NOT_GIVEN,
-        state: Optional[DocumentState] | NotGiven = NOT_GIVEN,
-        type: Optional[DocumentType] | NotGiven = NOT_GIVEN,
+        date_from: Union[str, datetime, None] | Omit = omit,
+        date_to: Union[str, datetime, None] | Omit = omit,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
+        search: Optional[str] | Omit = omit,
+        sender: Optional[str] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
+        type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received documents with filtering options.
@@ -313,14 +313,14 @@ class AsyncInboxResource(AsyncAPIResource):
     def list_credit_notes(
         self,
         *,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received credit notes with filtering options.
@@ -360,14 +360,14 @@ class AsyncInboxResource(AsyncAPIResource):
     def list_invoices(
         self,
         *,
-        page: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        page: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
         Retrieve a paginated list of received invoices with filtering options.
