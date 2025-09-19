@@ -7,7 +7,7 @@ from typing import Optional
 import httpx
 
 from ..types import webhook_create_params, webhook_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
+from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -50,13 +50,13 @@ class WebhooksResource(SyncAPIResource):
         *,
         events: SequenceNotStr[str],
         url: str,
-        enabled: bool | NotGiven = NOT_GIVEN,
+        enabled: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Create a new webhook
@@ -95,7 +95,7 @@ class WebhooksResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Get a webhook by ID
@@ -123,15 +123,15 @@ class WebhooksResource(SyncAPIResource):
         self,
         webhook_id: str,
         *,
-        enabled: Optional[bool] | NotGiven = NOT_GIVEN,
-        events: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        url: Optional[str] | NotGiven = NOT_GIVEN,
+        enabled: Optional[bool] | Omit = omit,
+        events: Optional[SequenceNotStr[str]] | Omit = omit,
+        url: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Update a webhook by ID
@@ -171,7 +171,7 @@ class WebhooksResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookListResponse:
         """Get all webhooks for the current tenant"""
         return self._get(
@@ -191,7 +191,7 @@ class WebhooksResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookDeleteResponse:
         """
         Delete a webhook
@@ -241,13 +241,13 @@ class AsyncWebhooksResource(AsyncAPIResource):
         *,
         events: SequenceNotStr[str],
         url: str,
-        enabled: bool | NotGiven = NOT_GIVEN,
+        enabled: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Create a new webhook
@@ -286,7 +286,7 @@ class AsyncWebhooksResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Get a webhook by ID
@@ -314,15 +314,15 @@ class AsyncWebhooksResource(AsyncAPIResource):
         self,
         webhook_id: str,
         *,
-        enabled: Optional[bool] | NotGiven = NOT_GIVEN,
-        events: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        url: Optional[str] | NotGiven = NOT_GIVEN,
+        enabled: Optional[bool] | Omit = omit,
+        events: Optional[SequenceNotStr[str]] | Omit = omit,
+        url: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookResponse:
         """
         Update a webhook by ID
@@ -362,7 +362,7 @@ class AsyncWebhooksResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookListResponse:
         """Get all webhooks for the current tenant"""
         return await self._get(
@@ -382,7 +382,7 @@ class AsyncWebhooksResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> WebhookDeleteResponse:
         """
         Delete a webhook
