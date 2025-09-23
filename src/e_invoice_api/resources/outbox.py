@@ -118,7 +118,8 @@ class OutboxResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
-        Retrieve a paginated list of received documents with filtering options.
+        Retrieve a paginated list of sent documents with filtering options including
+        state, type, sender, date range, and text search.
 
         Args:
           date_from: Filter by issue date (from)
@@ -257,7 +258,8 @@ class AsyncOutboxResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
-        Retrieve a paginated list of received documents with filtering options.
+        Retrieve a paginated list of sent documents with filtering options including
+        state, type, sender, date range, and text search.
 
         Args:
           date_from: Filter by issue date (from)
