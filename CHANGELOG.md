@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.8.0 (2025-09-23)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **api:** api update ([beea7d2](https://github.com/e-invoice-be/e-invoice-py/commit/beea7d20b83a612dd4a88a5f13cb2878f04b25eb))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([1a32118](https://github.com/e-invoice-be/e-invoice-py/commit/1a32118fa332a6c4331f37340979c8f174b0b2a6))
+* **types:** change optional parameter type from NotGiven to Omit ([c0b0cd3](https://github.com/e-invoice-be/e-invoice-py/commit/c0b0cd32b4ac1d7dfc88c5ea5da92650d3117190))
+
 ## 1.7.0 (2025-09-17)
 
 Full Changelog: [v1.6.0...v1.7.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.6.0...v1.7.0)
