@@ -11,7 +11,9 @@ from tests.utils import assert_matches_type
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import (
     DocumentResponse,
+    UblDocumentValidation,
     DocumentDeleteResponse,
+    DocumentCreateFromPdfResponse,
 )
 from e_invoice_api._utils import parse_date
 
@@ -261,6 +263,50 @@ class TestDocuments:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
+    def test_method_create_from_pdf(self, client: EInvoice) -> None:
+        document = client.documents.create_from_pdf(
+            file=b"raw file contents",
+        )
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_create_from_pdf_with_all_params(self, client: EInvoice) -> None:
+        document = client.documents.create_from_pdf(
+            file=b"raw file contents",
+            customer_tax_id="customer_tax_id",
+            vendor_tax_id="vendor_tax_id",
+        )
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_create_from_pdf(self, client: EInvoice) -> None:
+        response = client.documents.with_raw_response.create_from_pdf(
+            file=b"raw file contents",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        document = response.parse()
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_create_from_pdf(self, client: EInvoice) -> None:
+        with client.documents.with_streaming_response.create_from_pdf(
+            file=b"raw file contents",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            document = response.parse()
+            assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
     def test_method_send(self, client: EInvoice) -> None:
         document = client.documents.send(
             document_id="document_id",
@@ -312,6 +358,48 @@ class TestDocuments:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             client.documents.with_raw_response.send(
                 document_id="",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_validate(self, client: EInvoice) -> None:
+        document = client.documents.validate(
+            "document_id",
+        )
+        assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_validate(self, client: EInvoice) -> None:
+        response = client.documents.with_raw_response.validate(
+            "document_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        document = response.parse()
+        assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_validate(self, client: EInvoice) -> None:
+        with client.documents.with_streaming_response.validate(
+            "document_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            document = response.parse()
+            assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_validate(self, client: EInvoice) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
+            client.documents.with_raw_response.validate(
+                "",
             )
 
 
@@ -560,6 +648,50 @@ class TestAsyncDocuments:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
+    async def test_method_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
+        document = await async_client.documents.create_from_pdf(
+            file=b"raw file contents",
+        )
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_create_from_pdf_with_all_params(self, async_client: AsyncEInvoice) -> None:
+        document = await async_client.documents.create_from_pdf(
+            file=b"raw file contents",
+            customer_tax_id="customer_tax_id",
+            vendor_tax_id="vendor_tax_id",
+        )
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
+        response = await async_client.documents.with_raw_response.create_from_pdf(
+            file=b"raw file contents",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        document = await response.parse()
+        assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
+        async with async_client.documents.with_streaming_response.create_from_pdf(
+            file=b"raw file contents",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            document = await response.parse()
+            assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
     async def test_method_send(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.send(
             document_id="document_id",
@@ -611,4 +743,46 @@ class TestAsyncDocuments:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             await async_client.documents.with_raw_response.send(
                 document_id="",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_validate(self, async_client: AsyncEInvoice) -> None:
+        document = await async_client.documents.validate(
+            "document_id",
+        )
+        assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_validate(self, async_client: AsyncEInvoice) -> None:
+        response = await async_client.documents.with_raw_response.validate(
+            "document_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        document = await response.parse()
+        assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_validate(self, async_client: AsyncEInvoice) -> None:
+        async with async_client.documents.with_streaming_response.validate(
+            "document_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            document = await response.parse()
+            assert_matches_type(UblDocumentValidation, document, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_validate(self, async_client: AsyncEInvoice) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
+            await async_client.documents.with_raw_response.validate(
+                "",
             )
