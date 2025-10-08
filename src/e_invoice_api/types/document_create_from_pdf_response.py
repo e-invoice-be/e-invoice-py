@@ -4,84 +4,22 @@ from typing import List, Optional
 from datetime import date
 from typing_extensions import Literal
 
-from . import charge, allowance
+from .charge import Charge
 from .._models import BaseModel
+from .allowance import Allowance
 from .currency_code import CurrencyCode
 from .document_type import DocumentType
 from .document_state import DocumentState
 from .document_direction import DocumentDirection
 from .unit_of_measure_code import UnitOfMeasureCode
-from .documents.document_attachment import DocumentAttachment
+from .payment_detail_create import PaymentDetailCreate
+from .document_attachment_create import DocumentAttachmentCreate
 
-__all__ = ["DocumentResponse", "Allowance", "Charge", "Item", "PaymentDetail", "TaxDetail"]
-
-
-class Allowance(BaseModel):
-    amount: Optional[str] = None
-    """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
-
-    base_amount: Optional[str] = None
-    """
-    The base amount that may be used, in conjunction with the allowance percentage,
-    to calculate the allowance amount. Must be rounded to maximum 2 decimals
-    """
-
-    multiplier_factor: Optional[str] = None
-    """
-    The percentage that may be used, in conjunction with the allowance base amount,
-    to calculate the allowance amount. To state 20%, use value 20
-    """
-
-    reason: Optional[str] = None
-    """The reason for the allowance"""
-
-    reason_code: Optional[str] = None
-    """The code for the allowance reason"""
-
-    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]] = None
-    """Duty or tax or fee category codes (Subset of UNCL5305)
-
-    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
-    """
-
-    tax_rate: Optional[str] = None
-    """The VAT rate, represented as percentage that applies to the allowance"""
-
-
-class Charge(BaseModel):
-    amount: Optional[str] = None
-    """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
-
-    base_amount: Optional[str] = None
-    """
-    The base amount that may be used, in conjunction with the charge percentage, to
-    calculate the charge amount. Must be rounded to maximum 2 decimals
-    """
-
-    multiplier_factor: Optional[str] = None
-    """
-    The percentage that may be used, in conjunction with the charge base amount, to
-    calculate the charge amount. To state 20%, use value 20
-    """
-
-    reason: Optional[str] = None
-    """The reason for the charge"""
-
-    reason_code: Optional[str] = None
-    """The code for the charge reason"""
-
-    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]] = None
-    """Duty or tax or fee category codes (Subset of UNCL5305)
-
-    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
-    """
-
-    tax_rate: Optional[str] = None
-    """The VAT rate, represented as percentage that applies to the charge"""
+__all__ = ["DocumentCreateFromPdfResponse", "Item", "TaxDetail"]
 
 
 class Item(BaseModel):
-    allowances: Optional[List[allowance.Allowance]] = None
+    allowances: Optional[List[Allowance]] = None
     """The allowances of the line item."""
 
     amount: Optional[str] = None
@@ -91,7 +29,7 @@ class Item(BaseModel):
     decimals
     """
 
-    charges: Optional[List[charge.Charge]] = None
+    charges: Optional[List[Charge]] = None
     """The charges of the line item."""
 
     date: None = None
@@ -121,25 +59,13 @@ class Item(BaseModel):
     """The unit price of the line item. Must be rounded to maximum 2 decimals"""
 
 
-class PaymentDetail(BaseModel):
-    bank_account_number: Optional[str] = None
-
-    iban: Optional[str] = None
-
-    payment_reference: Optional[str] = None
-
-    swift: Optional[str] = None
-
-
 class TaxDetail(BaseModel):
     amount: Optional[str] = None
 
     rate: Optional[str] = None
 
 
-class DocumentResponse(BaseModel):
-    id: str
-
+class DocumentCreateFromPdfResponse(BaseModel):
     allowances: Optional[List[Allowance]] = None
 
     amount_due: Optional[str] = None
@@ -148,7 +74,7 @@ class DocumentResponse(BaseModel):
     Must be positive and rounded to maximum 2 decimals
     """
 
-    attachments: Optional[List[DocumentAttachment]] = None
+    attachments: Optional[List[DocumentAttachmentCreate]] = None
 
     billing_address: Optional[str] = None
 
@@ -188,10 +114,11 @@ class DocumentResponse(BaseModel):
     """
 
     items: Optional[List[Item]] = None
+    """At least one line item is required"""
 
     note: Optional[str] = None
 
-    payment_details: Optional[List[PaymentDetail]] = None
+    payment_details: Optional[List[PaymentDetailCreate]] = None
 
     payment_term: Optional[str] = None
 
@@ -229,6 +156,9 @@ class DocumentResponse(BaseModel):
     2 decimals
     """
 
+    success: Optional[bool] = None
+    """Whether the PDF was successfully converted into a compliant e-invoice"""
+
     tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]] = None
     """Tax category code of the invoice"""
 
@@ -245,6 +175,9 @@ class DocumentResponse(BaseModel):
 
     Must be positive and rounded to maximum 2 decimals
     """
+
+    ubl_document: Optional[str] = None
+    """The UBL document as an XML string"""
 
     vatex: Optional[
         Literal[

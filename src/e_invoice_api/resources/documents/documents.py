@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Union, Iterable, Optional
+from typing import Union, Mapping, Iterable, Optional, cast
 from datetime import date
 from typing_extensions import Literal
 
@@ -23,9 +23,10 @@ from ...types import (
     DocumentDirection,
     document_send_params,
     document_create_params,
+    document_create_from_pdf_params,
 )
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
+from ..._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -48,9 +49,11 @@ from ...types.document_type import DocumentType
 from ...types.document_state import DocumentState
 from ...types.document_response import DocumentResponse
 from ...types.document_direction import DocumentDirection
+from ...types.ubl_document_validation import UblDocumentValidation
 from ...types.document_delete_response import DocumentDeleteResponse
 from ...types.payment_detail_create_param import PaymentDetailCreateParam
 from ...types.document_attachment_create_param import DocumentAttachmentCreateParam
+from ...types.document_create_from_pdf_response import DocumentCreateFromPdfResponse
 
 __all__ = ["DocumentsResource", "AsyncDocumentsResource"]
 
@@ -372,6 +375,62 @@ class DocumentsResource(SyncAPIResource):
             cast_to=DocumentDeleteResponse,
         )
 
+    def create_from_pdf(
+        self,
+        *,
+        file: FileTypes,
+        customer_tax_id: Optional[str] | Omit = omit,
+        vendor_tax_id: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DocumentCreateFromPdfResponse:
+        """Create a new invoice or credit note from a PDF file.
+
+        If the 'ubl_document' field
+        is set in the response, it indicates that sufficient details were extracted from
+        the PDF to automatically generate a valid UBL document ready for sending. If
+        'ubl_document' is not set, human intervention may be required to ensure
+        compliance.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        body = deepcopy_minimal({"file": file})
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return self._post(
+            "/api/documents/pdf",
+            body=maybe_transform(body, document_create_from_pdf_params.DocumentCreateFromPdfParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "customer_tax_id": customer_tax_id,
+                        "vendor_tax_id": vendor_tax_id,
+                    },
+                    document_create_from_pdf_params.DocumentCreateFromPdfParams,
+                ),
+            ),
+            cast_to=DocumentCreateFromPdfResponse,
+        )
+
     def send(
         self,
         document_id: str,
@@ -421,6 +480,39 @@ class DocumentsResource(SyncAPIResource):
                 ),
             ),
             cast_to=DocumentResponse,
+        )
+
+    def validate(
+        self,
+        document_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UblDocumentValidation:
+        """
+        Validate a UBL document according to Peppol BIS Billing 3.0
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not document_id:
+            raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
+        return self._post(
+            f"/api/documents/{document_id}/validate",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UblDocumentValidation,
         )
 
 
@@ -741,6 +833,62 @@ class AsyncDocumentsResource(AsyncAPIResource):
             cast_to=DocumentDeleteResponse,
         )
 
+    async def create_from_pdf(
+        self,
+        *,
+        file: FileTypes,
+        customer_tax_id: Optional[str] | Omit = omit,
+        vendor_tax_id: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DocumentCreateFromPdfResponse:
+        """Create a new invoice or credit note from a PDF file.
+
+        If the 'ubl_document' field
+        is set in the response, it indicates that sufficient details were extracted from
+        the PDF to automatically generate a valid UBL document ready for sending. If
+        'ubl_document' is not set, human intervention may be required to ensure
+        compliance.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        body = deepcopy_minimal({"file": file})
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return await self._post(
+            "/api/documents/pdf",
+            body=await async_maybe_transform(body, document_create_from_pdf_params.DocumentCreateFromPdfParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "customer_tax_id": customer_tax_id,
+                        "vendor_tax_id": vendor_tax_id,
+                    },
+                    document_create_from_pdf_params.DocumentCreateFromPdfParams,
+                ),
+            ),
+            cast_to=DocumentCreateFromPdfResponse,
+        )
+
     async def send(
         self,
         document_id: str,
@@ -792,6 +940,39 @@ class AsyncDocumentsResource(AsyncAPIResource):
             cast_to=DocumentResponse,
         )
 
+    async def validate(
+        self,
+        document_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UblDocumentValidation:
+        """
+        Validate a UBL document according to Peppol BIS Billing 3.0
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not document_id:
+            raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
+        return await self._post(
+            f"/api/documents/{document_id}/validate",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UblDocumentValidation,
+        )
+
 
 class DocumentsResourceWithRawResponse:
     def __init__(self, documents: DocumentsResource) -> None:
@@ -806,8 +987,14 @@ class DocumentsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             documents.delete,
         )
+        self.create_from_pdf = to_raw_response_wrapper(
+            documents.create_from_pdf,
+        )
         self.send = to_raw_response_wrapper(
             documents.send,
+        )
+        self.validate = to_raw_response_wrapper(
+            documents.validate,
         )
 
     @cached_property
@@ -832,8 +1019,14 @@ class AsyncDocumentsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             documents.delete,
         )
+        self.create_from_pdf = async_to_raw_response_wrapper(
+            documents.create_from_pdf,
+        )
         self.send = async_to_raw_response_wrapper(
             documents.send,
+        )
+        self.validate = async_to_raw_response_wrapper(
+            documents.validate,
         )
 
     @cached_property
@@ -858,8 +1051,14 @@ class DocumentsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             documents.delete,
         )
+        self.create_from_pdf = to_streamed_response_wrapper(
+            documents.create_from_pdf,
+        )
         self.send = to_streamed_response_wrapper(
             documents.send,
+        )
+        self.validate = to_streamed_response_wrapper(
+            documents.validate,
         )
 
     @cached_property
@@ -884,8 +1083,14 @@ class AsyncDocumentsResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             documents.delete,
         )
+        self.create_from_pdf = async_to_streamed_response_wrapper(
+            documents.create_from_pdf,
+        )
         self.send = async_to_streamed_response_wrapper(
             documents.send,
+        )
+        self.validate = async_to_streamed_response_wrapper(
+            documents.validate,
         )
 
     @cached_property

@@ -21,7 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import inbox, lookup, outbox, validate, webhooks
+from .resources import me, inbox, lookup, outbox, validate, webhooks
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import EInvoiceError, APIStatusError
 from ._base_client import (
@@ -49,6 +49,7 @@ class EInvoice(SyncAPIClient):
     outbox: outbox.OutboxResource
     validate: validate.ValidateResource
     lookup: lookup.LookupResource
+    me: me.MeResource
     webhooks: webhooks.WebhooksResource
     with_raw_response: EInvoiceWithRawResponse
     with_streaming_response: EInvoiceWithStreamedResponse
@@ -112,6 +113,7 @@ class EInvoice(SyncAPIClient):
         self.outbox = outbox.OutboxResource(self)
         self.validate = validate.ValidateResource(self)
         self.lookup = lookup.LookupResource(self)
+        self.me = me.MeResource(self)
         self.webhooks = webhooks.WebhooksResource(self)
         self.with_raw_response = EInvoiceWithRawResponse(self)
         self.with_streaming_response = EInvoiceWithStreamedResponse(self)
@@ -227,6 +229,7 @@ class AsyncEInvoice(AsyncAPIClient):
     outbox: outbox.AsyncOutboxResource
     validate: validate.AsyncValidateResource
     lookup: lookup.AsyncLookupResource
+    me: me.AsyncMeResource
     webhooks: webhooks.AsyncWebhooksResource
     with_raw_response: AsyncEInvoiceWithRawResponse
     with_streaming_response: AsyncEInvoiceWithStreamedResponse
@@ -290,6 +293,7 @@ class AsyncEInvoice(AsyncAPIClient):
         self.outbox = outbox.AsyncOutboxResource(self)
         self.validate = validate.AsyncValidateResource(self)
         self.lookup = lookup.AsyncLookupResource(self)
+        self.me = me.AsyncMeResource(self)
         self.webhooks = webhooks.AsyncWebhooksResource(self)
         self.with_raw_response = AsyncEInvoiceWithRawResponse(self)
         self.with_streaming_response = AsyncEInvoiceWithStreamedResponse(self)
@@ -406,6 +410,7 @@ class EInvoiceWithRawResponse:
         self.outbox = outbox.OutboxResourceWithRawResponse(client.outbox)
         self.validate = validate.ValidateResourceWithRawResponse(client.validate)
         self.lookup = lookup.LookupResourceWithRawResponse(client.lookup)
+        self.me = me.MeResourceWithRawResponse(client.me)
         self.webhooks = webhooks.WebhooksResourceWithRawResponse(client.webhooks)
 
 
@@ -416,6 +421,7 @@ class AsyncEInvoiceWithRawResponse:
         self.outbox = outbox.AsyncOutboxResourceWithRawResponse(client.outbox)
         self.validate = validate.AsyncValidateResourceWithRawResponse(client.validate)
         self.lookup = lookup.AsyncLookupResourceWithRawResponse(client.lookup)
+        self.me = me.AsyncMeResourceWithRawResponse(client.me)
         self.webhooks = webhooks.AsyncWebhooksResourceWithRawResponse(client.webhooks)
 
 
@@ -426,6 +432,7 @@ class EInvoiceWithStreamedResponse:
         self.outbox = outbox.OutboxResourceWithStreamingResponse(client.outbox)
         self.validate = validate.ValidateResourceWithStreamingResponse(client.validate)
         self.lookup = lookup.LookupResourceWithStreamingResponse(client.lookup)
+        self.me = me.MeResourceWithStreamingResponse(client.me)
         self.webhooks = webhooks.WebhooksResourceWithStreamingResponse(client.webhooks)
 
 
@@ -436,6 +443,7 @@ class AsyncEInvoiceWithStreamedResponse:
         self.outbox = outbox.AsyncOutboxResourceWithStreamingResponse(client.outbox)
         self.validate = validate.AsyncValidateResourceWithStreamingResponse(client.validate)
         self.lookup = lookup.AsyncLookupResourceWithStreamingResponse(client.lookup)
+        self.me = me.AsyncMeResourceWithStreamingResponse(client.me)
         self.webhooks = webhooks.AsyncWebhooksResourceWithStreamingResponse(client.webhooks)
 
 
