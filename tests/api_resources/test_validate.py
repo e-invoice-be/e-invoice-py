@@ -31,6 +31,17 @@ class TestValidate:
     @parametrize
     def test_method_validate_json_with_all_params(self, client: EInvoice) -> None:
         validate = client.validate.validate_json(
+            allowances=[
+                {
+                    "amount": 0,
+                    "base_amount": 0,
+                    "multiplier_factor": 0,
+                    "reason": "reason",
+                    "reason_code": "reason_code",
+                    "tax_code": "AE",
+                    "tax_rate": "tax_rate",
+                }
+            ],
             amount_due=0,
             attachments=[
                 {
@@ -42,6 +53,17 @@ class TestValidate:
             ],
             billing_address="billing_address",
             billing_address_recipient="billing_address_recipient",
+            charges=[
+                {
+                    "amount": 0,
+                    "base_amount": 0,
+                    "multiplier_factor": 0,
+                    "reason": "reason",
+                    "reason_code": "reason_code",
+                    "tax_code": "AE",
+                    "tax_rate": "tax_rate",
+                }
+            ],
             currency="EUR",
             customer_address="customer_address",
             customer_address_recipient="customer_address_recipient",
@@ -57,7 +79,29 @@ class TestValidate:
             invoice_total=0,
             items=[
                 {
+                    "allowances": [
+                        {
+                            "amount": 0,
+                            "base_amount": 0,
+                            "multiplier_factor": 0,
+                            "reason": "reason",
+                            "reason_code": "reason_code",
+                            "tax_code": "AE",
+                            "tax_rate": "tax_rate",
+                        }
+                    ],
                     "amount": 0,
+                    "charges": [
+                        {
+                            "amount": 0,
+                            "base_amount": 0,
+                            "multiplier_factor": 0,
+                            "reason": "reason",
+                            "reason_code": "reason_code",
+                            "tax_code": "AE",
+                            "tax_rate": "tax_rate",
+                        }
+                    ],
                     "date": None,
                     "description": "description",
                     "product_code": "product_code",
@@ -215,6 +259,17 @@ class TestAsyncValidate:
     @parametrize
     async def test_method_validate_json_with_all_params(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_json(
+            allowances=[
+                {
+                    "amount": 0,
+                    "base_amount": 0,
+                    "multiplier_factor": 0,
+                    "reason": "reason",
+                    "reason_code": "reason_code",
+                    "tax_code": "AE",
+                    "tax_rate": "tax_rate",
+                }
+            ],
             amount_due=0,
             attachments=[
                 {
@@ -226,6 +281,17 @@ class TestAsyncValidate:
             ],
             billing_address="billing_address",
             billing_address_recipient="billing_address_recipient",
+            charges=[
+                {
+                    "amount": 0,
+                    "base_amount": 0,
+                    "multiplier_factor": 0,
+                    "reason": "reason",
+                    "reason_code": "reason_code",
+                    "tax_code": "AE",
+                    "tax_rate": "tax_rate",
+                }
+            ],
             currency="EUR",
             customer_address="customer_address",
             customer_address_recipient="customer_address_recipient",
@@ -241,7 +307,29 @@ class TestAsyncValidate:
             invoice_total=0,
             items=[
                 {
+                    "allowances": [
+                        {
+                            "amount": 0,
+                            "base_amount": 0,
+                            "multiplier_factor": 0,
+                            "reason": "reason",
+                            "reason_code": "reason_code",
+                            "tax_code": "AE",
+                            "tax_rate": "tax_rate",
+                        }
+                    ],
                     "amount": 0,
+                    "charges": [
+                        {
+                            "amount": 0,
+                            "base_amount": 0,
+                            "multiplier_factor": 0,
+                            "reason": "reason",
+                            "reason_code": "reason_code",
+                            "tax_code": "AE",
+                            "tax_rate": "tax_rate",
+                        }
+                    ],
                     "date": None,
                     "description": "description",
                     "product_code": "product_code",

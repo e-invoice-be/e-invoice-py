@@ -63,10 +63,12 @@ class ValidateResource(SyncAPIResource):
     def validate_json(
         self,
         *,
+        allowances: Optional[Iterable[validate_validate_json_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
         billing_address: Optional[str] | Omit = omit,
         billing_address_recipient: Optional[str] | Omit = omit,
+        charges: Optional[Iterable[validate_validate_json_params.Charge]] | Omit = omit,
         currency: CurrencyCode | Omit = omit,
         customer_address: Optional[str] | Omit = omit,
         customer_address_recipient: Optional[str] | Omit = omit,
@@ -80,7 +82,7 @@ class ValidateResource(SyncAPIResource):
         invoice_date: Union[str, date, None] | Omit = omit,
         invoice_id: Optional[str] | Omit = omit,
         invoice_total: Union[float, str, None] | Omit = omit,
-        items: Optional[Iterable[validate_validate_json_params.Item]] | Omit = omit,
+        items: Iterable[validate_validate_json_params.Item] | Omit = omit,
         note: Optional[str] | Omit = omit,
         payment_details: Optional[Iterable[PaymentDetailCreateParam]] | Omit = omit,
         payment_term: Optional[str] | Omit = omit,
@@ -184,9 +186,29 @@ class ValidateResource(SyncAPIResource):
         Validate if the JSON document can be converted to a valid UBL document
 
         Args:
+          amount_due: The amount due of the invoice. Must be positive and rounded to maximum 2
+              decimals
+
           currency: Currency of the invoice
 
+          invoice_total: The total amount of the invoice (so invoice_total = subtotal + total_tax +
+              total_discount). Must be positive and rounded to maximum 2 decimals
+
+          items: At least one line item is required
+
+          previous_unpaid_balance: The previous unpaid balance of the invoice, if any. Must be positive and rounded
+              to maximum 2 decimals
+
+          subtotal: The taxable base of the invoice. Should be the sum of all line items -
+              allowances (for example commercial discounts) + charges with impact on VAT. Must
+              be positive and rounded to maximum 2 decimals
+
           tax_code: Tax category code of the invoice
+
+          total_discount: The total financial discount of the invoice (so discounts not subject to VAT).
+              Must be positive and rounded to maximum 2 decimals
+
+          total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
 
           vatex: VATEX code list for VAT exemption reasons
 
@@ -206,10 +228,12 @@ class ValidateResource(SyncAPIResource):
             "/api/validate/json",
             body=maybe_transform(
                 {
+                    "allowances": allowances,
                     "amount_due": amount_due,
                     "attachments": attachments,
                     "billing_address": billing_address,
                     "billing_address_recipient": billing_address_recipient,
+                    "charges": charges,
                     "currency": currency,
                     "customer_address": customer_address,
                     "customer_address_recipient": customer_address_recipient,
@@ -367,10 +391,12 @@ class AsyncValidateResource(AsyncAPIResource):
     async def validate_json(
         self,
         *,
+        allowances: Optional[Iterable[validate_validate_json_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
         billing_address: Optional[str] | Omit = omit,
         billing_address_recipient: Optional[str] | Omit = omit,
+        charges: Optional[Iterable[validate_validate_json_params.Charge]] | Omit = omit,
         currency: CurrencyCode | Omit = omit,
         customer_address: Optional[str] | Omit = omit,
         customer_address_recipient: Optional[str] | Omit = omit,
@@ -384,7 +410,7 @@ class AsyncValidateResource(AsyncAPIResource):
         invoice_date: Union[str, date, None] | Omit = omit,
         invoice_id: Optional[str] | Omit = omit,
         invoice_total: Union[float, str, None] | Omit = omit,
-        items: Optional[Iterable[validate_validate_json_params.Item]] | Omit = omit,
+        items: Iterable[validate_validate_json_params.Item] | Omit = omit,
         note: Optional[str] | Omit = omit,
         payment_details: Optional[Iterable[PaymentDetailCreateParam]] | Omit = omit,
         payment_term: Optional[str] | Omit = omit,
@@ -488,9 +514,29 @@ class AsyncValidateResource(AsyncAPIResource):
         Validate if the JSON document can be converted to a valid UBL document
 
         Args:
+          amount_due: The amount due of the invoice. Must be positive and rounded to maximum 2
+              decimals
+
           currency: Currency of the invoice
 
+          invoice_total: The total amount of the invoice (so invoice_total = subtotal + total_tax +
+              total_discount). Must be positive and rounded to maximum 2 decimals
+
+          items: At least one line item is required
+
+          previous_unpaid_balance: The previous unpaid balance of the invoice, if any. Must be positive and rounded
+              to maximum 2 decimals
+
+          subtotal: The taxable base of the invoice. Should be the sum of all line items -
+              allowances (for example commercial discounts) + charges with impact on VAT. Must
+              be positive and rounded to maximum 2 decimals
+
           tax_code: Tax category code of the invoice
+
+          total_discount: The total financial discount of the invoice (so discounts not subject to VAT).
+              Must be positive and rounded to maximum 2 decimals
+
+          total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
 
           vatex: VATEX code list for VAT exemption reasons
 
@@ -510,10 +556,12 @@ class AsyncValidateResource(AsyncAPIResource):
             "/api/validate/json",
             body=await async_maybe_transform(
                 {
+                    "allowances": allowances,
                     "amount_due": amount_due,
                     "attachments": attachments,
                     "billing_address": billing_address,
                     "billing_address_recipient": billing_address_recipient,
+                    "charges": charges,
                     "currency": currency,
                     "customer_address": customer_address,
                     "customer_address_recipient": customer_address_recipient,
