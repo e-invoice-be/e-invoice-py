@@ -90,6 +90,7 @@ class TestDocuments:
             shipping_address_recipient="shipping_address_recipient",
             state="DRAFT",
             subtotal=0,
+            tax_code="AE",
             tax_details=[
                 {
                     "amount": 0,
@@ -98,6 +99,8 @@ class TestDocuments:
             ],
             total_discount=0,
             total_tax=0,
+            vatex="VATEX-EU-79-C",
+            vatex_note="vatex_note",
             vendor_address="vendor_address",
             vendor_address_recipient="vendor_address_recipient",
             vendor_email="vendor_email",
@@ -342,6 +345,7 @@ class TestAsyncDocuments:
             shipping_address_recipient="shipping_address_recipient",
             state="DRAFT",
             subtotal=0,
+            tax_code="AE",
             tax_details=[
                 {
                     "amount": 0,
@@ -350,6 +354,8 @@ class TestAsyncDocuments:
             ],
             total_discount=0,
             total_tax=0,
+            vatex="VATEX-EU-79-C",
+            vatex_note="vatex_note",
             vendor_address="vendor_address",
             vendor_address_recipient="vendor_address_recipient",
             vendor_email="vendor_email",
