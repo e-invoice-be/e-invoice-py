@@ -15,17 +15,25 @@ from .unit_of_measure_code import UnitOfMeasureCode
 from .payment_detail_create_param import PaymentDetailCreateParam
 from .document_attachment_create_param import DocumentAttachmentCreateParam
 
-__all__ = ["DocumentCreateParams", "Item", "TaxDetail"]
+__all__ = ["DocumentCreateParams", "Allowance", "Charge", "Item", "ItemAllowance", "ItemCharge", "TaxDetail"]
 
 
 class DocumentCreateParams(TypedDict, total=False):
+    allowances: Optional[Iterable[Allowance]]
+
     amount_due: Union[float, str, None]
+    """The amount due of the invoice.
+
+    Must be positive and rounded to maximum 2 decimals
+    """
 
     attachments: Optional[Iterable[DocumentAttachmentCreateParam]]
 
     billing_address: Optional[str]
 
     billing_address_recipient: Optional[str]
+
+    charges: Optional[Iterable[Charge]]
 
     currency: CurrencyCode
     """Currency of the invoice"""
@@ -53,8 +61,13 @@ class DocumentCreateParams(TypedDict, total=False):
     invoice_id: Optional[str]
 
     invoice_total: Union[float, str, None]
+    """
+    The total amount of the invoice (so invoice_total = subtotal + total_tax +
+    total_discount). Must be positive and rounded to maximum 2 decimals
+    """
 
-    items: Optional[Iterable[Item]]
+    items: Iterable[Item]
+    """At least one line item is required"""
 
     note: Optional[str]
 
@@ -63,6 +76,10 @@ class DocumentCreateParams(TypedDict, total=False):
     payment_term: Optional[str]
 
     previous_unpaid_balance: Union[float, str, None]
+    """The previous unpaid balance of the invoice, if any.
+
+    Must be positive and rounded to maximum 2 decimals
+    """
 
     purchase_order: Optional[str]
 
@@ -85,6 +102,12 @@ class DocumentCreateParams(TypedDict, total=False):
     state: DocumentState
 
     subtotal: Union[float, str, None]
+    """The taxable base of the invoice.
+
+    Should be the sum of all line items - allowances (for example commercial
+    discounts) + charges with impact on VAT. Must be positive and rounded to maximum
+    2 decimals
+    """
 
     tax_code: Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]
     """Tax category code of the invoice"""
@@ -92,8 +115,16 @@ class DocumentCreateParams(TypedDict, total=False):
     tax_details: Optional[Iterable[TaxDetail]]
 
     total_discount: Union[float, str, None]
+    """The total financial discount of the invoice (so discounts not subject to VAT).
+
+    Must be positive and rounded to maximum 2 decimals
+    """
 
     total_tax: Union[float, str, None]
+    """The total tax of the invoice.
+
+    Must be positive and rounded to maximum 2 decimals
+    """
 
     vatex: Optional[
         Literal[
@@ -180,25 +211,173 @@ class DocumentCreateParams(TypedDict, total=False):
     vendor_tax_id: Optional[str]
 
 
-class Item(TypedDict, total=False):
+class Allowance(TypedDict, total=False):
     amount: Union[float, str, None]
+    """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
+
+    base_amount: Union[float, str, None]
+    """
+    The base amount that may be used, in conjunction with the allowance percentage,
+    to calculate the allowance amount. Must be rounded to maximum 2 decimals
+    """
+
+    multiplier_factor: Union[float, str, None]
+    """
+    The percentage that may be used, in conjunction with the allowance base amount,
+    to calculate the allowance amount. To state 20%, use value 20
+    """
+
+    reason: Optional[str]
+    """The reason for the allowance"""
+
+    reason_code: Optional[str]
+    """The code for the allowance reason"""
+
+    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]]
+    """Duty or tax or fee category codes (Subset of UNCL5305)
+
+    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
+    """
+
+    tax_rate: Optional[str]
+    """The VAT rate, represented as percentage that applies to the allowance"""
+
+
+class Charge(TypedDict, total=False):
+    amount: Union[float, str, None]
+    """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
+
+    base_amount: Union[float, str, None]
+    """
+    The base amount that may be used, in conjunction with the charge percentage, to
+    calculate the charge amount. Must be rounded to maximum 2 decimals
+    """
+
+    multiplier_factor: Union[float, str, None]
+    """
+    The percentage that may be used, in conjunction with the charge base amount, to
+    calculate the charge amount. To state 20%, use value 20
+    """
+
+    reason: Optional[str]
+    """The reason for the charge"""
+
+    reason_code: Optional[str]
+    """The code for the charge reason"""
+
+    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]]
+    """Duty or tax or fee category codes (Subset of UNCL5305)
+
+    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
+    """
+
+    tax_rate: Optional[str]
+    """The VAT rate, represented as percentage that applies to the charge"""
+
+
+class ItemAllowance(TypedDict, total=False):
+    amount: Union[float, str, None]
+    """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
+
+    base_amount: Union[float, str, None]
+    """
+    The base amount that may be used, in conjunction with the allowance percentage,
+    to calculate the allowance amount. Must be rounded to maximum 2 decimals
+    """
+
+    multiplier_factor: Union[float, str, None]
+    """
+    The percentage that may be used, in conjunction with the allowance base amount,
+    to calculate the allowance amount. To state 20%, use value 20
+    """
+
+    reason: Optional[str]
+    """The reason for the allowance"""
+
+    reason_code: Optional[str]
+    """The code for the allowance reason"""
+
+    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]]
+    """Duty or tax or fee category codes (Subset of UNCL5305)
+
+    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
+    """
+
+    tax_rate: Optional[str]
+    """The VAT rate, represented as percentage that applies to the allowance"""
+
+
+class ItemCharge(TypedDict, total=False):
+    amount: Union[float, str, None]
+    """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
+
+    base_amount: Union[float, str, None]
+    """
+    The base amount that may be used, in conjunction with the charge percentage, to
+    calculate the charge amount. Must be rounded to maximum 2 decimals
+    """
+
+    multiplier_factor: Union[float, str, None]
+    """
+    The percentage that may be used, in conjunction with the charge base amount, to
+    calculate the charge amount. To state 20%, use value 20
+    """
+
+    reason: Optional[str]
+    """The reason for the charge"""
+
+    reason_code: Optional[str]
+    """The code for the charge reason"""
+
+    tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]]
+    """Duty or tax or fee category codes (Subset of UNCL5305)
+
+    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
+    """
+
+    tax_rate: Optional[str]
+    """The VAT rate, represented as percentage that applies to the charge"""
+
+
+class Item(TypedDict, total=False):
+    allowances: Optional[Iterable[ItemAllowance]]
+    """The allowances of the line item."""
+
+    amount: Union[float, str, None]
+    """
+    The total amount of the line item, exclusive of VAT, after subtracting line
+    level allowances and adding line level charges. Must be rounded to maximum 2
+    decimals
+    """
+
+    charges: Optional[Iterable[ItemCharge]]
+    """The charges of the line item."""
 
     date: None
 
     description: Optional[str]
+    """The description of the line item."""
 
     product_code: Optional[str]
+    """The product code of the line item."""
 
     quantity: Union[float, str, None]
+    """The quantity of items (goods or services) that is the subject of the line item.
+
+    Must be rounded to maximum 4 decimals
+    """
 
     tax: Union[float, str, None]
+    """The total VAT amount for the line item. Must be rounded to maximum 2 decimals"""
 
     tax_rate: Optional[str]
+    """The VAT rate of the line item expressed as percentage with 2 decimals"""
 
     unit: Optional[UnitOfMeasureCode]
     """Unit of Measure Codes from UNECERec20 used in Peppol BIS Billing 3.0."""
 
     unit_price: Union[float, str, None]
+    """The unit price of the line item. Must be rounded to maximum 2 decimals"""
 
 
 class TaxDetail(TypedDict, total=False):
