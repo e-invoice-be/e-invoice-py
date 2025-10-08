@@ -7,3 +7,4 @@ from .document_attachment import DocumentAttachment as DocumentAttachment
 from .attachment_add_params import AttachmentAddParams as AttachmentAddParams
 from .attachment_list_response import AttachmentListResponse as AttachmentListResponse
 from .attachment_delete_response import AttachmentDeleteResponse as AttachmentDeleteResponse
+from .ubl_create_from_ubl_params import UblCreateFromUblParams as UblCreateFromUblParams

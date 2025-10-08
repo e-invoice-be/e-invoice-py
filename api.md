@@ -4,6 +4,8 @@ Types:
 
 ```python
 from e_invoice_api.types import (
+    Allowance,
+    Charge,
     CurrencyCode,
     DocumentAttachmentCreate,
     DocumentCreate,
@@ -13,6 +15,7 @@ from e_invoice_api.types import (
     PaymentDetailCreate,
     UnitOfMeasureCode,
     DocumentDeleteResponse,
+    DocumentCreateFromPdfResponse,
 )
 ```
 
@@ -21,7 +24,9 @@ Methods:
 - <code title="post /api/documents/">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">create</a>(\*\*<a href="src/e_invoice_api/types/document_create_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
 - <code title="get /api/documents/{document_id}">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">retrieve</a>(document_id) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
 - <code title="delete /api/documents/{document_id}">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">delete</a>(document_id) -> <a href="./src/e_invoice_api/types/document_delete_response.py">DocumentDeleteResponse</a></code>
+- <code title="post /api/documents/pdf">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">create_from_pdf</a>(\*\*<a href="src/e_invoice_api/types/document_create_from_pdf_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_create_from_pdf_response.py">DocumentCreateFromPdfResponse</a></code>
 - <code title="post /api/documents/{document_id}/send">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">send</a>(document_id, \*\*<a href="src/e_invoice_api/types/document_send_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
+- <code title="post /api/documents/{document_id}/validate">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">validate</a>(document_id) -> <a href="./src/e_invoice_api/types/ubl_document_validation.py">UblDocumentValidation</a></code>
 
 ## Attachments
 
@@ -52,6 +57,7 @@ from e_invoice_api.types.documents import UblGetResponse
 
 Methods:
 
+- <code title="post /api/documents/ubl">client.documents.ubl.<a href="./src/e_invoice_api/resources/documents/ubl.py">create_from_ubl</a>(\*\*<a href="src/e_invoice_api/types/documents/ubl_create_from_ubl_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
 - <code title="get /api/documents/{document_id}/ubl">client.documents.ubl.<a href="./src/e_invoice_api/resources/documents/ubl.py">get</a>(document_id) -> <a href="./src/e_invoice_api/types/documents/ubl_get_response.py">UblGetResponse</a></code>
 
 # Inbox
@@ -105,6 +111,18 @@ Methods:
 
 - <code title="get /api/lookup">client.lookup.<a href="./src/e_invoice_api/resources/lookup.py">retrieve</a>(\*\*<a href="src/e_invoice_api/types/lookup_retrieve_params.py">params</a>) -> <a href="./src/e_invoice_api/types/lookup_retrieve_response.py">LookupRetrieveResponse</a></code>
 - <code title="get /api/lookup/participants">client.lookup.<a href="./src/e_invoice_api/resources/lookup.py">retrieve_participants</a>(\*\*<a href="src/e_invoice_api/types/lookup_retrieve_participants_params.py">params</a>) -> <a href="./src/e_invoice_api/types/lookup_retrieve_participants_response.py">LookupRetrieveParticipantsResponse</a></code>
+
+# Me
+
+Types:
+
+```python
+from e_invoice_api.types import MeRetrieveResponse
+```
+
+Methods:
+
+- <code title="get /api/me/">client.me.<a href="./src/e_invoice_api/resources/me.py">retrieve</a>() -> <a href="./src/e_invoice_api/types/me_retrieve_response.py">MeRetrieveResponse</a></code>
 
 # Webhooks
 

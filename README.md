@@ -178,8 +178,7 @@ from e_invoice_api import EInvoice
 
 client = EInvoice()
 
-client.documents.attachments.add(
-    document_id="document_id",
+client.documents.create_from_pdf(
     file=Path("/path/to/file"),
 )
 ```
