@@ -390,7 +390,6 @@ UnitOfMeasureCode: TypeAlias = Literal[
     "C59",
     "C60",
     "C61",
-    "C62",
     "C63",
     "C64",
     "C65",
@@ -1035,5 +1034,6 @@ UnitOfMeasureCode: TypeAlias = Literal[
     "XZZ",
     "ZZ",
     "NAR",
+    "C62",
     "LTR",
 ]
