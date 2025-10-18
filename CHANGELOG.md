@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.12.1 (2025-10-18)
+
+Full Changelog: [v1.12.0...v1.12.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.0...v1.12.1)
+
+### Chores
+
+* bump `httpx-aiohttp` version to 0.1.9 ([824d57f](https://github.com/e-invoice-be/e-invoice-py/commit/824d57ff74057fa9e8c1a627013d732705b275fc))
+* **internal:** detect missing future annotations with ruff ([d56ad86](https://github.com/e-invoice-be/e-invoice-py/commit/d56ad8672f7fb7736d24bf37f54c1adde30cee6b))
+
 ## 1.12.0 (2025-10-09)
 
 Full Changelog: [v1.11.0...v1.12.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.11.0...v1.12.0)
