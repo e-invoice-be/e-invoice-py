@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.12.2 (2025-10-31)
+
+Full Changelog: [v1.12.1...v1.12.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.1...v1.12.2)
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([df10fa9](https://github.com/e-invoice-be/e-invoice-py/commit/df10fa9908048f36e4093ea1e38f1cc63cb8a0e8))
+
 ## 1.12.1 (2025-10-30)
 
 Full Changelog: [v1.12.0...v1.12.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.0...v1.12.1)
