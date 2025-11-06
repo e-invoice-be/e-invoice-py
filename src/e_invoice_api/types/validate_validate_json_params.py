@@ -115,9 +115,10 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     tax_details: Optional[Iterable[TaxDetail]]
 
     total_discount: Union[float, str, None]
-    """The total financial discount of the invoice (so discounts not subject to VAT).
-
-    Must be positive and rounded to maximum 2 decimals
+    """
+    The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
+    allowances). Can be positive (net charge), negative (net discount), or zero.
+    Must be rounded to maximum 2 decimals
     """
 
     total_tax: Union[float, str, None]
