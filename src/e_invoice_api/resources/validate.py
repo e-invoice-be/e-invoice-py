@@ -205,8 +205,9 @@ class ValidateResource(SyncAPIResource):
 
           tax_code: Tax category code of the invoice
 
-          total_discount: The total financial discount of the invoice (so discounts not subject to VAT).
-              Must be positive and rounded to maximum 2 decimals
+          total_discount: The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
+              allowances). Can be positive (net charge), negative (net discount), or zero.
+              Must be rounded to maximum 2 decimals
 
           total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
 
@@ -533,8 +534,9 @@ class AsyncValidateResource(AsyncAPIResource):
 
           tax_code: Tax category code of the invoice
 
-          total_discount: The total financial discount of the invoice (so discounts not subject to VAT).
-              Must be positive and rounded to maximum 2 decimals
+          total_discount: The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
+              allowances). Can be positive (net charge), negative (net discount), or zero.
+              Must be rounded to maximum 2 decimals
 
           total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
 

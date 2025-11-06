@@ -235,9 +235,10 @@ class DocumentResponse(BaseModel):
     tax_details: Optional[List[TaxDetail]] = None
 
     total_discount: Optional[str] = None
-    """The total financial discount of the invoice (so discounts not subject to VAT).
-
-    Must be positive and rounded to maximum 2 decimals
+    """
+    The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
+    allowances). Can be positive (net charge), negative (net discount), or zero.
+    Must be rounded to maximum 2 decimals
     """
 
     total_tax: Optional[str] = None
