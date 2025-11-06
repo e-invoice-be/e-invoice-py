@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.13.0 (2025-11-06)
+
+Full Changelog: [v1.12.1...v1.13.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.1...v1.13.0)
+
+### Features
+
+* **api:** api update ([91e531d](https://github.com/e-invoice-be/e-invoice-py/commit/91e531dbf108c2c8442810cf7c1f84bb839eef24))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([df10fa9](https://github.com/e-invoice-be/e-invoice-py/commit/df10fa9908048f36e4093ea1e38f1cc63cb8a0e8))
+* **internal:** grammar fix (it's -&gt; its) ([32c8ecb](https://github.com/e-invoice-be/e-invoice-py/commit/32c8ecb0681408e5847fd7bc6f68303dcff8fcba))
+
 ## 1.12.1 (2025-10-30)
 
 Full Changelog: [v1.12.0...v1.12.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.0...v1.12.1)
