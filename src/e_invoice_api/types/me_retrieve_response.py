@@ -22,7 +22,7 @@ class MeRetrieveResponse(BaseModel):
     """BCC recipient email to deliver documents"""
 
     company_address: Optional[str] = None
-    """Address of the company"""
+    """Address of the company. Must be in the form of `Street Name Street Number`"""
 
     company_city: Optional[str] = None
     """City of the company"""
@@ -34,10 +34,23 @@ class MeRetrieveResponse(BaseModel):
     """Email of the company"""
 
     company_name: Optional[str] = None
-    """Name of the company"""
+    """Name of the company.
+
+    Must include the company type. For example: `BV`, `NV`, `CVBA`, `VOF`
+    """
 
     company_number: Optional[str] = None
-    """Company number"""
+    """Company number.
+
+    For Belgium this is the CBE number or their EUID (European Unique Identifier)
+    number
+    """
+
+    company_tax_id: Optional[str] = None
+    """Company tax ID.
+
+    For Belgium this is the VAT number. Must include the country prefix
+    """
 
     company_zip: Optional[str] = None
     """Zip code of the company"""

@@ -72,6 +72,7 @@ class ValidateResource(SyncAPIResource):
         currency: CurrencyCode | Omit = omit,
         customer_address: Optional[str] | Omit = omit,
         customer_address_recipient: Optional[str] | Omit = omit,
+        customer_company_id: Optional[str] | Omit = omit,
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
@@ -172,6 +173,7 @@ class ValidateResource(SyncAPIResource):
         vatex_note: Optional[str] | Omit = omit,
         vendor_address: Optional[str] | Omit = omit,
         vendor_address_recipient: Optional[str] | Omit = omit,
+        vendor_company_id: Optional[str] | Omit = omit,
         vendor_email: Optional[str] | Omit = omit,
         vendor_name: Optional[str] | Omit = omit,
         vendor_tax_id: Optional[str] | Omit = omit,
@@ -186,36 +188,105 @@ class ValidateResource(SyncAPIResource):
         Validate if the JSON document can be converted to a valid UBL document
 
         Args:
-          amount_due: The amount due of the invoice. Must be positive and rounded to maximum 2
-              decimals
+          amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
-          currency: Currency of the invoice
+          billing_address: The billing address (if different from customer address)
 
-          invoice_total: The total amount of the invoice (so invoice_total = subtotal + total_tax +
-              total_discount). Must be positive and rounded to maximum 2 decimals
+          billing_address_recipient: The recipient name at the billing address
+
+          currency: Currency of the invoice (ISO 4217 currency code)
+
+          customer_address: The address of the customer/buyer
+
+          customer_address_recipient: The recipient name at the customer address
+
+          customer_company_id: Customer company ID. For Belgium this is the CBE number or their EUID (European
+              Unique Identifier) number. In the Netherlands this is the KVK number.
+
+          customer_email: The email address of the customer
+
+          customer_id: The unique identifier for the customer in your system
+
+          customer_name: The company name of the customer/buyer
+
+          customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
+              prefix
+
+          direction: The direction of the document: INBOUND (purchases) or OUTBOUND (sales)
+
+          document_type: The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE
+
+          due_date: The date when payment is due
+
+          invoice_date: The date when the invoice was issued
+
+          invoice_id: The unique invoice identifier/number
+
+          invoice_total: The total amount of the invoice including tax (invoice_total = subtotal +
+              total_tax + total_discount). Must be positive and rounded to maximum 2 decimals
 
           items: At least one line item is required
 
-          previous_unpaid_balance: The previous unpaid balance of the invoice, if any. Must be positive and rounded
-              to maximum 2 decimals
+          note: Additional notes or comments for the invoice
+
+          payment_term: The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')
+
+          previous_unpaid_balance: The previous unpaid balance from prior invoices, if any. Must be positive and
+              rounded to maximum 2 decimals
+
+          purchase_order: The purchase order reference number
+
+          remittance_address: The address where payment should be sent or remitted to
+
+          remittance_address_recipient: The recipient name at the remittance address
+
+          service_address: The address where services were performed or goods were delivered
+
+          service_address_recipient: The recipient name at the service address
+
+          service_end_date: The end date of the service period or delivery period
+
+          service_start_date: The start date of the service period or delivery period
+
+          shipping_address: The shipping/delivery address
+
+          shipping_address_recipient: The recipient name at the shipping address
+
+          state: The current state of the document: DRAFT, TRANSIT, FAILED, SENT, or RECEIVED
 
           subtotal: The taxable base of the invoice. Should be the sum of all line items -
               allowances (for example commercial discounts) + charges with impact on VAT. Must
               be positive and rounded to maximum 2 decimals
 
-          tax_code: Tax category code of the invoice
+          tax_code: Tax category code of the invoice (e.g., S for standard rate, Z for zero rate, E
+              for exempt)
 
           total_discount: The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
               allowances). Can be positive (net charge), negative (net discount), or zero.
               Must be rounded to maximum 2 decimals
 
-          total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
+          total_tax: The total tax amount of the invoice. Must be positive and rounded to maximum 2
+              decimals
 
           vatex: VATEX code list for VAT exemption reasons
 
               Agency: CEF Identifier: vatex
 
-          vatex_note: VAT exemption note of the invoice
+          vatex_note: Textual explanation for VAT exemption
+
+          vendor_address: The address of the vendor/seller
+
+          vendor_address_recipient: The recipient name at the vendor address
+
+          vendor_company_id: Vendor company ID. For Belgium this is the CBE number or their EUID (European
+              Unique Identifier) number. In the Netherlands this is the KVK number.
+
+          vendor_email: The email address of the vendor
+
+          vendor_name: The name of the vendor/seller/supplier
+
+          vendor_tax_id: Vendor tax ID. For Belgium this is the VAT number. Must include the country
+              prefix
 
           extra_headers: Send extra headers
 
@@ -238,6 +309,7 @@ class ValidateResource(SyncAPIResource):
                     "currency": currency,
                     "customer_address": customer_address,
                     "customer_address_recipient": customer_address_recipient,
+                    "customer_company_id": customer_company_id,
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
@@ -272,6 +344,7 @@ class ValidateResource(SyncAPIResource):
                     "vatex_note": vatex_note,
                     "vendor_address": vendor_address,
                     "vendor_address_recipient": vendor_address_recipient,
+                    "vendor_company_id": vendor_company_id,
                     "vendor_email": vendor_email,
                     "vendor_name": vendor_name,
                     "vendor_tax_id": vendor_tax_id,
@@ -401,6 +474,7 @@ class AsyncValidateResource(AsyncAPIResource):
         currency: CurrencyCode | Omit = omit,
         customer_address: Optional[str] | Omit = omit,
         customer_address_recipient: Optional[str] | Omit = omit,
+        customer_company_id: Optional[str] | Omit = omit,
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
@@ -501,6 +575,7 @@ class AsyncValidateResource(AsyncAPIResource):
         vatex_note: Optional[str] | Omit = omit,
         vendor_address: Optional[str] | Omit = omit,
         vendor_address_recipient: Optional[str] | Omit = omit,
+        vendor_company_id: Optional[str] | Omit = omit,
         vendor_email: Optional[str] | Omit = omit,
         vendor_name: Optional[str] | Omit = omit,
         vendor_tax_id: Optional[str] | Omit = omit,
@@ -515,36 +590,105 @@ class AsyncValidateResource(AsyncAPIResource):
         Validate if the JSON document can be converted to a valid UBL document
 
         Args:
-          amount_due: The amount due of the invoice. Must be positive and rounded to maximum 2
-              decimals
+          amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
-          currency: Currency of the invoice
+          billing_address: The billing address (if different from customer address)
 
-          invoice_total: The total amount of the invoice (so invoice_total = subtotal + total_tax +
-              total_discount). Must be positive and rounded to maximum 2 decimals
+          billing_address_recipient: The recipient name at the billing address
+
+          currency: Currency of the invoice (ISO 4217 currency code)
+
+          customer_address: The address of the customer/buyer
+
+          customer_address_recipient: The recipient name at the customer address
+
+          customer_company_id: Customer company ID. For Belgium this is the CBE number or their EUID (European
+              Unique Identifier) number. In the Netherlands this is the KVK number.
+
+          customer_email: The email address of the customer
+
+          customer_id: The unique identifier for the customer in your system
+
+          customer_name: The company name of the customer/buyer
+
+          customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
+              prefix
+
+          direction: The direction of the document: INBOUND (purchases) or OUTBOUND (sales)
+
+          document_type: The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE
+
+          due_date: The date when payment is due
+
+          invoice_date: The date when the invoice was issued
+
+          invoice_id: The unique invoice identifier/number
+
+          invoice_total: The total amount of the invoice including tax (invoice_total = subtotal +
+              total_tax + total_discount). Must be positive and rounded to maximum 2 decimals
 
           items: At least one line item is required
 
-          previous_unpaid_balance: The previous unpaid balance of the invoice, if any. Must be positive and rounded
-              to maximum 2 decimals
+          note: Additional notes or comments for the invoice
+
+          payment_term: The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')
+
+          previous_unpaid_balance: The previous unpaid balance from prior invoices, if any. Must be positive and
+              rounded to maximum 2 decimals
+
+          purchase_order: The purchase order reference number
+
+          remittance_address: The address where payment should be sent or remitted to
+
+          remittance_address_recipient: The recipient name at the remittance address
+
+          service_address: The address where services were performed or goods were delivered
+
+          service_address_recipient: The recipient name at the service address
+
+          service_end_date: The end date of the service period or delivery period
+
+          service_start_date: The start date of the service period or delivery period
+
+          shipping_address: The shipping/delivery address
+
+          shipping_address_recipient: The recipient name at the shipping address
+
+          state: The current state of the document: DRAFT, TRANSIT, FAILED, SENT, or RECEIVED
 
           subtotal: The taxable base of the invoice. Should be the sum of all line items -
               allowances (for example commercial discounts) + charges with impact on VAT. Must
               be positive and rounded to maximum 2 decimals
 
-          tax_code: Tax category code of the invoice
+          tax_code: Tax category code of the invoice (e.g., S for standard rate, Z for zero rate, E
+              for exempt)
 
           total_discount: The net financial discount/charge of the invoice (non-VAT charges minus non-VAT
               allowances). Can be positive (net charge), negative (net discount), or zero.
               Must be rounded to maximum 2 decimals
 
-          total_tax: The total tax of the invoice. Must be positive and rounded to maximum 2 decimals
+          total_tax: The total tax amount of the invoice. Must be positive and rounded to maximum 2
+              decimals
 
           vatex: VATEX code list for VAT exemption reasons
 
               Agency: CEF Identifier: vatex
 
-          vatex_note: VAT exemption note of the invoice
+          vatex_note: Textual explanation for VAT exemption
+
+          vendor_address: The address of the vendor/seller
+
+          vendor_address_recipient: The recipient name at the vendor address
+
+          vendor_company_id: Vendor company ID. For Belgium this is the CBE number or their EUID (European
+              Unique Identifier) number. In the Netherlands this is the KVK number.
+
+          vendor_email: The email address of the vendor
+
+          vendor_name: The name of the vendor/seller/supplier
+
+          vendor_tax_id: Vendor tax ID. For Belgium this is the VAT number. Must include the country
+              prefix
 
           extra_headers: Send extra headers
 
@@ -567,6 +711,7 @@ class AsyncValidateResource(AsyncAPIResource):
                     "currency": currency,
                     "customer_address": customer_address,
                     "customer_address_recipient": customer_address_recipient,
+                    "customer_company_id": customer_company_id,
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
@@ -601,6 +746,7 @@ class AsyncValidateResource(AsyncAPIResource):
                     "vatex_note": vatex_note,
                     "vendor_address": vendor_address,
                     "vendor_address_recipient": vendor_address_recipient,
+                    "vendor_company_id": vendor_company_id,
                     "vendor_email": vendor_email,
                     "vendor_name": vendor_name,
                     "vendor_tax_id": vendor_tax_id,
