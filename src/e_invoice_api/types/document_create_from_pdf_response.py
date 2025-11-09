@@ -61,92 +61,126 @@ class Item(BaseModel):
 
 class TaxDetail(BaseModel):
     amount: Optional[str] = None
+    """The tax amount for this tax category. Must be rounded to maximum 2 decimals"""
 
     rate: Optional[str] = None
+    """The tax rate as a percentage (e.g., '21.00', '6.00', '0.00')"""
 
 
 class DocumentCreateFromPdfResponse(BaseModel):
     allowances: Optional[List[Allowance]] = None
 
     amount_due: Optional[str] = None
-    """The amount due of the invoice.
-
-    Must be positive and rounded to maximum 2 decimals
-    """
+    """The amount due for payment. Must be positive and rounded to maximum 2 decimals"""
 
     attachments: Optional[List[DocumentAttachmentCreate]] = None
 
     billing_address: Optional[str] = None
+    """The billing address (if different from customer address)"""
 
     billing_address_recipient: Optional[str] = None
+    """The recipient name at the billing address"""
 
     charges: Optional[List[Charge]] = None
 
     currency: Optional[CurrencyCode] = None
-    """Currency of the invoice"""
+    """Currency of the invoice (ISO 4217 currency code)"""
 
     customer_address: Optional[str] = None
+    """The address of the customer/buyer"""
 
     customer_address_recipient: Optional[str] = None
+    """The recipient name at the customer address"""
+
+    customer_company_id: Optional[str] = None
+    """Customer company ID.
+
+    For Belgium this is the CBE number or their EUID (European Unique Identifier)
+    number. In the Netherlands this is the KVK number.
+    """
 
     customer_email: Optional[str] = None
+    """The email address of the customer"""
 
     customer_id: Optional[str] = None
+    """The unique identifier for the customer in your system"""
 
     customer_name: Optional[str] = None
+    """The company name of the customer/buyer"""
 
     customer_tax_id: Optional[str] = None
+    """Customer tax ID.
+
+    For Belgium this is the VAT number. Must include the country prefix
+    """
 
     direction: Optional[DocumentDirection] = None
+    """The direction of the document: INBOUND (purchases) or OUTBOUND (sales)"""
 
     document_type: Optional[DocumentType] = None
+    """The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE"""
 
     due_date: Optional[date] = None
+    """The date when payment is due"""
 
     invoice_date: Optional[date] = None
+    """The date when the invoice was issued"""
 
     invoice_id: Optional[str] = None
+    """The unique invoice identifier/number"""
 
     invoice_total: Optional[str] = None
     """
-    The total amount of the invoice (so invoice_total = subtotal + total_tax +
-    total_discount). Must be positive and rounded to maximum 2 decimals
+    The total amount of the invoice including tax (invoice_total = subtotal +
+    total_tax + total_discount). Must be positive and rounded to maximum 2 decimals
     """
 
     items: Optional[List[Item]] = None
     """At least one line item is required"""
 
     note: Optional[str] = None
+    """Additional notes or comments for the invoice"""
 
     payment_details: Optional[List[PaymentDetailCreate]] = None
 
     payment_term: Optional[str] = None
+    """The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')"""
 
     previous_unpaid_balance: Optional[str] = None
-    """The previous unpaid balance of the invoice, if any.
+    """The previous unpaid balance from prior invoices, if any.
 
     Must be positive and rounded to maximum 2 decimals
     """
 
     purchase_order: Optional[str] = None
+    """The purchase order reference number"""
 
     remittance_address: Optional[str] = None
+    """The address where payment should be sent or remitted to"""
 
     remittance_address_recipient: Optional[str] = None
+    """The recipient name at the remittance address"""
 
     service_address: Optional[str] = None
+    """The address where services were performed or goods were delivered"""
 
     service_address_recipient: Optional[str] = None
+    """The recipient name at the service address"""
 
     service_end_date: Optional[date] = None
+    """The end date of the service period or delivery period"""
 
     service_start_date: Optional[date] = None
+    """The start date of the service period or delivery period"""
 
     shipping_address: Optional[str] = None
+    """The shipping/delivery address"""
 
     shipping_address_recipient: Optional[str] = None
+    """The recipient name at the shipping address"""
 
     state: Optional[DocumentState] = None
+    """The current state of the document: DRAFT, TRANSIT, FAILED, SENT, or RECEIVED"""
 
     subtotal: Optional[str] = None
     """The taxable base of the invoice.
@@ -160,7 +194,10 @@ class DocumentCreateFromPdfResponse(BaseModel):
     """Whether the PDF was successfully converted into a compliant e-invoice"""
 
     tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]] = None
-    """Tax category code of the invoice"""
+    """
+    Tax category code of the invoice (e.g., S for standard rate, Z for zero rate, E
+    for exempt)
+    """
 
     tax_details: Optional[List[TaxDetail]] = None
 
@@ -172,7 +209,7 @@ class DocumentCreateFromPdfResponse(BaseModel):
     """
 
     total_tax: Optional[str] = None
-    """The total tax of the invoice.
+    """The total tax amount of the invoice.
 
     Must be positive and rounded to maximum 2 decimals
     """
@@ -252,14 +289,29 @@ class DocumentCreateFromPdfResponse(BaseModel):
     """
 
     vatex_note: Optional[str] = None
-    """VAT exemption note of the invoice"""
+    """Textual explanation for VAT exemption"""
 
     vendor_address: Optional[str] = None
+    """The address of the vendor/seller"""
 
     vendor_address_recipient: Optional[str] = None
+    """The recipient name at the vendor address"""
+
+    vendor_company_id: Optional[str] = None
+    """Vendor company ID.
+
+    For Belgium this is the CBE number or their EUID (European Unique Identifier)
+    number. In the Netherlands this is the KVK number.
+    """
 
     vendor_email: Optional[str] = None
+    """The email address of the vendor"""
 
     vendor_name: Optional[str] = None
+    """The name of the vendor/seller/supplier"""
 
     vendor_tax_id: Optional[str] = None
+    """Vendor tax ID.
+
+    For Belgium this is the VAT number. Must include the country prefix
+    """
