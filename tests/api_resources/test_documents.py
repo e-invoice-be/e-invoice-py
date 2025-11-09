@@ -69,10 +69,11 @@ class TestDocuments:
             currency="EUR",
             customer_address="customer_address",
             customer_address_recipient="customer_address_recipient",
+            customer_company_id="1018265814",
             customer_email="customer_email",
             customer_id="customer_id",
             customer_name="customer_name",
-            customer_tax_id="customer_tax_id",
+            customer_tax_id="BE1018265814",
             direction="INBOUND",
             document_type="INVOICE",
             due_date=parse_date("2019-12-27"),
@@ -149,9 +150,10 @@ class TestDocuments:
             vatex_note="vatex_note",
             vendor_address="vendor_address",
             vendor_address_recipient="vendor_address_recipient",
+            vendor_company_id="1018265814",
             vendor_email="vendor_email",
             vendor_name="vendor_name",
-            vendor_tax_id="vendor_tax_id",
+            vendor_tax_id="BE1018265814",
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
@@ -454,10 +456,11 @@ class TestAsyncDocuments:
             currency="EUR",
             customer_address="customer_address",
             customer_address_recipient="customer_address_recipient",
+            customer_company_id="1018265814",
             customer_email="customer_email",
             customer_id="customer_id",
             customer_name="customer_name",
-            customer_tax_id="customer_tax_id",
+            customer_tax_id="BE1018265814",
             direction="INBOUND",
             document_type="INVOICE",
             due_date=parse_date("2019-12-27"),
@@ -534,9 +537,10 @@ class TestAsyncDocuments:
             vatex_note="vatex_note",
             vendor_address="vendor_address",
             vendor_address_recipient="vendor_address_recipient",
+            vendor_company_id="1018265814",
             vendor_email="vendor_email",
             vendor_name="vendor_name",
-            vendor_tax_id="vendor_tax_id",
+            vendor_tax_id="BE1018265814",
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 

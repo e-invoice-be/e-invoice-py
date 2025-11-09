@@ -22,84 +22,116 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     allowances: Optional[Iterable[Allowance]]
 
     amount_due: Union[float, str, None]
-    """The amount due of the invoice.
-
-    Must be positive and rounded to maximum 2 decimals
-    """
+    """The amount due for payment. Must be positive and rounded to maximum 2 decimals"""
 
     attachments: Optional[Iterable[DocumentAttachmentCreateParam]]
 
     billing_address: Optional[str]
+    """The billing address (if different from customer address)"""
 
     billing_address_recipient: Optional[str]
+    """The recipient name at the billing address"""
 
     charges: Optional[Iterable[Charge]]
 
     currency: CurrencyCode
-    """Currency of the invoice"""
+    """Currency of the invoice (ISO 4217 currency code)"""
 
     customer_address: Optional[str]
+    """The address of the customer/buyer"""
 
     customer_address_recipient: Optional[str]
+    """The recipient name at the customer address"""
+
+    customer_company_id: Optional[str]
+    """Customer company ID.
+
+    For Belgium this is the CBE number or their EUID (European Unique Identifier)
+    number. In the Netherlands this is the KVK number.
+    """
 
     customer_email: Optional[str]
+    """The email address of the customer"""
 
     customer_id: Optional[str]
+    """The unique identifier for the customer in your system"""
 
     customer_name: Optional[str]
+    """The company name of the customer/buyer"""
 
     customer_tax_id: Optional[str]
+    """Customer tax ID.
+
+    For Belgium this is the VAT number. Must include the country prefix
+    """
 
     direction: DocumentDirection
+    """The direction of the document: INBOUND (purchases) or OUTBOUND (sales)"""
 
     document_type: DocumentType
+    """The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE"""
 
     due_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """The date when payment is due"""
 
     invoice_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """The date when the invoice was issued"""
 
     invoice_id: Optional[str]
+    """The unique invoice identifier/number"""
 
     invoice_total: Union[float, str, None]
     """
-    The total amount of the invoice (so invoice_total = subtotal + total_tax +
-    total_discount). Must be positive and rounded to maximum 2 decimals
+    The total amount of the invoice including tax (invoice_total = subtotal +
+    total_tax + total_discount). Must be positive and rounded to maximum 2 decimals
     """
 
     items: Iterable[Item]
     """At least one line item is required"""
 
     note: Optional[str]
+    """Additional notes or comments for the invoice"""
 
     payment_details: Optional[Iterable[PaymentDetailCreateParam]]
 
     payment_term: Optional[str]
+    """The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')"""
 
     previous_unpaid_balance: Union[float, str, None]
-    """The previous unpaid balance of the invoice, if any.
+    """The previous unpaid balance from prior invoices, if any.
 
     Must be positive and rounded to maximum 2 decimals
     """
 
     purchase_order: Optional[str]
+    """The purchase order reference number"""
 
     remittance_address: Optional[str]
+    """The address where payment should be sent or remitted to"""
 
     remittance_address_recipient: Optional[str]
+    """The recipient name at the remittance address"""
 
     service_address: Optional[str]
+    """The address where services were performed or goods were delivered"""
 
     service_address_recipient: Optional[str]
+    """The recipient name at the service address"""
 
     service_end_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """The end date of the service period or delivery period"""
 
     service_start_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    """The start date of the service period or delivery period"""
 
     shipping_address: Optional[str]
+    """The shipping/delivery address"""
 
     shipping_address_recipient: Optional[str]
+    """The recipient name at the shipping address"""
 
     state: DocumentState
+    """The current state of the document: DRAFT, TRANSIT, FAILED, SENT, or RECEIVED"""
 
     subtotal: Union[float, str, None]
     """The taxable base of the invoice.
@@ -110,7 +142,10 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     """
 
     tax_code: Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]
-    """Tax category code of the invoice"""
+    """
+    Tax category code of the invoice (e.g., S for standard rate, Z for zero rate, E
+    for exempt)
+    """
 
     tax_details: Optional[Iterable[TaxDetail]]
 
@@ -122,7 +157,7 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     """
 
     total_tax: Union[float, str, None]
-    """The total tax of the invoice.
+    """The total tax amount of the invoice.
 
     Must be positive and rounded to maximum 2 decimals
     """
@@ -199,17 +234,32 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     """
 
     vatex_note: Optional[str]
-    """VAT exemption note of the invoice"""
+    """Textual explanation for VAT exemption"""
 
     vendor_address: Optional[str]
+    """The address of the vendor/seller"""
 
     vendor_address_recipient: Optional[str]
+    """The recipient name at the vendor address"""
+
+    vendor_company_id: Optional[str]
+    """Vendor company ID.
+
+    For Belgium this is the CBE number or their EUID (European Unique Identifier)
+    number. In the Netherlands this is the KVK number.
+    """
 
     vendor_email: Optional[str]
+    """The email address of the vendor"""
 
     vendor_name: Optional[str]
+    """The name of the vendor/seller/supplier"""
 
     vendor_tax_id: Optional[str]
+    """Vendor tax ID.
+
+    For Belgium this is the VAT number. Must include the country prefix
+    """
 
 
 class Allowance(TypedDict, total=False):
@@ -383,5 +433,7 @@ class Item(TypedDict, total=False):
 
 class TaxDetail(TypedDict, total=False):
     amount: Union[float, str, None]
+    """The tax amount for this tax category. Must be rounded to maximum 2 decimals"""
 
     rate: Optional[str]
+    """The tax rate as a percentage (e.g., '21.00', '6.00', '0.00')"""
