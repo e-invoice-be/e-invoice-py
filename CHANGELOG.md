@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.0 (2025-11-09)
+
+Full Changelog: [v1.13.0...v1.14.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.13.0...v1.14.0)
+
+### Features
+
+* **api:** api update ([e581e4a](https://github.com/e-invoice-be/e-invoice-py/commit/e581e4ae5ddfdb0574ea6a72e3ea945404a92cfa))
+
 ## 1.13.0 (2025-11-06)
 
 Full Changelog: [v1.12.1...v1.13.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.12.1...v1.13.0)
