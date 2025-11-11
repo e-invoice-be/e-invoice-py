@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.14.1 (2025-11-11)
+
+Full Changelog: [v1.14.0...v1.14.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.14.0...v1.14.1)
+
+### Bug Fixes
+
+* compat with Python 3.14 ([d3b330f](https://github.com/e-invoice-be/e-invoice-py/commit/d3b330f657a2f311b9aa521631caa3772d95ed5a))
+
+
+### Chores
+
+* **package:** drop Python 3.8 support ([ddb32a6](https://github.com/e-invoice-be/e-invoice-py/commit/ddb32a65b2bf9ecd34905dc9c80e4a2c05d23943))
+
 ## 1.14.0 (2025-11-09)
 
 Full Changelog: [v1.13.0...v1.14.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.13.0...v1.14.0)
