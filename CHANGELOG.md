@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.2 (2025-11-12)
+
+Full Changelog: [v1.14.1...v1.14.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.14.1...v1.14.2)
+
+### Bug Fixes
+
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([8c4c17c](https://github.com/e-invoice-be/e-invoice-py/commit/8c4c17c3acc0226f66525d3eec509e7d87e4dcf4))
+
 ## 1.14.1 (2025-11-11)
 
 Full Changelog: [v1.14.0...v1.14.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.14.0...v1.14.1)
