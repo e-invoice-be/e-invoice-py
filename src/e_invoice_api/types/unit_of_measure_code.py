@@ -1036,4 +1036,5 @@ UnitOfMeasureCode: TypeAlias = Literal[
     "NAR",
     "C62",
     "LTR",
+    "H87",
 ]
