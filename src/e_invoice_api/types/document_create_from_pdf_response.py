@@ -24,9 +24,9 @@ class Item(BaseModel):
 
     amount: Optional[str] = None
     """
-    The total amount of the line item, exclusive of VAT, after subtracting line
-    level allowances and adding line level charges. Must be rounded to maximum 2
-    decimals
+    The invoice line net amount (BT-131), exclusive of VAT, inclusive of line level
+    allowances and charges. Calculated as: ((unit_price / price_base_quantity) \\**
+    quantity) - allowances + charges. Must be rounded to maximum 2 decimals
     """
 
     charges: Optional[List[Charge]] = None
@@ -36,6 +36,13 @@ class Item(BaseModel):
 
     description: Optional[str] = None
     """The description of the line item."""
+
+    price_base_quantity: Optional[str] = None
+    """The item price base quantity (BT-149).
+
+    The number of item units to which the price applies. Defaults to 1. Must be
+    rounded to maximum 4 decimals
+    """
 
     product_code: Optional[str] = None
     """The product code of the line item."""
@@ -56,7 +63,11 @@ class Item(BaseModel):
     """Unit of Measure Codes from UNECERec20 used in Peppol BIS Billing 3.0."""
 
     unit_price: Optional[str] = None
-    """The unit price of the line item. Must be rounded to maximum 2 decimals"""
+    """The item net price (BT-146).
+
+    The price of an item, exclusive of VAT, after subtracting item price discount.
+    Must be rounded to maximum 4 decimals
+    """
 
 
 class TaxDetail(BaseModel):
