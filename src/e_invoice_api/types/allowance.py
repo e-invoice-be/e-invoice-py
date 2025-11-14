@@ -21,20 +21,43 @@ class Allowance(BaseModel):
     multiplier_factor: Optional[str] = None
     """
     The percentage that may be used, in conjunction with the allowance base amount,
-    to calculate the allowance amount. To state 20%, use value 20
+    to calculate the allowance amount. To state 20%, use value 20. Must be rounded
+    to maximum 2 decimals
     """
 
     reason: Optional[str] = None
     """The reason for the allowance"""
 
-    reason_code: Optional[str] = None
-    """The code for the allowance reason"""
+    reason_code: Optional[
+        Literal[
+            "41",
+            "42",
+            "60",
+            "62",
+            "63",
+            "64",
+            "65",
+            "66",
+            "67",
+            "68",
+            "70",
+            "71",
+            "88",
+            "95",
+            "100",
+            "102",
+            "103",
+            "104",
+            "105",
+        ]
+    ] = None
+    """Allowance reason codes for invoice discounts and charges"""
 
     tax_code: Optional[Literal["AE", "E", "S", "Z", "G", "O", "K", "L", "M", "B"]] = None
-    """Duty or tax or fee category codes (Subset of UNCL5305)
-
-    Agency: UN/CEFACT Version: D.16B Subset: OpenPEPPOL
-    """
+    """The VAT category code that applies to the allowance"""
 
     tax_rate: Optional[str] = None
-    """The VAT rate, represented as percentage that applies to the allowance"""
+    """The VAT rate, represented as percentage that applies to the allowance.
+
+    Must be rounded to maximum 2 decimals
+    """
