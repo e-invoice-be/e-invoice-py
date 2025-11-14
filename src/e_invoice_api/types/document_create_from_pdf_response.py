@@ -24,9 +24,10 @@ class Item(BaseModel):
 
     amount: Optional[str] = None
     """
-    The total amount of the line item, exclusive of VAT, after subtracting line
-    level allowances and adding line level charges. Must be rounded to maximum 2
-    decimals
+    The invoice line net amount (BT-131), exclusive of VAT, inclusive of line level
+    allowances and charges. Calculated as: ((unit_price / price_base_quantity) \\**
+    quantity) - allowances + charges. Must be rounded to maximum 2 decimals. Can be
+    negative for credit notes or corrections.
     """
 
     charges: Optional[List[Charge]] = None
@@ -43,11 +44,16 @@ class Item(BaseModel):
     quantity: Optional[str] = None
     """The quantity of items (goods or services) that is the subject of the line item.
 
-    Must be rounded to maximum 4 decimals
+    Must be rounded to maximum 4 decimals. Can be negative for credit notes or
+    corrections.
     """
 
     tax: Optional[str] = None
-    """The total VAT amount for the line item. Must be rounded to maximum 2 decimals"""
+    """The total VAT amount for the line item.
+
+    Must be rounded to maximum 2 decimals. Can be negative for credit notes or
+    corrections.
+    """
 
     tax_rate: Optional[str] = None
     """The VAT rate of the line item expressed as percentage with 2 decimals"""
@@ -56,7 +62,11 @@ class Item(BaseModel):
     """Unit of Measure Codes from UNECERec20 used in Peppol BIS Billing 3.0."""
 
     unit_price: Optional[str] = None
-    """The unit price of the line item. Must be rounded to maximum 2 decimals"""
+    """The item net price (BT-146).
+
+    The price of an item, exclusive of VAT, after subtracting item price discount.
+    Must be rounded to maximum 4 decimals
+    """
 
 
 class TaxDetail(BaseModel):
@@ -145,12 +155,6 @@ class DocumentCreateFromPdfResponse(BaseModel):
 
     payment_term: Optional[str] = None
     """The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')"""
-
-    previous_unpaid_balance: Optional[str] = None
-    """The previous unpaid balance from prior invoices, if any.
-
-    Must be positive and rounded to maximum 2 decimals
-    """
 
     purchase_order: Optional[str] = None
     """The purchase order reference number"""
