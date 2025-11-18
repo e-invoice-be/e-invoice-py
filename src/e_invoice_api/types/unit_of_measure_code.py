@@ -473,7 +473,6 @@ UnitOfMeasureCode: TypeAlias = Literal[
     "MIN",
     "MON",
     "ONZ",
-    "PCE",
     "LBR",
     "QT",
     "SEC",
