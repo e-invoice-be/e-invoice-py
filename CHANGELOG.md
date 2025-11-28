@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.18.1 (2025-11-28)
+
+Full Changelog: [v1.18.0...v1.18.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.0...v1.18.1)
+
+### Bug Fixes
+
+* ensure streams are always closed ([5da693a](https://github.com/e-invoice-be/e-invoice-py/commit/5da693a020f3ea1b8414605bc9deffc43844bf5e))
+
+
+### Chores
+
+* add Python 3.14 classifier and testing ([5fca16c](https://github.com/e-invoice-be/e-invoice-py/commit/5fca16cb8292a9eda317a7a8764c249637176fe1))
+* **deps:** mypy 1.18.1 has a regression, pin to 1.17 ([fcd3ab8](https://github.com/e-invoice-be/e-invoice-py/commit/fcd3ab8e69327586fad0c0b090fb0b7296881683))
+
 ## 1.18.0 (2025-11-18)
 
 Full Changelog: [v1.17.0...v1.18.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.17.0...v1.18.0)
