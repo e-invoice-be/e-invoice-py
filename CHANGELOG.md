@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.18.2 (2025-12-03)
+
+Full Changelog: [v1.18.1...v1.18.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.1...v1.18.2)
+
+### Chores
+
+* **docs:** use environment variables for authentication in code snippets ([7d365b8](https://github.com/e-invoice-be/e-invoice-py/commit/7d365b88295d887e9973482c8999d328d71d506e))
+* update lockfile ([07fd731](https://github.com/e-invoice-be/e-invoice-py/commit/07fd7311874c0301e1e8cd69026ce3d9cb8bd745))
+
 ## 1.18.1 (2025-11-28)
 
 Full Changelog: [v1.18.0...v1.18.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.0...v1.18.1)
