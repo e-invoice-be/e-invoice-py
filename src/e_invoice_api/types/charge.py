@@ -9,6 +9,8 @@ __all__ = ["Charge"]
 
 
 class Charge(BaseModel):
+    """A charge is an additional fee for example for late payment, late delivery, etc."""
+
     amount: Optional[str] = None
     """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
 

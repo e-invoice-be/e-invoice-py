@@ -8,6 +8,8 @@ __all__ = ["WebhookResponse"]
 
 
 class WebhookResponse(BaseModel):
+    """Response model for webhook API endpoints."""
+
     id: str
 
     events: List[str]

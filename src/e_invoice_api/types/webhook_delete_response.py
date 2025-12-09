@@ -6,4 +6,6 @@ __all__ = ["WebhookDeleteResponse"]
 
 
 class WebhookDeleteResponse(BaseModel):
+    """Model for webhook deletion."""
+
     is_deleted: bool
