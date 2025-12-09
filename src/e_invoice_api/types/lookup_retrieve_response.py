@@ -24,6 +24,8 @@ __all__ = [
 
 
 class BusinessCardEntity(BaseModel):
+    """Business entity information in the Peppol network."""
+
     additional_information: Optional[List[str]] = FieldInfo(alias="additionalInformation", default=None)
     """Additional information about the business entity"""
 
@@ -38,6 +40,8 @@ class BusinessCardEntity(BaseModel):
 
 
 class BusinessCard(BaseModel):
+    """Business card information for the Peppol participant"""
+
     entities: List[BusinessCardEntity]
     """List of business entities associated with the Peppol ID"""
 
@@ -52,11 +56,15 @@ class BusinessCard(BaseModel):
 
 
 class DNSInfoDNSRecord(BaseModel):
+    """DNS record information for a Peppol participant."""
+
     ip: str
     """IP address found in the DNS record"""
 
 
 class DNSInfo(BaseModel):
+    """Information about the DNS lookup performed"""
+
     dns_records: List[DNSInfoDNSRecord] = FieldInfo(alias="dnsRecords")
     """List of DNS records found for the Peppol participant"""
 
@@ -71,6 +79,8 @@ class DNSInfo(BaseModel):
 
 
 class QueryMetadata(BaseModel):
+    """Metadata about the query that was performed"""
+
     identifier_scheme: str = FieldInfo(alias="identifierScheme")
     """Scheme of the identifier, typically 'iso6523-actorid-upis'"""
 
@@ -88,6 +98,8 @@ class QueryMetadata(BaseModel):
 
 
 class ServiceMetadataEndpointDocumentType(BaseModel):
+    """Document type supported by a Peppol participant."""
+
     scheme: str
     """Scheme of the document type identifier"""
 
@@ -96,6 +108,8 @@ class ServiceMetadataEndpointDocumentType(BaseModel):
 
 
 class ServiceMetadataEndpointProcessEndpoint(BaseModel):
+    """Endpoint information for a specific Peppol process."""
+
     address: str
     """URL or address of the endpoint"""
 
@@ -122,6 +136,8 @@ class ServiceMetadataEndpointProcessEndpoint(BaseModel):
 
 
 class ServiceMetadataEndpointProcessProcessID(BaseModel):
+    """Identifier of the process"""
+
     scheme: str
     """Scheme of the process identifier"""
 
@@ -130,6 +146,8 @@ class ServiceMetadataEndpointProcessProcessID(BaseModel):
 
 
 class ServiceMetadataEndpointProcess(BaseModel):
+    """Process information in the Peppol network."""
+
     endpoints: List[ServiceMetadataEndpointProcessEndpoint]
     """List of endpoints supporting this process"""
 
@@ -138,6 +156,8 @@ class ServiceMetadataEndpointProcess(BaseModel):
 
 
 class ServiceMetadataEndpoint(BaseModel):
+    """Information about a Peppol participant's endpoint."""
+
     document_types: List[ServiceMetadataEndpointDocumentType] = FieldInfo(alias="documentTypes")
     """List of document types supported by this endpoint"""
 
@@ -155,6 +175,8 @@ class ServiceMetadataEndpoint(BaseModel):
 
 
 class ServiceMetadata(BaseModel):
+    """Service metadata information for the Peppol participant"""
+
     endpoints: List[ServiceMetadataEndpoint]
     """List of endpoints found for the Peppol participant"""
 
@@ -169,6 +191,18 @@ class ServiceMetadata(BaseModel):
 
 
 class LookupRetrieveResponse(BaseModel):
+    """Response from a Peppol ID lookup operation.
+
+    This model represents the complete result of validating and looking up a Peppol ID
+    in the Peppol network, including DNS information, service metadata, business card
+    details, and certificate information.
+
+    Example:
+        A successful lookup for a Peppol ID "0192:991825827" would return DNS information,
+        service metadata with supported document types and processes, business card information
+        with organization details, and certificate data.
+    """
+
     business_card: BusinessCard = FieldInfo(alias="businessCard")
     """Business card information for the Peppol participant"""
 

@@ -8,6 +8,8 @@ __all__ = ["Certificate"]
 
 
 class Certificate(BaseModel):
+    """Certificate information for a Peppol endpoint."""
+
     status: str
     """Status of the certificate validation: 'success', 'error', or 'pending'"""
 

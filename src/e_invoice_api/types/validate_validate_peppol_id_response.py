@@ -9,6 +9,8 @@ __all__ = ["ValidateValidatePeppolIDResponse", "BusinessCard"]
 
 
 class BusinessCard(BaseModel):
+    """Business card information for the Peppol ID"""
+
     country_code: Optional[str] = None
 
     name: Optional[str] = None
@@ -17,6 +19,12 @@ class BusinessCard(BaseModel):
 
 
 class ValidateValidatePeppolIDResponse(BaseModel):
+    """Response for a Peppol ID validation request.
+
+    This model represents the validation result of a Peppol ID in the Peppol network,
+    including whether the ID is valid and what document types it supports.
+    """
+
     business_card: Optional[BusinessCard] = None
     """Business card information for the Peppol ID"""
 

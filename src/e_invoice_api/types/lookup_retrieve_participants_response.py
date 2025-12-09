@@ -14,6 +14,8 @@ __all__ = [
 
 
 class ParticipantDocumentType(BaseModel):
+    """Represents a supported document type"""
+
     scheme: str
     """Document type scheme"""
 
@@ -22,6 +24,8 @@ class ParticipantDocumentType(BaseModel):
 
 
 class ParticipantEntityIdentifier(BaseModel):
+    """Represents a business identifier"""
+
     scheme: str
     """Identifier scheme"""
 
@@ -30,6 +34,8 @@ class ParticipantEntityIdentifier(BaseModel):
 
 
 class ParticipantEntity(BaseModel):
+    """Represents a business entity"""
+
     additional_info: Optional[str] = None
     """Additional information"""
 
@@ -53,6 +59,8 @@ class ParticipantEntity(BaseModel):
 
 
 class Participant(BaseModel):
+    """Represents a Peppol participant with their details"""
+
     peppol_id: str
     """Peppol ID of the participant"""
 
@@ -67,6 +75,8 @@ class Participant(BaseModel):
 
 
 class LookupRetrieveParticipantsResponse(BaseModel):
+    """Represents the result of a Peppol directory search"""
+
     query_terms: str
     """Query terms used for search"""
 
