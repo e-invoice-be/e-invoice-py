@@ -9,6 +9,8 @@ __all__ = ["Allowance"]
 
 
 class Allowance(BaseModel):
+    """An allowance is a discount for example for early payment, volume discount, etc."""
+
     amount: Optional[str] = None
     """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
 

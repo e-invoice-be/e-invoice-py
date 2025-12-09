@@ -263,6 +263,8 @@ class DocumentCreateParams(TypedDict, total=False):
 
 
 class Allowance(TypedDict, total=False):
+    """An allowance is a discount for example for early payment, volume discount, etc."""
+
     amount: Union[float, str, None]
     """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
 
@@ -318,6 +320,8 @@ class Allowance(TypedDict, total=False):
 
 
 class Charge(TypedDict, total=False):
+    """A charge is an additional fee for example for late payment, late delivery, etc."""
+
     amount: Union[float, str, None]
     """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
 
@@ -531,6 +535,8 @@ class Charge(TypedDict, total=False):
 
 
 class ItemAllowance(TypedDict, total=False):
+    """An allowance is a discount for example for early payment, volume discount, etc."""
+
     amount: Union[float, str, None]
     """The allowance amount, without VAT. Must be rounded to maximum 2 decimals"""
 
@@ -586,6 +592,8 @@ class ItemAllowance(TypedDict, total=False):
 
 
 class ItemCharge(TypedDict, total=False):
+    """A charge is an additional fee for example for late payment, late delivery, etc."""
+
     amount: Union[float, str, None]
     """The charge amount, without VAT. Must be rounded to maximum 2 decimals"""
 
