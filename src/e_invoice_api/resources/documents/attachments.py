@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Mapping, cast
 
 import httpx
@@ -151,6 +152,7 @@ class AttachmentsResource(SyncAPIResource):
             cast_to=AttachmentDeleteResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def add(
         self,
         document_id: str,
@@ -164,7 +166,8 @@ class AttachmentsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DocumentAttachment:
         """
-        Add a new attachment to an invoice or credit note
+        Add one or more attachments when creating a new invoice or credit note via POST
+        /api/documents/
 
         Args:
           extra_headers: Send extra headers
@@ -320,6 +323,7 @@ class AsyncAttachmentsResource(AsyncAPIResource):
             cast_to=AttachmentDeleteResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def add(
         self,
         document_id: str,
@@ -333,7 +337,8 @@ class AsyncAttachmentsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DocumentAttachment:
         """
-        Add a new attachment to an invoice or credit note
+        Add one or more attachments when creating a new invoice or credit note via POST
+        /api/documents/
 
         Args:
           extra_headers: Send extra headers
@@ -376,8 +381,10 @@ class AttachmentsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             attachments.delete,
         )
-        self.add = to_raw_response_wrapper(
-            attachments.add,
+        self.add = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                attachments.add,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -394,8 +401,10 @@ class AsyncAttachmentsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             attachments.delete,
         )
-        self.add = async_to_raw_response_wrapper(
-            attachments.add,
+        self.add = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                attachments.add,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -412,8 +421,10 @@ class AttachmentsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             attachments.delete,
         )
-        self.add = to_streamed_response_wrapper(
-            attachments.add,
+        self.add = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                attachments.add,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -430,6 +441,8 @@ class AsyncAttachmentsResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             attachments.delete,
         )
-        self.add = async_to_streamed_response_wrapper(
-            attachments.add,
+        self.add = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                attachments.add,  # pyright: ignore[reportDeprecated],
+            )
         )
