@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.19.0 (2025-12-11)
+
+Full Changelog: [v1.18.2...v1.19.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.2...v1.19.0)
+
+### Features
+
+* **api:** api update ([c2330a3](https://github.com/e-invoice-be/e-invoice-py/commit/c2330a3464d7fd5ec2a893ec87d7aec288fa868c))
+
+
+### Chores
+
+* add missing docstrings ([bae84c5](https://github.com/e-invoice-be/e-invoice-py/commit/bae84c5206f67b4cd54c9d6d15749fde98484abb))
+
 ## 1.18.2 (2025-12-09)
 
 Full Changelog: [v1.18.1...v1.18.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.1...v1.18.2)
