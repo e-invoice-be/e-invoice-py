@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Any, Mapping
 from typing_extensions import Self, override
 
 import httpx
@@ -20,8 +20,8 @@ from ._types import (
     not_given,
 )
 from ._utils import is_given, get_async_library
+from ._compat import cached_property
 from ._version import __version__
-from .resources import me, inbox, lookup, outbox, validate, webhooks
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import EInvoiceError, APIStatusError
 from ._base_client import (
@@ -29,7 +29,16 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
-from .resources.documents import documents
+
+if TYPE_CHECKING:
+    from .resources import me, inbox, lookup, outbox, validate, webhooks, documents
+    from .resources.me import MeResource, AsyncMeResource
+    from .resources.inbox import InboxResource, AsyncInboxResource
+    from .resources.lookup import LookupResource, AsyncLookupResource
+    from .resources.outbox import OutboxResource, AsyncOutboxResource
+    from .resources.validate import ValidateResource, AsyncValidateResource
+    from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
+    from .resources.documents.documents import DocumentsResource, AsyncDocumentsResource
 
 __all__ = [
     "Timeout",
@@ -44,16 +53,6 @@ __all__ = [
 
 
 class EInvoice(SyncAPIClient):
-    documents: documents.DocumentsResource
-    inbox: inbox.InboxResource
-    outbox: outbox.OutboxResource
-    validate: validate.ValidateResource
-    lookup: lookup.LookupResource
-    me: me.MeResource
-    webhooks: webhooks.WebhooksResource
-    with_raw_response: EInvoiceWithRawResponse
-    with_streaming_response: EInvoiceWithStreamedResponse
-
     # client options
     api_key: str
 
@@ -108,15 +107,55 @@ class EInvoice(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.documents = documents.DocumentsResource(self)
-        self.inbox = inbox.InboxResource(self)
-        self.outbox = outbox.OutboxResource(self)
-        self.validate = validate.ValidateResource(self)
-        self.lookup = lookup.LookupResource(self)
-        self.me = me.MeResource(self)
-        self.webhooks = webhooks.WebhooksResource(self)
-        self.with_raw_response = EInvoiceWithRawResponse(self)
-        self.with_streaming_response = EInvoiceWithStreamedResponse(self)
+    @cached_property
+    def documents(self) -> DocumentsResource:
+        from .resources.documents import DocumentsResource
+
+        return DocumentsResource(self)
+
+    @cached_property
+    def inbox(self) -> InboxResource:
+        from .resources.inbox import InboxResource
+
+        return InboxResource(self)
+
+    @cached_property
+    def outbox(self) -> OutboxResource:
+        from .resources.outbox import OutboxResource
+
+        return OutboxResource(self)
+
+    @cached_property
+    def validate(self) -> ValidateResource:
+        from .resources.validate import ValidateResource
+
+        return ValidateResource(self)
+
+    @cached_property
+    def lookup(self) -> LookupResource:
+        from .resources.lookup import LookupResource
+
+        return LookupResource(self)
+
+    @cached_property
+    def me(self) -> MeResource:
+        from .resources.me import MeResource
+
+        return MeResource(self)
+
+    @cached_property
+    def webhooks(self) -> WebhooksResource:
+        from .resources.webhooks import WebhooksResource
+
+        return WebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> EInvoiceWithRawResponse:
+        return EInvoiceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> EInvoiceWithStreamedResponse:
+        return EInvoiceWithStreamedResponse(self)
 
     @property
     @override
@@ -224,16 +263,6 @@ class EInvoice(SyncAPIClient):
 
 
 class AsyncEInvoice(AsyncAPIClient):
-    documents: documents.AsyncDocumentsResource
-    inbox: inbox.AsyncInboxResource
-    outbox: outbox.AsyncOutboxResource
-    validate: validate.AsyncValidateResource
-    lookup: lookup.AsyncLookupResource
-    me: me.AsyncMeResource
-    webhooks: webhooks.AsyncWebhooksResource
-    with_raw_response: AsyncEInvoiceWithRawResponse
-    with_streaming_response: AsyncEInvoiceWithStreamedResponse
-
     # client options
     api_key: str
 
@@ -288,15 +317,55 @@ class AsyncEInvoice(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.documents = documents.AsyncDocumentsResource(self)
-        self.inbox = inbox.AsyncInboxResource(self)
-        self.outbox = outbox.AsyncOutboxResource(self)
-        self.validate = validate.AsyncValidateResource(self)
-        self.lookup = lookup.AsyncLookupResource(self)
-        self.me = me.AsyncMeResource(self)
-        self.webhooks = webhooks.AsyncWebhooksResource(self)
-        self.with_raw_response = AsyncEInvoiceWithRawResponse(self)
-        self.with_streaming_response = AsyncEInvoiceWithStreamedResponse(self)
+    @cached_property
+    def documents(self) -> AsyncDocumentsResource:
+        from .resources.documents import AsyncDocumentsResource
+
+        return AsyncDocumentsResource(self)
+
+    @cached_property
+    def inbox(self) -> AsyncInboxResource:
+        from .resources.inbox import AsyncInboxResource
+
+        return AsyncInboxResource(self)
+
+    @cached_property
+    def outbox(self) -> AsyncOutboxResource:
+        from .resources.outbox import AsyncOutboxResource
+
+        return AsyncOutboxResource(self)
+
+    @cached_property
+    def validate(self) -> AsyncValidateResource:
+        from .resources.validate import AsyncValidateResource
+
+        return AsyncValidateResource(self)
+
+    @cached_property
+    def lookup(self) -> AsyncLookupResource:
+        from .resources.lookup import AsyncLookupResource
+
+        return AsyncLookupResource(self)
+
+    @cached_property
+    def me(self) -> AsyncMeResource:
+        from .resources.me import AsyncMeResource
+
+        return AsyncMeResource(self)
+
+    @cached_property
+    def webhooks(self) -> AsyncWebhooksResource:
+        from .resources.webhooks import AsyncWebhooksResource
+
+        return AsyncWebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncEInvoiceWithRawResponse:
+        return AsyncEInvoiceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncEInvoiceWithStreamedResponse:
+        return AsyncEInvoiceWithStreamedResponse(self)
 
     @property
     @override
@@ -404,47 +473,199 @@ class AsyncEInvoice(AsyncAPIClient):
 
 
 class EInvoiceWithRawResponse:
+    _client: EInvoice
+
     def __init__(self, client: EInvoice) -> None:
-        self.documents = documents.DocumentsResourceWithRawResponse(client.documents)
-        self.inbox = inbox.InboxResourceWithRawResponse(client.inbox)
-        self.outbox = outbox.OutboxResourceWithRawResponse(client.outbox)
-        self.validate = validate.ValidateResourceWithRawResponse(client.validate)
-        self.lookup = lookup.LookupResourceWithRawResponse(client.lookup)
-        self.me = me.MeResourceWithRawResponse(client.me)
-        self.webhooks = webhooks.WebhooksResourceWithRawResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def documents(self) -> documents.DocumentsResourceWithRawResponse:
+        from .resources.documents import DocumentsResourceWithRawResponse
+
+        return DocumentsResourceWithRawResponse(self._client.documents)
+
+    @cached_property
+    def inbox(self) -> inbox.InboxResourceWithRawResponse:
+        from .resources.inbox import InboxResourceWithRawResponse
+
+        return InboxResourceWithRawResponse(self._client.inbox)
+
+    @cached_property
+    def outbox(self) -> outbox.OutboxResourceWithRawResponse:
+        from .resources.outbox import OutboxResourceWithRawResponse
+
+        return OutboxResourceWithRawResponse(self._client.outbox)
+
+    @cached_property
+    def validate(self) -> validate.ValidateResourceWithRawResponse:
+        from .resources.validate import ValidateResourceWithRawResponse
+
+        return ValidateResourceWithRawResponse(self._client.validate)
+
+    @cached_property
+    def lookup(self) -> lookup.LookupResourceWithRawResponse:
+        from .resources.lookup import LookupResourceWithRawResponse
+
+        return LookupResourceWithRawResponse(self._client.lookup)
+
+    @cached_property
+    def me(self) -> me.MeResourceWithRawResponse:
+        from .resources.me import MeResourceWithRawResponse
+
+        return MeResourceWithRawResponse(self._client.me)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
+        from .resources.webhooks import WebhooksResourceWithRawResponse
+
+        return WebhooksResourceWithRawResponse(self._client.webhooks)
 
 
 class AsyncEInvoiceWithRawResponse:
+    _client: AsyncEInvoice
+
     def __init__(self, client: AsyncEInvoice) -> None:
-        self.documents = documents.AsyncDocumentsResourceWithRawResponse(client.documents)
-        self.inbox = inbox.AsyncInboxResourceWithRawResponse(client.inbox)
-        self.outbox = outbox.AsyncOutboxResourceWithRawResponse(client.outbox)
-        self.validate = validate.AsyncValidateResourceWithRawResponse(client.validate)
-        self.lookup = lookup.AsyncLookupResourceWithRawResponse(client.lookup)
-        self.me = me.AsyncMeResourceWithRawResponse(client.me)
-        self.webhooks = webhooks.AsyncWebhooksResourceWithRawResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def documents(self) -> documents.AsyncDocumentsResourceWithRawResponse:
+        from .resources.documents import AsyncDocumentsResourceWithRawResponse
+
+        return AsyncDocumentsResourceWithRawResponse(self._client.documents)
+
+    @cached_property
+    def inbox(self) -> inbox.AsyncInboxResourceWithRawResponse:
+        from .resources.inbox import AsyncInboxResourceWithRawResponse
+
+        return AsyncInboxResourceWithRawResponse(self._client.inbox)
+
+    @cached_property
+    def outbox(self) -> outbox.AsyncOutboxResourceWithRawResponse:
+        from .resources.outbox import AsyncOutboxResourceWithRawResponse
+
+        return AsyncOutboxResourceWithRawResponse(self._client.outbox)
+
+    @cached_property
+    def validate(self) -> validate.AsyncValidateResourceWithRawResponse:
+        from .resources.validate import AsyncValidateResourceWithRawResponse
+
+        return AsyncValidateResourceWithRawResponse(self._client.validate)
+
+    @cached_property
+    def lookup(self) -> lookup.AsyncLookupResourceWithRawResponse:
+        from .resources.lookup import AsyncLookupResourceWithRawResponse
+
+        return AsyncLookupResourceWithRawResponse(self._client.lookup)
+
+    @cached_property
+    def me(self) -> me.AsyncMeResourceWithRawResponse:
+        from .resources.me import AsyncMeResourceWithRawResponse
+
+        return AsyncMeResourceWithRawResponse(self._client.me)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
+
+        return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
 
 
 class EInvoiceWithStreamedResponse:
+    _client: EInvoice
+
     def __init__(self, client: EInvoice) -> None:
-        self.documents = documents.DocumentsResourceWithStreamingResponse(client.documents)
-        self.inbox = inbox.InboxResourceWithStreamingResponse(client.inbox)
-        self.outbox = outbox.OutboxResourceWithStreamingResponse(client.outbox)
-        self.validate = validate.ValidateResourceWithStreamingResponse(client.validate)
-        self.lookup = lookup.LookupResourceWithStreamingResponse(client.lookup)
-        self.me = me.MeResourceWithStreamingResponse(client.me)
-        self.webhooks = webhooks.WebhooksResourceWithStreamingResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def documents(self) -> documents.DocumentsResourceWithStreamingResponse:
+        from .resources.documents import DocumentsResourceWithStreamingResponse
+
+        return DocumentsResourceWithStreamingResponse(self._client.documents)
+
+    @cached_property
+    def inbox(self) -> inbox.InboxResourceWithStreamingResponse:
+        from .resources.inbox import InboxResourceWithStreamingResponse
+
+        return InboxResourceWithStreamingResponse(self._client.inbox)
+
+    @cached_property
+    def outbox(self) -> outbox.OutboxResourceWithStreamingResponse:
+        from .resources.outbox import OutboxResourceWithStreamingResponse
+
+        return OutboxResourceWithStreamingResponse(self._client.outbox)
+
+    @cached_property
+    def validate(self) -> validate.ValidateResourceWithStreamingResponse:
+        from .resources.validate import ValidateResourceWithStreamingResponse
+
+        return ValidateResourceWithStreamingResponse(self._client.validate)
+
+    @cached_property
+    def lookup(self) -> lookup.LookupResourceWithStreamingResponse:
+        from .resources.lookup import LookupResourceWithStreamingResponse
+
+        return LookupResourceWithStreamingResponse(self._client.lookup)
+
+    @cached_property
+    def me(self) -> me.MeResourceWithStreamingResponse:
+        from .resources.me import MeResourceWithStreamingResponse
+
+        return MeResourceWithStreamingResponse(self._client.me)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import WebhooksResourceWithStreamingResponse
+
+        return WebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
 class AsyncEInvoiceWithStreamedResponse:
+    _client: AsyncEInvoice
+
     def __init__(self, client: AsyncEInvoice) -> None:
-        self.documents = documents.AsyncDocumentsResourceWithStreamingResponse(client.documents)
-        self.inbox = inbox.AsyncInboxResourceWithStreamingResponse(client.inbox)
-        self.outbox = outbox.AsyncOutboxResourceWithStreamingResponse(client.outbox)
-        self.validate = validate.AsyncValidateResourceWithStreamingResponse(client.validate)
-        self.lookup = lookup.AsyncLookupResourceWithStreamingResponse(client.lookup)
-        self.me = me.AsyncMeResourceWithStreamingResponse(client.me)
-        self.webhooks = webhooks.AsyncWebhooksResourceWithStreamingResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def documents(self) -> documents.AsyncDocumentsResourceWithStreamingResponse:
+        from .resources.documents import AsyncDocumentsResourceWithStreamingResponse
+
+        return AsyncDocumentsResourceWithStreamingResponse(self._client.documents)
+
+    @cached_property
+    def inbox(self) -> inbox.AsyncInboxResourceWithStreamingResponse:
+        from .resources.inbox import AsyncInboxResourceWithStreamingResponse
+
+        return AsyncInboxResourceWithStreamingResponse(self._client.inbox)
+
+    @cached_property
+    def outbox(self) -> outbox.AsyncOutboxResourceWithStreamingResponse:
+        from .resources.outbox import AsyncOutboxResourceWithStreamingResponse
+
+        return AsyncOutboxResourceWithStreamingResponse(self._client.outbox)
+
+    @cached_property
+    def validate(self) -> validate.AsyncValidateResourceWithStreamingResponse:
+        from .resources.validate import AsyncValidateResourceWithStreamingResponse
+
+        return AsyncValidateResourceWithStreamingResponse(self._client.validate)
+
+    @cached_property
+    def lookup(self) -> lookup.AsyncLookupResourceWithStreamingResponse:
+        from .resources.lookup import AsyncLookupResourceWithStreamingResponse
+
+        return AsyncLookupResourceWithStreamingResponse(self._client.lookup)
+
+    @cached_property
+    def me(self) -> me.AsyncMeResourceWithStreamingResponse:
+        from .resources.me import AsyncMeResourceWithStreamingResponse
+
+        return AsyncMeResourceWithStreamingResponse(self._client.me)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
+
+        return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
 Client = EInvoice
