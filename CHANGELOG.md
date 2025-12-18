@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.19.1 (2025-12-18)
+
+Full Changelog: [v1.19.0...v1.19.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.0...v1.19.1)
+
+### Bug Fixes
+
+* use async_to_httpx_files in patch method ([c365027](https://github.com/e-invoice-be/e-invoice-py/commit/c365027ebcbf6623248feeb9d5fe9211689056be))
+
+
+### Chores
+
+* **internal:** add missing files argument to base client ([fad7fa1](https://github.com/e-invoice-be/e-invoice-py/commit/fad7fa166b21b02da19455636cc7cae3f89ce940))
+* speedup initial import ([80df476](https://github.com/e-invoice-be/e-invoice-py/commit/80df47609570eddb744422332122e43b03576e70))
+
 ## 1.19.0 (2025-12-11)
 
 Full Changelog: [v1.18.2...v1.19.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.18.2...v1.19.0)
