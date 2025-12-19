@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.19.2 (2025-12-19)
+
+Full Changelog: [v1.19.1...v1.19.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.1...v1.19.2)
+
+### Chores
+
+* **internal:** add `--fix` argument to lint script ([2150903](https://github.com/e-invoice-be/e-invoice-py/commit/21509036de7a8c0b594b4b0d3f66815176a45164))
+
 ## 1.19.1 (2025-12-18)
 
 Full Changelog: [v1.19.0...v1.19.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.0...v1.19.1)
