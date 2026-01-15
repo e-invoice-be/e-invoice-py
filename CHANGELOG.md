@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.20.0 (2026-01-15)
+
+Full Changelog: [v1.19.1...v1.20.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.1...v1.20.0)
+
+### Features
+
+* **api:** api update ([aaf54be](https://github.com/e-invoice-be/e-invoice-py/commit/aaf54be624ec5b9706fd1167f470bcd18b3ca80f))
+* **client:** add support for binary request streaming ([37fbe8d](https://github.com/e-invoice-be/e-invoice-py/commit/37fbe8dc8d6d607917d776c51597464735c4ab42))
+
+
+### Chores
+
+* **internal:** add `--fix` argument to lint script ([2150903](https://github.com/e-invoice-be/e-invoice-py/commit/21509036de7a8c0b594b4b0d3f66815176a45164))
+* **internal:** codegen related update ([c0c73f5](https://github.com/e-invoice-be/e-invoice-py/commit/c0c73f5b6b026440581b3e06ca7e5caeaf841a4a))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([4d9c935](https://github.com/e-invoice-be/e-invoice-py/commit/4d9c93550ae756a3639b114347142be02ec85b72))
+
 ## 1.19.1 (2025-12-18)
 
 Full Changelog: [v1.19.0...v1.19.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.0...v1.19.1)
