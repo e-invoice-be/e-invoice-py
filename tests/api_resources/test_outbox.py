@@ -33,6 +33,11 @@ class TestOutbox:
         outbox = client.outbox.list_draft_documents(
             page=1,
             page_size=1,
+            search="search",
+            sort_by="created_at",
+            sort_order="asc",
+            state="DRAFT",
+            type="INVOICE",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
@@ -72,8 +77,11 @@ class TestOutbox:
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
             page=1,
             page_size=1,
+            receiver="receiver",
             search="search",
             sender="sender",
+            sort_by="created_at",
+            sort_order="asc",
             state="DRAFT",
             type="INVOICE",
         )
@@ -119,6 +127,11 @@ class TestAsyncOutbox:
         outbox = await async_client.outbox.list_draft_documents(
             page=1,
             page_size=1,
+            search="search",
+            sort_by="created_at",
+            sort_order="asc",
+            state="DRAFT",
+            type="INVOICE",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
@@ -158,8 +171,11 @@ class TestAsyncOutbox:
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
             page=1,
             page_size=1,
+            receiver="receiver",
             search="search",
             sender="sender",
+            sort_by="created_at",
+            sort_order="asc",
             state="DRAFT",
             type="INVOICE",
         )

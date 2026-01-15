@@ -37,6 +37,8 @@ class TestInbox:
             page_size=1,
             search="search",
             sender="sender",
+            sort_by="created_at",
+            sort_order="asc",
             state="DRAFT",
             type="INVOICE",
         )
@@ -76,6 +78,8 @@ class TestInbox:
         inbox = client.inbox.list_credit_notes(
             page=1,
             page_size=1,
+            sort_by="created_at",
+            sort_order="asc",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
@@ -113,6 +117,8 @@ class TestInbox:
         inbox = client.inbox.list_invoices(
             page=1,
             page_size=1,
+            sort_by="created_at",
+            sort_order="asc",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
@@ -160,6 +166,8 @@ class TestAsyncInbox:
             page_size=1,
             search="search",
             sender="sender",
+            sort_by="created_at",
+            sort_order="asc",
             state="DRAFT",
             type="INVOICE",
         )
@@ -199,6 +207,8 @@ class TestAsyncInbox:
         inbox = await async_client.inbox.list_credit_notes(
             page=1,
             page_size=1,
+            sort_by="created_at",
+            sort_order="asc",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
@@ -236,6 +246,8 @@ class TestAsyncInbox:
         inbox = await async_client.inbox.list_invoices(
             page=1,
             page_size=1,
+            sort_by="created_at",
+            sort_order="asc",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
