@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Union, Optional
 from datetime import datetime
-from typing_extensions import Annotated, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .document_type import DocumentType
@@ -30,7 +30,15 @@ class InboxListParams(TypedDict, total=False):
     """Search in invoice number, seller/buyer names"""
 
     sender: Optional[str]
-    """Filter by sender ID"""
+    """Filter by sender (vendor_name, vendor_email, vendor_tax_id, vendor_company_id)"""
+
+    sort_by: Literal[
+        "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
+    ]
+    """Field to sort by"""
+
+    sort_order: Literal["asc", "desc"]
+    """Sort direction (asc/desc)"""
 
     state: Optional[DocumentState]
     """Filter by document state"""
