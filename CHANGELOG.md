@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.20.1 (2026-01-17)
+
+Full Changelog: [v1.20.0...v1.20.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.20.0...v1.20.1)
+
+### Chores
+
+* **internal:** update `actions/checkout` version ([07783d7](https://github.com/e-invoice-be/e-invoice-py/commit/07783d7cbbf2affa4c539d60097e717a4be945ed))
+
 ## 1.20.0 (2026-01-15)
 
 Full Changelog: [v1.19.1...v1.20.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.19.1...v1.20.0)
