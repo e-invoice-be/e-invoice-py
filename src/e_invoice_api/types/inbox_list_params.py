@@ -8,7 +8,6 @@ from typing_extensions import Literal, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .document_type import DocumentType
-from .document_state import DocumentState
 
 __all__ = ["InboxListParams"]
 
@@ -39,9 +38,6 @@ class InboxListParams(TypedDict, total=False):
 
     sort_order: Literal["asc", "desc"]
     """Sort direction (asc/desc)"""
-
-    state: Optional[DocumentState]
-    """Filter by document state. If not provided, returns all states."""
 
     type: Optional[DocumentType]
     """Filter by document type. If not provided, returns all types."""

@@ -139,7 +139,6 @@ class OutboxResource(SyncAPIResource):
         ]
         | Omit = omit,
         sort_order: Literal["asc", "desc"] | Omit = omit,
-        state: Optional[DocumentState] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -172,8 +171,6 @@ class OutboxResource(SyncAPIResource):
 
           sort_order: Sort direction (asc/desc)
 
-          state: Filter by document state. If not provided, returns all states.
-
           type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
@@ -203,7 +200,6 @@ class OutboxResource(SyncAPIResource):
                         "sender": sender,
                         "sort_by": sort_by,
                         "sort_order": sort_order,
-                        "state": state,
                         "type": type,
                     },
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
@@ -319,7 +315,6 @@ class AsyncOutboxResource(AsyncAPIResource):
         ]
         | Omit = omit,
         sort_order: Literal["asc", "desc"] | Omit = omit,
-        state: Optional[DocumentState] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -352,8 +347,6 @@ class AsyncOutboxResource(AsyncAPIResource):
 
           sort_order: Sort direction (asc/desc)
 
-          state: Filter by document state. If not provided, returns all states.
-
           type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
@@ -383,7 +376,6 @@ class AsyncOutboxResource(AsyncAPIResource):
                         "sender": sender,
                         "sort_by": sort_by,
                         "sort_order": sort_order,
-                        "state": state,
                         "type": type,
                     },
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
