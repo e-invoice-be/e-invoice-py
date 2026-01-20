@@ -47,7 +47,7 @@ class OutboxListReceivedDocumentsParams(TypedDict, total=False):
     """Sort direction (asc/desc)"""
 
     state: Optional[DocumentState]
-    """Filter by document state"""
+    """Filter by document state. If not provided, returns all states."""
 
     type: Optional[DocumentType]
-    """Filter by document type"""
+    """Filter by document type. If not provided, returns all types."""
