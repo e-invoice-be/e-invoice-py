@@ -172,9 +172,9 @@ class OutboxResource(SyncAPIResource):
 
           sort_order: Sort direction (asc/desc)
 
-          state: Filter by document state
+          state: Filter by document state. If not provided, returns all states.
 
-          type: Filter by document type
+          type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
 
@@ -352,9 +352,9 @@ class AsyncOutboxResource(AsyncAPIResource):
 
           sort_order: Sort direction (asc/desc)
 
-          state: Filter by document state
+          state: Filter by document state. If not provided, returns all states.
 
-          type: Filter by document type
+          type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
 

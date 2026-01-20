@@ -10,13 +10,7 @@ __all__ = ["MeRetrieveResponse"]
 
 
 class MeRetrieveResponse(BaseModel):
-    credit_balance: int
-    """Credit balance of the tenant"""
-
     name: str
-
-    plan: Literal["starter", "pro", "enterprise"]
-    """Plan of the tenant"""
 
     bcc_recipient_email: Optional[str] = None
     """BCC recipient email to deliver documents"""
@@ -55,6 +49,9 @@ class MeRetrieveResponse(BaseModel):
     company_zip: Optional[str] = None
     """Zip code of the company"""
 
+    credit_balance: Optional[int] = None
+    """Credit balance of the tenant"""
+
     description: Optional[str] = None
 
     ibans: Optional[List[str]] = None
@@ -62,6 +59,9 @@ class MeRetrieveResponse(BaseModel):
 
     peppol_ids: Optional[List[str]] = None
     """Peppol IDs of the tenant"""
+
+    plan: Optional[Literal["starter", "pro", "enterprise"]] = None
+    """Plan of the tenant"""
 
     smp_registration: Optional[bool] = None
     """Whether the tenant is registered on our SMP"""
