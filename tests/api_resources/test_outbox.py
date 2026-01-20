@@ -82,7 +82,6 @@ class TestOutbox:
             sender="sender",
             sort_by="created_at",
             sort_order="asc",
-            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
@@ -176,7 +175,6 @@ class TestAsyncOutbox:
             sender="sender",
             sort_by="created_at",
             sort_order="asc",
-            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])

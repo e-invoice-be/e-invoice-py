@@ -39,7 +39,6 @@ class TestInbox:
             sender="sender",
             sort_by="created_at",
             sort_order="asc",
-            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
@@ -168,7 +167,6 @@ class TestAsyncInbox:
             sender="sender",
             sort_by="created_at",
             sort_order="asc",
-            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
