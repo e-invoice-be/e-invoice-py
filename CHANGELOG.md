@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.23.1 (2026-01-29)
+
+Full Changelog: [v1.23.0...v1.23.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.23.0...v1.23.1)
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([185d008](https://github.com/e-invoice-be/e-invoice-py/commit/185d00822a038aead34bac55202721e8c4a0cf39))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([3a4b30e](https://github.com/e-invoice-be/e-invoice-py/commit/3a4b30e9b33b57bf56f2aff5e86dd71254c7e2fe))
+
 ## 1.23.0 (2026-01-22)
 
 Full Changelog: [v1.22.0...v1.23.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.22.0...v1.23.0)
