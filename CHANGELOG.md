@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.24.0 (2026-01-30)
+
+Full Changelog: [v1.23.1...v1.24.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.23.1...v1.24.0)
+
+### Features
+
+* **client:** add custom JSON encoder for extended type support ([9daf9fc](https://github.com/e-invoice-be/e-invoice-py/commit/9daf9fc26e36847e0001262098bbfa4e5c9f20f2))
+
 ## 1.23.1 (2026-01-29)
 
 Full Changelog: [v1.23.0...v1.23.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.23.0...v1.23.1)
