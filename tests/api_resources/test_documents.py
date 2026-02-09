@@ -33,6 +33,7 @@ class TestDocuments:
     @parametrize
     def test_method_create_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create(
+            construct_pdf=True,
             allowances=[
                 {
                     "amount": 0,
@@ -420,6 +421,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create(
+            construct_pdf=True,
             allowances=[
                 {
                     "amount": 0,
