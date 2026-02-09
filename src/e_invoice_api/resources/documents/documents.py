@@ -89,6 +89,7 @@ class DocumentsResource(SyncAPIResource):
     def create(
         self,
         *,
+        construct_pdf: bool | Omit = omit,
         allowances: Optional[Iterable[document_create_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
@@ -214,6 +215,9 @@ class DocumentsResource(SyncAPIResource):
         Create a new invoice or credit note
 
         Args:
+          construct_pdf: If true, generate a constructed PDF from the document and include it both as
+              document attachment and embedded in the UBL.
+
           amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
           billing_address: The billing address (if different from customer address)
@@ -378,7 +382,11 @@ class DocumentsResource(SyncAPIResource):
                 document_create_params.DocumentCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"construct_pdf": construct_pdf}, document_create_params.DocumentCreateParams),
             ),
             cast_to=DocumentResponse,
         )
@@ -627,6 +635,7 @@ class AsyncDocumentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        construct_pdf: bool | Omit = omit,
         allowances: Optional[Iterable[document_create_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
@@ -752,6 +761,9 @@ class AsyncDocumentsResource(AsyncAPIResource):
         Create a new invoice or credit note
 
         Args:
+          construct_pdf: If true, generate a constructed PDF from the document and include it both as
+              document attachment and embedded in the UBL.
+
           amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
           billing_address: The billing address (if different from customer address)
@@ -916,7 +928,13 @@ class AsyncDocumentsResource(AsyncAPIResource):
                 document_create_params.DocumentCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"construct_pdf": construct_pdf}, document_create_params.DocumentCreateParams
+                ),
             ),
             cast_to=DocumentResponse,
         )
