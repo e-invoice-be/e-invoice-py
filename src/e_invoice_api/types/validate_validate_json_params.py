@@ -59,9 +59,6 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     customer_name: Optional[str]
     """The company name of the customer/buyer"""
 
-    customer_peppol_id: Optional[str]
-    """Customer Peppol ID"""
-
     customer_tax_id: Optional[str]
     """Customer tax ID.
 
