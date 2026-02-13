@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.26.0 (2026-02-13)
+
+Full Changelog: [v1.25.0...v1.26.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.25.0...v1.26.0)
+
+### Features
+
+* **api:** api update ([81a252e](https://github.com/e-invoice-be/e-invoice-py/commit/81a252ebfbe9b1eb791d021366d8e3cfc4fdcc7e))
+
+
+### Chores
+
+* format all `api.md` files ([27f5503](https://github.com/e-invoice-be/e-invoice-py/commit/27f55039e7e16afac63a55adae4ba4f290f97cdd))
+* **internal:** bump dependencies ([46c6371](https://github.com/e-invoice-be/e-invoice-py/commit/46c63711abfccb26510c368cedc90bf00a6c2df8))
+* **internal:** fix lint error on Python 3.14 ([ff76332](https://github.com/e-invoice-be/e-invoice-py/commit/ff76332a44376dfdd94221fed5ef1e6267709910))
+
 ## 1.25.0 (2026-02-09)
 
 Full Changelog: [v1.24.0...v1.25.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.24.0...v1.25.0)
