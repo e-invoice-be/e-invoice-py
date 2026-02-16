@@ -76,6 +76,7 @@ class ValidateResource(SyncAPIResource):
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
+        customer_peppol_id: Optional[str] | Omit = omit,
         customer_tax_id: Optional[str] | Omit = omit,
         direction: DocumentDirection | Omit = omit,
         document_type: DocumentType | Omit = omit,
@@ -209,6 +210,8 @@ class ValidateResource(SyncAPIResource):
 
           customer_name: The company name of the customer/buyer
 
+          customer_peppol_id: Customer Peppol ID
+
           customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
               prefix
 
@@ -313,6 +316,7 @@ class ValidateResource(SyncAPIResource):
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
+                    "customer_peppol_id": customer_peppol_id,
                     "customer_tax_id": customer_tax_id,
                     "direction": direction,
                     "document_type": document_type,
@@ -478,6 +482,7 @@ class AsyncValidateResource(AsyncAPIResource):
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
+        customer_peppol_id: Optional[str] | Omit = omit,
         customer_tax_id: Optional[str] | Omit = omit,
         direction: DocumentDirection | Omit = omit,
         document_type: DocumentType | Omit = omit,
@@ -611,6 +616,8 @@ class AsyncValidateResource(AsyncAPIResource):
 
           customer_name: The company name of the customer/buyer
 
+          customer_peppol_id: Customer Peppol ID
+
           customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
               prefix
 
@@ -715,6 +722,7 @@ class AsyncValidateResource(AsyncAPIResource):
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
+                    "customer_peppol_id": customer_peppol_id,
                     "customer_tax_id": customer_tax_id,
                     "direction": direction,
                     "document_type": document_type,

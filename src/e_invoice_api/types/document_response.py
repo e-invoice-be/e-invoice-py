@@ -405,6 +405,9 @@ class DocumentResponse(BaseModel):
     customer_name: Optional[str] = None
     """The company name of the customer/buyer"""
 
+    customer_peppol_id: Optional[str] = None
+    """Customer Peppol ID"""
+
     customer_tax_id: Optional[str] = None
     """Customer tax ID.
 
