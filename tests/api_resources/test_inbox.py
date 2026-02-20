@@ -21,13 +21,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestInbox:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: EInvoice) -> None:
         inbox = client.inbox.list()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: EInvoice) -> None:
         inbox = client.inbox.list(
@@ -43,7 +43,7 @@ class TestInbox:
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: EInvoice) -> None:
         response = client.inbox.with_raw_response.list()
@@ -53,7 +53,7 @@ class TestInbox:
         inbox = response.parse()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: EInvoice) -> None:
         with client.inbox.with_streaming_response.list() as response:
@@ -65,13 +65,13 @@ class TestInbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_credit_notes(self, client: EInvoice) -> None:
         inbox = client.inbox.list_credit_notes()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_credit_notes_with_all_params(self, client: EInvoice) -> None:
         inbox = client.inbox.list_credit_notes(
@@ -82,7 +82,7 @@ class TestInbox:
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_credit_notes(self, client: EInvoice) -> None:
         response = client.inbox.with_raw_response.list_credit_notes()
@@ -92,7 +92,7 @@ class TestInbox:
         inbox = response.parse()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_credit_notes(self, client: EInvoice) -> None:
         with client.inbox.with_streaming_response.list_credit_notes() as response:
@@ -104,13 +104,13 @@ class TestInbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_invoices(self, client: EInvoice) -> None:
         inbox = client.inbox.list_invoices()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_invoices_with_all_params(self, client: EInvoice) -> None:
         inbox = client.inbox.list_invoices(
@@ -121,7 +121,7 @@ class TestInbox:
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_invoices(self, client: EInvoice) -> None:
         response = client.inbox.with_raw_response.list_invoices()
@@ -131,7 +131,7 @@ class TestInbox:
         inbox = response.parse()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_invoices(self, client: EInvoice) -> None:
         with client.inbox.with_streaming_response.list_invoices() as response:
@@ -149,13 +149,13 @@ class TestAsyncInbox:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list(
@@ -171,7 +171,7 @@ class TestAsyncInbox:
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.inbox.with_raw_response.list()
@@ -181,7 +181,7 @@ class TestAsyncInbox:
         inbox = await response.parse()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncEInvoice) -> None:
         async with async_client.inbox.with_streaming_response.list() as response:
@@ -193,13 +193,13 @@ class TestAsyncInbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_credit_notes(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list_credit_notes()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_credit_notes_with_all_params(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list_credit_notes(
@@ -210,7 +210,7 @@ class TestAsyncInbox:
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_credit_notes(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.inbox.with_raw_response.list_credit_notes()
@@ -220,7 +220,7 @@ class TestAsyncInbox:
         inbox = await response.parse()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_credit_notes(self, async_client: AsyncEInvoice) -> None:
         async with async_client.inbox.with_streaming_response.list_credit_notes() as response:
@@ -232,13 +232,13 @@ class TestAsyncInbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_invoices(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list_invoices()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_invoices_with_all_params(self, async_client: AsyncEInvoice) -> None:
         inbox = await async_client.inbox.list_invoices(
@@ -249,7 +249,7 @@ class TestAsyncInbox:
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_invoices(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.inbox.with_raw_response.list_invoices()
@@ -259,7 +259,7 @@ class TestAsyncInbox:
         inbox = await response.parse()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], inbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_invoices(self, async_client: AsyncEInvoice) -> None:
         async with async_client.inbox.with_streaming_response.list_invoices() as response:
