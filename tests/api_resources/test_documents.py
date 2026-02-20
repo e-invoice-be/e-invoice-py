@@ -23,13 +23,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestDocuments:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: EInvoice) -> None:
         document = client.documents.create()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create(
@@ -159,7 +159,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.create()
@@ -169,7 +169,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.create() as response:
@@ -181,7 +181,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: EInvoice) -> None:
         document = client.documents.retrieve(
@@ -189,7 +189,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.retrieve(
@@ -201,7 +201,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.retrieve(
@@ -215,7 +215,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -223,7 +223,7 @@ class TestDocuments:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_delete(self, client: EInvoice) -> None:
         document = client.documents.delete(
@@ -231,7 +231,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentDeleteResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.delete(
@@ -243,7 +243,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(DocumentDeleteResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.delete(
@@ -257,7 +257,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -265,7 +265,7 @@ class TestDocuments:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_from_pdf(self, client: EInvoice) -> None:
         document = client.documents.create_from_pdf(
@@ -273,7 +273,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_from_pdf_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create_from_pdf(
@@ -283,7 +283,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create_from_pdf(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.create_from_pdf(
@@ -295,7 +295,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create_from_pdf(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.create_from_pdf(
@@ -309,7 +309,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_send(self, client: EInvoice) -> None:
         document = client.documents.send(
@@ -317,7 +317,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_send_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.send(
@@ -330,7 +330,7 @@ class TestDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_send(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.send(
@@ -342,7 +342,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_send(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.send(
@@ -356,7 +356,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_send(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -364,7 +364,7 @@ class TestDocuments:
                 document_id="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_validate(self, client: EInvoice) -> None:
         document = client.documents.validate(
@@ -372,7 +372,7 @@ class TestDocuments:
         )
         assert_matches_type(UblDocumentValidation, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_validate(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.validate(
@@ -384,7 +384,7 @@ class TestDocuments:
         document = response.parse()
         assert_matches_type(UblDocumentValidation, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_validate(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.validate(
@@ -398,7 +398,7 @@ class TestDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_validate(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -412,13 +412,13 @@ class TestAsyncDocuments:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create(
@@ -548,7 +548,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.create()
@@ -558,7 +558,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.create() as response:
@@ -570,7 +570,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.retrieve(
@@ -578,7 +578,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.retrieve(
@@ -590,7 +590,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.retrieve(
@@ -604,7 +604,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -612,7 +612,7 @@ class TestAsyncDocuments:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.delete(
@@ -620,7 +620,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentDeleteResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.delete(
@@ -632,7 +632,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(DocumentDeleteResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.delete(
@@ -646,7 +646,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -654,7 +654,7 @@ class TestAsyncDocuments:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create_from_pdf(
@@ -662,7 +662,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_from_pdf_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create_from_pdf(
@@ -672,7 +672,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.create_from_pdf(
@@ -684,7 +684,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.create_from_pdf(
@@ -698,7 +698,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_send(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.send(
@@ -706,7 +706,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_send_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.send(
@@ -719,7 +719,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_send(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.send(
@@ -731,7 +731,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(DocumentResponse, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_send(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.send(
@@ -745,7 +745,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_send(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
@@ -753,7 +753,7 @@ class TestAsyncDocuments:
                 document_id="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_validate(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.validate(
@@ -761,7 +761,7 @@ class TestAsyncDocuments:
         )
         assert_matches_type(UblDocumentValidation, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_validate(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.validate(
@@ -773,7 +773,7 @@ class TestAsyncDocuments:
         document = await response.parse()
         assert_matches_type(UblDocumentValidation, document, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_validate(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.validate(
@@ -787,7 +787,7 @@ class TestAsyncDocuments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_validate(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
