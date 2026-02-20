@@ -23,7 +23,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestOutbox:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_draft_documents(self, client: EInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -31,7 +31,7 @@ class TestOutbox:
 
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_draft_documents_with_all_params(self, client: EInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -47,7 +47,7 @@ class TestOutbox:
 
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_draft_documents(self, client: EInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -58,7 +58,7 @@ class TestOutbox:
         outbox = response.parse()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_draft_documents(self, client: EInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -71,13 +71,13 @@ class TestOutbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_received_documents(self, client: EInvoice) -> None:
         outbox = client.outbox.list_received_documents()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_received_documents_with_all_params(self, client: EInvoice) -> None:
         outbox = client.outbox.list_received_documents(
@@ -94,7 +94,7 @@ class TestOutbox:
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_received_documents(self, client: EInvoice) -> None:
         response = client.outbox.with_raw_response.list_received_documents()
@@ -104,7 +104,7 @@ class TestOutbox:
         outbox = response.parse()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_received_documents(self, client: EInvoice) -> None:
         with client.outbox.with_streaming_response.list_received_documents() as response:
@@ -122,7 +122,7 @@ class TestAsyncOutbox:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -130,7 +130,7 @@ class TestAsyncOutbox:
 
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_draft_documents_with_all_params(self, async_client: AsyncEInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -146,7 +146,7 @@ class TestAsyncOutbox:
 
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -157,7 +157,7 @@ class TestAsyncOutbox:
         outbox = await response.parse()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
         with pytest.warns(DeprecationWarning):
@@ -170,13 +170,13 @@ class TestAsyncOutbox:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_received_documents()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_received_documents_with_all_params(self, async_client: AsyncEInvoice) -> None:
         outbox = await async_client.outbox.list_received_documents(
@@ -193,7 +193,7 @@ class TestAsyncOutbox:
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.outbox.with_raw_response.list_received_documents()
@@ -203,7 +203,7 @@ class TestAsyncOutbox:
         outbox = await response.parse()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_received_documents(self, async_client: AsyncEInvoice) -> None:
         async with async_client.outbox.with_streaming_response.list_received_documents() as response:
