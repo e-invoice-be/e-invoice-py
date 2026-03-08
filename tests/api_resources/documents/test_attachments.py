@@ -175,7 +175,7 @@ class TestAttachments:
         with pytest.warns(DeprecationWarning):
             attachment = client.documents.attachments.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             )
 
         assert_matches_type(DocumentAttachment, attachment, path=["response"])
@@ -186,7 +186,7 @@ class TestAttachments:
         with pytest.warns(DeprecationWarning):
             response = client.documents.attachments.with_raw_response.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             )
 
         assert response.is_closed is True
@@ -200,7 +200,7 @@ class TestAttachments:
         with pytest.warns(DeprecationWarning):
             with client.documents.attachments.with_streaming_response.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             ) as response:
                 assert not response.is_closed
                 assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -217,7 +217,7 @@ class TestAttachments:
             with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
                 client.documents.attachments.with_raw_response.add(
                     document_id="",
-                    file=b"raw file contents",
+                    file=b"Example data",
                 )
 
 
@@ -378,7 +378,7 @@ class TestAsyncAttachments:
         with pytest.warns(DeprecationWarning):
             attachment = await async_client.documents.attachments.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             )
 
         assert_matches_type(DocumentAttachment, attachment, path=["response"])
@@ -389,7 +389,7 @@ class TestAsyncAttachments:
         with pytest.warns(DeprecationWarning):
             response = await async_client.documents.attachments.with_raw_response.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             )
 
         assert response.is_closed is True
@@ -403,7 +403,7 @@ class TestAsyncAttachments:
         with pytest.warns(DeprecationWarning):
             async with async_client.documents.attachments.with_streaming_response.add(
                 document_id="document_id",
-                file=b"raw file contents",
+                file=b"Example data",
             ) as response:
                 assert not response.is_closed
                 assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -420,5 +420,5 @@ class TestAsyncAttachments:
             with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
                 await async_client.documents.attachments.with_raw_response.add(
                     document_id="",
-                    file=b"raw file contents",
+                    file=b"Example data",
                 )
