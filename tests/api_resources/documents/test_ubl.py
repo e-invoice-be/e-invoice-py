@@ -22,7 +22,7 @@ class TestUbl:
     @parametrize
     def test_method_create_from_ubl(self, client: EInvoice) -> None:
         ubl = client.documents.ubl.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(DocumentResponse, ubl, path=["response"])
 
@@ -30,7 +30,7 @@ class TestUbl:
     @parametrize
     def test_raw_response_create_from_ubl(self, client: EInvoice) -> None:
         response = client.documents.ubl.with_raw_response.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -42,7 +42,7 @@ class TestUbl:
     @parametrize
     def test_streaming_response_create_from_ubl(self, client: EInvoice) -> None:
         with client.documents.ubl.with_streaming_response.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -104,7 +104,7 @@ class TestAsyncUbl:
     @parametrize
     async def test_method_create_from_ubl(self, async_client: AsyncEInvoice) -> None:
         ubl = await async_client.documents.ubl.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(DocumentResponse, ubl, path=["response"])
 
@@ -112,7 +112,7 @@ class TestAsyncUbl:
     @parametrize
     async def test_raw_response_create_from_ubl(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.ubl.with_raw_response.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -124,7 +124,7 @@ class TestAsyncUbl:
     @parametrize
     async def test_streaming_response_create_from_ubl(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.ubl.with_streaming_response.create_from_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
