@@ -216,7 +216,7 @@ class TestValidate:
     @parametrize
     def test_method_validate_ubl(self, client: EInvoice) -> None:
         validate = client.validate.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
@@ -224,7 +224,7 @@ class TestValidate:
     @parametrize
     def test_raw_response_validate_ubl(self, client: EInvoice) -> None:
         response = client.validate.with_raw_response.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -236,7 +236,7 @@ class TestValidate:
     @parametrize
     def test_streaming_response_validate_ubl(self, client: EInvoice) -> None:
         with client.validate.with_streaming_response.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -447,7 +447,7 @@ class TestAsyncValidate:
     @parametrize
     async def test_method_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         validate = await async_client.validate.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(UblDocumentValidation, validate, path=["response"])
 
@@ -455,7 +455,7 @@ class TestAsyncValidate:
     @parametrize
     async def test_raw_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.validate.with_raw_response.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -467,7 +467,7 @@ class TestAsyncValidate:
     @parametrize
     async def test_streaming_response_validate_ubl(self, async_client: AsyncEInvoice) -> None:
         async with async_client.validate.with_streaming_response.validate_ubl(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

@@ -269,7 +269,7 @@ class TestDocuments:
     @parametrize
     def test_method_create_from_pdf(self, client: EInvoice) -> None:
         document = client.documents.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
@@ -277,7 +277,7 @@ class TestDocuments:
     @parametrize
     def test_method_create_from_pdf_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
             customer_tax_id="customer_tax_id",
             vendor_tax_id="vendor_tax_id",
         )
@@ -287,7 +287,7 @@ class TestDocuments:
     @parametrize
     def test_raw_response_create_from_pdf(self, client: EInvoice) -> None:
         response = client.documents.with_raw_response.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -299,7 +299,7 @@ class TestDocuments:
     @parametrize
     def test_streaming_response_create_from_pdf(self, client: EInvoice) -> None:
         with client.documents.with_streaming_response.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -658,7 +658,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_method_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(DocumentCreateFromPdfResponse, document, path=["response"])
 
@@ -666,7 +666,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_method_create_from_pdf_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
             customer_tax_id="customer_tax_id",
             vendor_tax_id="vendor_tax_id",
         )
@@ -676,7 +676,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_raw_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         response = await async_client.documents.with_raw_response.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -688,7 +688,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_streaming_response_create_from_pdf(self, async_client: AsyncEInvoice) -> None:
         async with async_client.documents.with_streaming_response.create_from_pdf(
-            file=b"raw file contents",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
