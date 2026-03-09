@@ -15,8 +15,6 @@ from e_invoice_api.types import (
 from e_invoice_api._utils import parse_datetime
 from e_invoice_api.pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
 
-# pyright: reportDeprecated=false
-
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
@@ -26,32 +24,22 @@ class TestOutbox:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_draft_documents(self, client: EInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            outbox = client.outbox.list_draft_documents()
-
+        outbox = client.outbox.list_draft_documents()
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_draft_documents_with_all_params(self, client: EInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            outbox = client.outbox.list_draft_documents(
-                page=1,
-                page_size=1,
-                search="search",
-                sort_by="created_at",
-                sort_order="asc",
-                state="DRAFT",
-                type="INVOICE",
-            )
-
+        outbox = client.outbox.list_draft_documents(
+            page=1,
+            page_size=1,
+        )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_draft_documents(self, client: EInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = client.outbox.with_raw_response.list_draft_documents()
+        response = client.outbox.with_raw_response.list_draft_documents()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -61,13 +49,12 @@ class TestOutbox:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_draft_documents(self, client: EInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            with client.outbox.with_streaming_response.list_draft_documents() as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with client.outbox.with_streaming_response.list_draft_documents() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                outbox = response.parse()
-                assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
+            outbox = response.parse()
+            assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -85,11 +72,9 @@ class TestOutbox:
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
             page=1,
             page_size=1,
-            receiver="receiver",
             search="search",
             sender="sender",
-            sort_by="created_at",
-            sort_order="asc",
+            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(SyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
@@ -125,32 +110,22 @@ class TestAsyncOutbox:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            outbox = await async_client.outbox.list_draft_documents()
-
+        outbox = await async_client.outbox.list_draft_documents()
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_draft_documents_with_all_params(self, async_client: AsyncEInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            outbox = await async_client.outbox.list_draft_documents(
-                page=1,
-                page_size=1,
-                search="search",
-                sort_by="created_at",
-                sort_order="asc",
-                state="DRAFT",
-                type="INVOICE",
-            )
-
+        outbox = await async_client.outbox.list_draft_documents(
+            page=1,
+            page_size=1,
+        )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = await async_client.outbox.with_raw_response.list_draft_documents()
+        response = await async_client.outbox.with_raw_response.list_draft_documents()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -160,13 +135,12 @@ class TestAsyncOutbox:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_draft_documents(self, async_client: AsyncEInvoice) -> None:
-        with pytest.warns(DeprecationWarning):
-            async with async_client.outbox.with_streaming_response.list_draft_documents() as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        async with async_client.outbox.with_streaming_response.list_draft_documents() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                outbox = await response.parse()
-                assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
+            outbox = await response.parse()
+            assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -184,11 +158,9 @@ class TestAsyncOutbox:
             date_to=parse_datetime("2019-12-27T18:11:19.117Z"),
             page=1,
             page_size=1,
-            receiver="receiver",
             search="search",
             sender="sender",
-            sort_by="created_at",
-            sort_order="asc",
+            state="DRAFT",
             type="INVOICE",
         )
         assert_matches_type(AsyncDocumentsNumberPage[DocumentResponse], outbox, path=["response"])
