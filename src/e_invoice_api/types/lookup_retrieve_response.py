@@ -77,12 +77,6 @@ class DNSInfo(BaseModel):
     error: Optional[str] = None
     """Error message if the DNS lookup failed"""
 
-    lookup_method: Optional[str] = FieldInfo(alias="lookupMethod", default=None)
-    """DNS lookup method used: 'naptr' (new spec) or 'busdox' (legacy)"""
-
-    smp_hostname: Optional[str] = FieldInfo(alias="smpHostname", default=None)
-    """Hostname of the SMP (Service Metadata Publisher) discovered via DNS"""
-
 
 class QueryMetadata(BaseModel):
     """Metadata about the query that was performed"""

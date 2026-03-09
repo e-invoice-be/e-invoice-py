@@ -1,7 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
-from datetime import date, datetime
+from datetime import date
 from typing_extensions import Literal
 
 from . import charge, allowance
@@ -363,8 +363,6 @@ class TaxDetail(BaseModel):
 class DocumentResponse(BaseModel):
     id: str
 
-    created_at: datetime
-
     allowances: Optional[List[Allowance]] = None
 
     amount_due: Optional[str] = None
@@ -404,9 +402,6 @@ class DocumentResponse(BaseModel):
 
     customer_name: Optional[str] = None
     """The company name of the customer/buyer"""
-
-    customer_peppol_id: Optional[str] = None
-    """Customer Peppol ID"""
 
     customer_tax_id: Optional[str] = None
     """Customer tax ID.
