@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.29.0 (2026-03-09)
+
+Full Changelog: [v1.28.0...v1.29.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.28.0...v1.29.0)
+
+### Features
+
+* **api:** api update ([007baee](https://github.com/e-invoice-be/e-invoice-py/commit/007baee0fad1381e3394fde56b65bf1ca0d7dc30))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([683e556](https://github.com/e-invoice-be/e-invoice-py/commit/683e55650ac689850dc1743638a2e33b2547dc2b))
+* **internal:** add request options to SSE classes ([9c235d8](https://github.com/e-invoice-be/e-invoice-py/commit/9c235d89e19b3384892bc0e6263f35ae93ceba89))
+* **internal:** make `test_proxy_environment_variables` more resilient ([6e9fda8](https://github.com/e-invoice-be/e-invoice-py/commit/6e9fda8481b57423464605d941c551dc4cbd1d2c))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([a979f86](https://github.com/e-invoice-be/e-invoice-py/commit/a979f86dac062263b8dae26a92a53de3680164f3))
+* **internal:** remove mock server code ([0045309](https://github.com/e-invoice-be/e-invoice-py/commit/004530914e6676871da8fe0dc46fbdf65de1f98e))
+* update mock server docs ([8fd84ab](https://github.com/e-invoice-be/e-invoice-py/commit/8fd84abe816ff3e6632582c7a9e4fc2ee5c74a87))
+* update placeholder string ([0aed894](https://github.com/e-invoice-be/e-invoice-py/commit/0aed89495fcfa598b5b3e6e594d2f93483abf291))
+
 ## 1.28.0 (2026-02-16)
 
 Full Changelog: [v1.27.0...v1.28.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.27.0...v1.28.0)
