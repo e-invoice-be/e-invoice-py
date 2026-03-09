@@ -9,8 +9,6 @@ __all__ = ["PaginatedDocumentResponse"]
 
 
 class PaginatedDocumentResponse(BaseModel):
-    has_next_page: bool
-
     items: List[DocumentResponse]
 
     page: int

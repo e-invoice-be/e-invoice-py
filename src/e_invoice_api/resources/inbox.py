@@ -4,11 +4,16 @@ from __future__ import annotations
 
 from typing import Union, Optional
 from datetime import datetime
-from typing_extensions import Literal
 
 import httpx
 
-from ..types import DocumentType, inbox_list_params, inbox_list_invoices_params, inbox_list_credit_notes_params
+from ..types import (
+    DocumentType,
+    DocumentState,
+    inbox_list_params,
+    inbox_list_invoices_params,
+    inbox_list_credit_notes_params,
+)
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform
 from .._compat import cached_property
@@ -22,6 +27,7 @@ from .._response import (
 from ..pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.document_type import DocumentType
+from ..types.document_state import DocumentState
 from ..types.document_response import DocumentResponse
 
 __all__ = ["InboxResource", "AsyncInboxResource"]
@@ -56,11 +62,7 @@ class InboxResource(SyncAPIResource):
         page_size: int | Omit = omit,
         search: Optional[str] | Omit = omit,
         sender: Optional[str] | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -84,13 +86,11 @@ class InboxResource(SyncAPIResource):
 
           search: Search in invoice number, seller/buyer names
 
-          sender: Filter by sender (vendor_name, vendor_email, vendor_tax_id, vendor_company_id)
+          sender: Filter by sender ID
 
-          sort_by: Field to sort by
+          state: Filter by document state
 
-          sort_order: Sort direction (asc/desc)
-
-          type: Filter by document type. If not provided, returns all types.
+          type: Filter by document type
 
           extra_headers: Send extra headers
 
@@ -116,8 +116,7 @@ class InboxResource(SyncAPIResource):
                         "page_size": page_size,
                         "search": search,
                         "sender": sender,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
+                        "state": state,
                         "type": type,
                     },
                     inbox_list_params.InboxListParams,
@@ -131,11 +130,6 @@ class InboxResource(SyncAPIResource):
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -150,10 +144,6 @@ class InboxResource(SyncAPIResource):
           page: Page number
 
           page_size: Number of items per page
-
-          sort_by: Field to sort by
-
-          sort_order: Sort direction (asc/desc)
 
           extra_headers: Send extra headers
 
@@ -175,8 +165,6 @@ class InboxResource(SyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
                     },
                     inbox_list_credit_notes_params.InboxListCreditNotesParams,
                 ),
@@ -189,11 +177,6 @@ class InboxResource(SyncAPIResource):
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -208,10 +191,6 @@ class InboxResource(SyncAPIResource):
           page: Page number
 
           page_size: Number of items per page
-
-          sort_by: Field to sort by
-
-          sort_order: Sort direction (asc/desc)
 
           extra_headers: Send extra headers
 
@@ -233,8 +212,6 @@ class InboxResource(SyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
                     },
                     inbox_list_invoices_params.InboxListInvoicesParams,
                 ),
@@ -272,11 +249,7 @@ class AsyncInboxResource(AsyncAPIResource):
         page_size: int | Omit = omit,
         search: Optional[str] | Omit = omit,
         sender: Optional[str] | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -300,13 +273,11 @@ class AsyncInboxResource(AsyncAPIResource):
 
           search: Search in invoice number, seller/buyer names
 
-          sender: Filter by sender (vendor_name, vendor_email, vendor_tax_id, vendor_company_id)
+          sender: Filter by sender ID
 
-          sort_by: Field to sort by
+          state: Filter by document state
 
-          sort_order: Sort direction (asc/desc)
-
-          type: Filter by document type. If not provided, returns all types.
+          type: Filter by document type
 
           extra_headers: Send extra headers
 
@@ -332,8 +303,7 @@ class AsyncInboxResource(AsyncAPIResource):
                         "page_size": page_size,
                         "search": search,
                         "sender": sender,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
+                        "state": state,
                         "type": type,
                     },
                     inbox_list_params.InboxListParams,
@@ -347,11 +317,6 @@ class AsyncInboxResource(AsyncAPIResource):
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -366,10 +331,6 @@ class AsyncInboxResource(AsyncAPIResource):
           page: Page number
 
           page_size: Number of items per page
-
-          sort_by: Field to sort by
-
-          sort_order: Sort direction (asc/desc)
 
           extra_headers: Send extra headers
 
@@ -391,8 +352,6 @@ class AsyncInboxResource(AsyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
                     },
                     inbox_list_credit_notes_params.InboxListCreditNotesParams,
                 ),
@@ -405,11 +364,6 @@ class AsyncInboxResource(AsyncAPIResource):
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
-        sort_by: Literal[
-            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
-        ]
-        | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -424,10 +378,6 @@ class AsyncInboxResource(AsyncAPIResource):
           page: Page number
 
           page_size: Number of items per page
-
-          sort_by: Field to sort by
-
-          sort_order: Sort direction (asc/desc)
 
           extra_headers: Send extra headers
 
@@ -449,8 +399,6 @@ class AsyncInboxResource(AsyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
-                        "sort_by": sort_by,
-                        "sort_order": sort_order,
                     },
                     inbox_list_invoices_params.InboxListInvoicesParams,
                 ),
