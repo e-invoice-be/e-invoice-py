@@ -19,6 +19,12 @@ __all__ = ["DocumentCreateParams", "Allowance", "Charge", "Item", "ItemAllowance
 
 
 class DocumentCreateParams(TypedDict, total=False):
+    construct_pdf: bool
+    """
+    If true, generate a constructed PDF from the document and include it both as
+    document attachment and embedded in the UBL.
+    """
+
     allowances: Optional[Iterable[Allowance]]
 
     amount_due: Union[float, str, None]
@@ -58,6 +64,9 @@ class DocumentCreateParams(TypedDict, total=False):
 
     customer_name: Optional[str]
     """The company name of the customer/buyer"""
+
+    customer_peppol_id: Optional[str]
+    """Customer Peppol ID"""
 
     customer_tax_id: Optional[str]
     """Customer tax ID.

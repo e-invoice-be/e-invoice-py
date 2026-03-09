@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Union, Optional
 from datetime import datetime
+from typing_extensions import Literal
 
 import httpx
 
@@ -52,11 +54,20 @@ class OutboxResource(SyncAPIResource):
         """
         return OutboxResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def list_draft_documents(
         self,
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
+        search: Optional[str] | Omit = omit,
+        sort_by: Literal[
+            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
+        ]
+        | Omit = omit,
+        sort_order: Literal["asc", "desc"] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
+        type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -65,12 +76,23 @@ class OutboxResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDocumentsNumberPage[DocumentResponse]:
         """
-        Retrieve a paginated list of draft documents with filtering options.
+        Retrieve a paginated list of draft documents with filtering options including
+        state and text search.
 
         Args:
           page: Page number
 
           page_size: Number of items per page
+
+          search: Search in invoice number, seller/buyer names
+
+          sort_by: Field to sort by
+
+          sort_order: Sort direction (asc/desc)
+
+          state: Filter by document state
+
+          type: Filter by document type
 
           extra_headers: Send extra headers
 
@@ -92,6 +114,11 @@ class OutboxResource(SyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
+                        "search": search,
+                        "sort_by": sort_by,
+                        "sort_order": sort_order,
+                        "state": state,
+                        "type": type,
                     },
                     outbox_list_draft_documents_params.OutboxListDraftDocumentsParams,
                 ),
@@ -106,9 +133,14 @@ class OutboxResource(SyncAPIResource):
         date_to: Union[str, datetime, None] | Omit = omit,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
+        receiver: Optional[str] | Omit = omit,
         search: Optional[str] | Omit = omit,
         sender: Optional[str] | Omit = omit,
-        state: Optional[DocumentState] | Omit = omit,
+        sort_by: Literal[
+            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
+        ]
+        | Omit = omit,
+        sort_order: Literal["asc", "desc"] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -130,13 +162,18 @@ class OutboxResource(SyncAPIResource):
 
           page_size: Number of items per page
 
+          receiver: Filter by receiver (customer_name, customer_email, customer_tax_id,
+              customer_company_id, customer_id)
+
           search: Search in invoice number, seller/buyer names
 
-          sender: Filter by sender ID
+          sender: (Deprecated) Filter by sender ID
 
-          state: Filter by document state
+          sort_by: Field to sort by
 
-          type: Filter by document type
+          sort_order: Sort direction (asc/desc)
+
+          type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
 
@@ -160,9 +197,11 @@ class OutboxResource(SyncAPIResource):
                         "date_to": date_to,
                         "page": page,
                         "page_size": page_size,
+                        "receiver": receiver,
                         "search": search,
                         "sender": sender,
-                        "state": state,
+                        "sort_by": sort_by,
+                        "sort_order": sort_order,
                         "type": type,
                     },
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
@@ -192,11 +231,20 @@ class AsyncOutboxResource(AsyncAPIResource):
         """
         return AsyncOutboxResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def list_draft_documents(
         self,
         *,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
+        search: Optional[str] | Omit = omit,
+        sort_by: Literal[
+            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
+        ]
+        | Omit = omit,
+        sort_order: Literal["asc", "desc"] | Omit = omit,
+        state: Optional[DocumentState] | Omit = omit,
+        type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -205,12 +253,23 @@ class AsyncOutboxResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DocumentResponse, AsyncDocumentsNumberPage[DocumentResponse]]:
         """
-        Retrieve a paginated list of draft documents with filtering options.
+        Retrieve a paginated list of draft documents with filtering options including
+        state and text search.
 
         Args:
           page: Page number
 
           page_size: Number of items per page
+
+          search: Search in invoice number, seller/buyer names
+
+          sort_by: Field to sort by
+
+          sort_order: Sort direction (asc/desc)
+
+          state: Filter by document state
+
+          type: Filter by document type
 
           extra_headers: Send extra headers
 
@@ -232,6 +291,11 @@ class AsyncOutboxResource(AsyncAPIResource):
                     {
                         "page": page,
                         "page_size": page_size,
+                        "search": search,
+                        "sort_by": sort_by,
+                        "sort_order": sort_order,
+                        "state": state,
+                        "type": type,
                     },
                     outbox_list_draft_documents_params.OutboxListDraftDocumentsParams,
                 ),
@@ -246,9 +310,14 @@ class AsyncOutboxResource(AsyncAPIResource):
         date_to: Union[str, datetime, None] | Omit = omit,
         page: int | Omit = omit,
         page_size: int | Omit = omit,
+        receiver: Optional[str] | Omit = omit,
         search: Optional[str] | Omit = omit,
         sender: Optional[str] | Omit = omit,
-        state: Optional[DocumentState] | Omit = omit,
+        sort_by: Literal[
+            "created_at", "invoice_date", "due_date", "invoice_total", "customer_name", "vendor_name", "invoice_id"
+        ]
+        | Omit = omit,
+        sort_order: Literal["asc", "desc"] | Omit = omit,
         type: Optional[DocumentType] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -270,13 +339,18 @@ class AsyncOutboxResource(AsyncAPIResource):
 
           page_size: Number of items per page
 
+          receiver: Filter by receiver (customer_name, customer_email, customer_tax_id,
+              customer_company_id, customer_id)
+
           search: Search in invoice number, seller/buyer names
 
-          sender: Filter by sender ID
+          sender: (Deprecated) Filter by sender ID
 
-          state: Filter by document state
+          sort_by: Field to sort by
 
-          type: Filter by document type
+          sort_order: Sort direction (asc/desc)
+
+          type: Filter by document type. If not provided, returns all types.
 
           extra_headers: Send extra headers
 
@@ -300,9 +374,11 @@ class AsyncOutboxResource(AsyncAPIResource):
                         "date_to": date_to,
                         "page": page,
                         "page_size": page_size,
+                        "receiver": receiver,
                         "search": search,
                         "sender": sender,
-                        "state": state,
+                        "sort_by": sort_by,
+                        "sort_order": sort_order,
                         "type": type,
                     },
                     outbox_list_received_documents_params.OutboxListReceivedDocumentsParams,
@@ -316,8 +392,10 @@ class OutboxResourceWithRawResponse:
     def __init__(self, outbox: OutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = to_raw_response_wrapper(
-            outbox.list_draft_documents,
+        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.list_received_documents = to_raw_response_wrapper(
             outbox.list_received_documents,
@@ -328,8 +406,10 @@ class AsyncOutboxResourceWithRawResponse:
     def __init__(self, outbox: AsyncOutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = async_to_raw_response_wrapper(
-            outbox.list_draft_documents,
+        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.list_received_documents = async_to_raw_response_wrapper(
             outbox.list_received_documents,
@@ -340,8 +420,10 @@ class OutboxResourceWithStreamingResponse:
     def __init__(self, outbox: OutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = to_streamed_response_wrapper(
-            outbox.list_draft_documents,
+        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.list_received_documents = to_streamed_response_wrapper(
             outbox.list_received_documents,
@@ -352,8 +434,10 @@ class AsyncOutboxResourceWithStreamingResponse:
     def __init__(self, outbox: AsyncOutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = async_to_streamed_response_wrapper(
-            outbox.list_draft_documents,
+        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.list_received_documents = async_to_streamed_response_wrapper(
             outbox.list_received_documents,
