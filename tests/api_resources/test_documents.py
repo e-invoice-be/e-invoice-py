@@ -33,6 +33,7 @@ class TestDocuments:
     @parametrize
     def test_method_create_with_all_params(self, client: EInvoice) -> None:
         document = client.documents.create(
+            construct_pdf=True,
             allowances=[
                 {
                     "amount": 0,
@@ -73,6 +74,7 @@ class TestDocuments:
             customer_email="customer_email",
             customer_id="customer_id",
             customer_name="customer_name",
+            customer_peppol_id="0208:0123456789",
             customer_tax_id="BE1018265814",
             direction="INBOUND",
             document_type="INVOICE",
@@ -420,6 +422,7 @@ class TestAsyncDocuments:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncEInvoice) -> None:
         document = await async_client.documents.create(
+            construct_pdf=True,
             allowances=[
                 {
                     "amount": 0,
@@ -460,6 +463,7 @@ class TestAsyncDocuments:
             customer_email="customer_email",
             customer_id="customer_id",
             customer_name="customer_name",
+            customer_peppol_id="0208:0123456789",
             customer_tax_id="BE1018265814",
             direction="INBOUND",
             document_type="INVOICE",

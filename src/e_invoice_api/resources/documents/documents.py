@@ -89,6 +89,7 @@ class DocumentsResource(SyncAPIResource):
     def create(
         self,
         *,
+        construct_pdf: bool | Omit = omit,
         allowances: Optional[Iterable[document_create_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
@@ -102,6 +103,7 @@ class DocumentsResource(SyncAPIResource):
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
+        customer_peppol_id: Optional[str] | Omit = omit,
         customer_tax_id: Optional[str] | Omit = omit,
         direction: DocumentDirection | Omit = omit,
         document_type: DocumentType | Omit = omit,
@@ -214,6 +216,9 @@ class DocumentsResource(SyncAPIResource):
         Create a new invoice or credit note
 
         Args:
+          construct_pdf: If true, generate a constructed PDF from the document and include it both as
+              document attachment and embedded in the UBL.
+
           amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
           billing_address: The billing address (if different from customer address)
@@ -234,6 +239,8 @@ class DocumentsResource(SyncAPIResource):
           customer_id: The unique identifier for the customer in your system
 
           customer_name: The company name of the customer/buyer
+
+          customer_peppol_id: Customer Peppol ID
 
           customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
               prefix
@@ -339,6 +346,7 @@ class DocumentsResource(SyncAPIResource):
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
+                    "customer_peppol_id": customer_peppol_id,
                     "customer_tax_id": customer_tax_id,
                     "direction": direction,
                     "document_type": document_type,
@@ -378,7 +386,11 @@ class DocumentsResource(SyncAPIResource):
                 document_create_params.DocumentCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"construct_pdf": construct_pdf}, document_create_params.DocumentCreateParams),
             ),
             cast_to=DocumentResponse,
         )
@@ -521,8 +533,14 @@ class DocumentsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DocumentResponse:
-        """
-        Send an invoice or credit note via Peppol
+        """Send an invoice or credit note via Peppol.
+
+        By default, the sender and receiver
+        Peppol IDs are derived from the company (tax) IDs in the document, regardless of
+        whether the document was created from a UBL with a different endpoint ID. To
+        explicitly set the sender or receiver Peppol ID, provide them via the query
+        parameters (sender_peppol_scheme, sender_peppol_id, receiver_peppol_scheme,
+        receiver_peppol_id).
 
         Args:
           extra_headers: Send extra headers
@@ -621,6 +639,7 @@ class AsyncDocumentsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        construct_pdf: bool | Omit = omit,
         allowances: Optional[Iterable[document_create_params.Allowance]] | Omit = omit,
         amount_due: Union[float, str, None] | Omit = omit,
         attachments: Optional[Iterable[DocumentAttachmentCreateParam]] | Omit = omit,
@@ -634,6 +653,7 @@ class AsyncDocumentsResource(AsyncAPIResource):
         customer_email: Optional[str] | Omit = omit,
         customer_id: Optional[str] | Omit = omit,
         customer_name: Optional[str] | Omit = omit,
+        customer_peppol_id: Optional[str] | Omit = omit,
         customer_tax_id: Optional[str] | Omit = omit,
         direction: DocumentDirection | Omit = omit,
         document_type: DocumentType | Omit = omit,
@@ -746,6 +766,9 @@ class AsyncDocumentsResource(AsyncAPIResource):
         Create a new invoice or credit note
 
         Args:
+          construct_pdf: If true, generate a constructed PDF from the document and include it both as
+              document attachment and embedded in the UBL.
+
           amount_due: The amount due for payment. Must be positive and rounded to maximum 2 decimals
 
           billing_address: The billing address (if different from customer address)
@@ -766,6 +789,8 @@ class AsyncDocumentsResource(AsyncAPIResource):
           customer_id: The unique identifier for the customer in your system
 
           customer_name: The company name of the customer/buyer
+
+          customer_peppol_id: Customer Peppol ID
 
           customer_tax_id: Customer tax ID. For Belgium this is the VAT number. Must include the country
               prefix
@@ -871,6 +896,7 @@ class AsyncDocumentsResource(AsyncAPIResource):
                     "customer_email": customer_email,
                     "customer_id": customer_id,
                     "customer_name": customer_name,
+                    "customer_peppol_id": customer_peppol_id,
                     "customer_tax_id": customer_tax_id,
                     "direction": direction,
                     "document_type": document_type,
@@ -910,7 +936,13 @@ class AsyncDocumentsResource(AsyncAPIResource):
                 document_create_params.DocumentCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"construct_pdf": construct_pdf}, document_create_params.DocumentCreateParams
+                ),
             ),
             cast_to=DocumentResponse,
         )
@@ -1053,8 +1085,14 @@ class AsyncDocumentsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DocumentResponse:
-        """
-        Send an invoice or credit note via Peppol
+        """Send an invoice or credit note via Peppol.
+
+        By default, the sender and receiver
+        Peppol IDs are derived from the company (tax) IDs in the document, regardless of
+        whether the document was created from a UBL with a different endpoint ID. To
+        explicitly set the sender or receiver Peppol ID, provide them via the query
+        parameters (sender_peppol_scheme, sender_peppol_id, receiver_peppol_scheme,
+        receiver_peppol_id).
 
         Args:
           extra_headers: Send extra headers
