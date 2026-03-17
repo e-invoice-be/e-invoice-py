@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.30.1 (2026-03-17)
+
+Full Changelog: [v1.30.0...v1.30.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.0...v1.30.1)
+
+### Bug Fixes
+
+* **pydantic:** do not pass `by_alias` unless set ([11711c7](https://github.com/e-invoice-be/e-invoice-py/commit/11711c7dc6705d1b2aa187280f1de307c5e17c9c))
+
 ## 1.30.0 (2026-03-09)
 
 Full Changelog: [v1.29.0...v1.30.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.29.0...v1.30.0)
