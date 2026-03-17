@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.30.2 (2026-03-17)
+
+Full Changelog: [v1.30.1...v1.30.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.1...v1.30.2)
+
+### Bug Fixes
+
+* **deps:** bump minimum typing-extensions version ([5efa0c0](https://github.com/e-invoice-be/e-invoice-py/commit/5efa0c015fcbbf57bd54bb174d8af2b9d7d81349))
+
 ## 1.30.1 (2026-03-17)
 
 Full Changelog: [v1.30.0...v1.30.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.0...v1.30.1)
