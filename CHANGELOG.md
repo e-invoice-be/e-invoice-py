@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.30.3 (2026-03-20)
+
+Full Changelog: [v1.30.2...v1.30.3](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.2...v1.30.3)
+
+### Bug Fixes
+
+* sanitize endpoint path params ([9205ce6](https://github.com/e-invoice-be/e-invoice-py/commit/9205ce65724085cf1223f68c94302472176d5a69))
+
+
+### Chores
+
+* **internal:** tweak CI branches ([9bf50bc](https://github.com/e-invoice-be/e-invoice-py/commit/9bf50bc4bbc57e8cbbe713186d788d731a60b360))
+
 ## 1.30.2 (2026-03-17)
 
 Full Changelog: [v1.30.1...v1.30.2](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.1...v1.30.2)
