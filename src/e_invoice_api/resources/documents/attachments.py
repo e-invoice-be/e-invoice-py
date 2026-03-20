@@ -8,7 +8,7 @@ from typing import Mapping, cast
 import httpx
 
 from ..._types import Body, Query, Headers, NotGiven, FileTypes, not_given
-from ..._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -76,7 +76,11 @@ class AttachmentsResource(SyncAPIResource):
         if not attachment_id:
             raise ValueError(f"Expected a non-empty value for `attachment_id` but received {attachment_id!r}")
         return self._get(
-            f"/api/documents/{document_id}/attachments/{attachment_id}",
+            path_template(
+                "/api/documents/{document_id}/attachments/{attachment_id}",
+                document_id=document_id,
+                attachment_id=attachment_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -109,7 +113,7 @@ class AttachmentsResource(SyncAPIResource):
         if not document_id:
             raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
         return self._get(
-            f"/api/documents/{document_id}/attachments",
+            path_template("/api/documents/{document_id}/attachments", document_id=document_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -145,7 +149,11 @@ class AttachmentsResource(SyncAPIResource):
         if not attachment_id:
             raise ValueError(f"Expected a non-empty value for `attachment_id` but received {attachment_id!r}")
         return self._delete(
-            f"/api/documents/{document_id}/attachments/{attachment_id}",
+            path_template(
+                "/api/documents/{document_id}/attachments/{attachment_id}",
+                document_id=document_id,
+                attachment_id=attachment_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -190,7 +198,7 @@ class AttachmentsResource(SyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            f"/api/documents/{document_id}/attachments",
+            path_template("/api/documents/{document_id}/attachments", document_id=document_id),
             body=maybe_transform(body, attachment_add_params.AttachmentAddParams),
             files=files,
             options=make_request_options(
@@ -250,7 +258,11 @@ class AsyncAttachmentsResource(AsyncAPIResource):
         if not attachment_id:
             raise ValueError(f"Expected a non-empty value for `attachment_id` but received {attachment_id!r}")
         return await self._get(
-            f"/api/documents/{document_id}/attachments/{attachment_id}",
+            path_template(
+                "/api/documents/{document_id}/attachments/{attachment_id}",
+                document_id=document_id,
+                attachment_id=attachment_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -283,7 +295,7 @@ class AsyncAttachmentsResource(AsyncAPIResource):
         if not document_id:
             raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
         return await self._get(
-            f"/api/documents/{document_id}/attachments",
+            path_template("/api/documents/{document_id}/attachments", document_id=document_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -319,7 +331,11 @@ class AsyncAttachmentsResource(AsyncAPIResource):
         if not attachment_id:
             raise ValueError(f"Expected a non-empty value for `attachment_id` but received {attachment_id!r}")
         return await self._delete(
-            f"/api/documents/{document_id}/attachments/{attachment_id}",
+            path_template(
+                "/api/documents/{document_id}/attachments/{attachment_id}",
+                document_id=document_id,
+                attachment_id=attachment_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -364,7 +380,7 @@ class AsyncAttachmentsResource(AsyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            f"/api/documents/{document_id}/attachments",
+            path_template("/api/documents/{document_id}/attachments", document_id=document_id),
             body=await async_maybe_transform(body, attachment_add_params.AttachmentAddParams),
             files=files,
             options=make_request_options(
