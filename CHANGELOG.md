@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.31.0 (2026-03-27)
+
+Full Changelog: [v1.30.3...v1.31.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.3...v1.31.0)
+
+### Features
+
+* **internal:** implement indices array format for query and form serialization ([c2406c1](https://github.com/e-invoice-be/e-invoice-py/commit/c2406c1d01c09cfeea53b21e5aa416c87954e149))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([8fc37a0](https://github.com/e-invoice-be/e-invoice-py/commit/8fc37a0360543f13a945edb0636a54a9457cbfbb))
+* **internal:** update gitignore ([ff9b2b5](https://github.com/e-invoice-be/e-invoice-py/commit/ff9b2b5b2d22d8b1e535e1e0ee182a879965e0f6))
+
 ## 1.30.3 (2026-03-20)
 
 Full Changelog: [v1.30.2...v1.30.3](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.2...v1.30.3)
