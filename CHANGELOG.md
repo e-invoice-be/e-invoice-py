@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.31.1 (2026-04-08)
+
+Full Changelog: [v1.31.0...v1.31.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.31.0...v1.31.1)
+
+### Bug Fixes
+
+* **client:** preserve hardcoded query params when merging with user params ([61aa7e8](https://github.com/e-invoice-be/e-invoice-py/commit/61aa7e82a01a6d46abe82739edc41ca5083df6bb))
+
 ## 1.31.0 (2026-03-27)
 
 Full Changelog: [v1.30.3...v1.31.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.30.3...v1.31.0)
