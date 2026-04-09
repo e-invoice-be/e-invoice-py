@@ -25,9 +25,6 @@ class ValidateValidatePeppolIDResponse(BaseModel):
     including whether the ID is valid and what document types it supports.
     """
 
-    business_card: Optional[BusinessCard] = None
-    """Business card information for the Peppol ID"""
-
     business_card_valid: bool
     """Whether a business card is set at the SMP"""
 
@@ -36,5 +33,8 @@ class ValidateValidatePeppolIDResponse(BaseModel):
 
     is_valid: bool
     """Whether the Peppol ID is valid and registered in the Peppol network"""
+
+    business_card: Optional[BusinessCard] = None
+    """Business card information for the Peppol ID"""
 
     supported_document_types: Optional[List[str]] = None
