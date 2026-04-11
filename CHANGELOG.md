@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.32.1 (2026-04-11)
+
+Full Changelog: [v1.32.0...v1.32.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.32.0...v1.32.1)
+
+### Bug Fixes
+
+* ensure file data are only sent as 1 parameter ([992ea82](https://github.com/e-invoice-be/e-invoice-py/commit/992ea82702e549ccda5b720ad91b092fd8c68fba))
+
 ## 1.32.0 (2026-04-09)
 
 Full Changelog: [v1.31.1...v1.32.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.31.1...v1.32.0)
