@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.33.0 (2026-04-28)
+
+Full Changelog: [v1.32.1...v1.33.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.32.1...v1.33.0)
+
+### Features
+
+* support setting headers via env ([8dd3ed2](https://github.com/e-invoice-be/e-invoice-py/commit/8dd3ed2cf509195228d43e1cd7913a3eff1a7080))
+
+
+### Bug Fixes
+
+* use correct field name format for multipart file arrays ([d1156c4](https://github.com/e-invoice-be/e-invoice-py/commit/d1156c40ef52b82f2a6d9eb2bf41e15374145d43))
+
+
+### Performance Improvements
+
+* **client:** optimize file structure copying in multipart requests ([5ba8bae](https://github.com/e-invoice-be/e-invoice-py/commit/5ba8bae2a6e34234b3d551008618630c873eda8d))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([afd3614](https://github.com/e-invoice-be/e-invoice-py/commit/afd361414e1bb65e4122c465bb851f871b94683c))
+
 ## 1.32.1 (2026-04-11)
 
 Full Changelog: [v1.32.0...v1.32.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.32.0...v1.32.1)
