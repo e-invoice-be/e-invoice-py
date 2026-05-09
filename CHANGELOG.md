@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.33.1 (2026-05-09)
+
+Full Changelog: [v1.33.0...v1.33.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.33.0...v1.33.1)
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([378ab6d](https://github.com/e-invoice-be/e-invoice-py/commit/378ab6d1d0dcb1cc41c2c53bdc1a95152eb07ae7))
+
+
+### Chores
+
+* **internal:** reformat pyproject.toml ([2423dbb](https://github.com/e-invoice-be/e-invoice-py/commit/2423dbb7f62a85cf893d07270c75d793a7f4124c))
+
 ## 1.33.0 (2026-04-28)
 
 Full Changelog: [v1.32.1...v1.33.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.32.1...v1.33.0)
