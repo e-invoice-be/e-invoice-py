@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.34.0 (2026-05-12)
+
+Full Changelog: [v1.33.1...v1.34.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.33.1...v1.34.0)
+
+### Features
+
+* **internal/types:** support eagerly validating pydantic iterators ([5ec0997](https://github.com/e-invoice-be/e-invoice-py/commit/5ec09974faa2c7879a9debaf29b1ab6d25ba5be4))
+
 ## 1.33.1 (2026-05-09)
 
 Full Changelog: [v1.33.0...v1.33.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.33.0...v1.33.1)
