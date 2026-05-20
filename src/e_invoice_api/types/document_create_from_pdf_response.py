@@ -136,6 +136,12 @@ class DocumentCreateFromPdfResponse(BaseModel):
     due_date: Optional[date] = None
     """The date when payment is due"""
 
+    error_message: Optional[str] = None
+    """Error message when success is False"""
+
+    error_type: Optional[str] = None
+    """Error type/category when success is False"""
+
     invoice_date: Optional[date] = None
     """The date when the invoice was issued"""
 
@@ -149,7 +155,7 @@ class DocumentCreateFromPdfResponse(BaseModel):
     """
 
     items: Optional[List[Item]] = None
-    """At least one line item is required"""
+    """Line items (may be empty for failed conversions)"""
 
     note: Optional[str] = None
     """Additional notes or comments for the invoice"""
