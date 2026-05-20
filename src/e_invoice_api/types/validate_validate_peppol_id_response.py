@@ -34,7 +34,8 @@ class ValidateValidatePeppolIDResponse(BaseModel):
     is_valid: bool
     """Whether the Peppol ID is valid and registered in the Peppol network"""
 
+    supported_document_types: List[str]
+    """List of document types that this Peppol ID supports"""
+
     business_card: Optional[BusinessCard] = None
     """Business card information for the Peppol ID"""
-
-    supported_document_types: Optional[List[str]] = None
