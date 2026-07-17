@@ -106,6 +106,12 @@ class TestValidate:
                     ],
                     "date": None,
                     "description": "description",
+                    "item_attributes": [
+                        {
+                            "name": "name",
+                            "value": "value",
+                        }
+                    ],
                     "product_code": "product_code",
                     "quantity": 0,
                     "tax": 0,
@@ -337,6 +343,12 @@ class TestAsyncValidate:
                     ],
                     "date": None,
                     "description": "description",
+                    "item_attributes": [
+                        {
+                            "name": "name",
+                            "value": "value",
+                        }
+                    ],
                     "product_code": "product_code",
                     "quantity": 0,
                     "tax": 0,
