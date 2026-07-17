@@ -13,7 +13,7 @@ from .document_direction import DocumentDirection
 from .unit_of_measure_code import UnitOfMeasureCode
 from .documents.document_attachment import DocumentAttachment
 
-__all__ = ["DocumentResponse", "Allowance", "Charge", "Item", "PaymentDetail", "TaxDetail"]
+__all__ = ["DocumentResponse", "Allowance", "Charge", "Item", "ItemItemAttribute", "PaymentDetail", "TaxDetail"]
 
 
 class Allowance(BaseModel):
@@ -284,6 +284,18 @@ class Charge(BaseModel):
     """The VAT rate, represented as percentage that applies to the charge"""
 
 
+class ItemItemAttribute(BaseModel):
+    """
+    An item-level attribute (BG-32 / BT-160 + BT-161) from cac:AdditionalItemProperty.
+    """
+
+    name: str
+    """Attribute name (BT-160)."""
+
+    value: Optional[str] = None
+    """Attribute value (BT-161)."""
+
+
 class Item(BaseModel):
     allowances: Optional[List[allowance.Allowance]] = None
     """The allowances of the line item."""
@@ -303,6 +315,9 @@ class Item(BaseModel):
 
     description: Optional[str] = None
     """The description of the line item."""
+
+    item_attributes: Optional[List[ItemItemAttribute]] = None
+    """Item-level attributes (BG-32) from cac:AdditionalItemProperty."""
 
     product_code: Optional[str] = None
     """The product code of the line item."""

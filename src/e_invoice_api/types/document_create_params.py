@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Union, Iterable, Optional
 from datetime import date
-from typing_extensions import Literal, Annotated, TypedDict
+from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .currency_code import CurrencyCode
@@ -15,7 +15,16 @@ from .unit_of_measure_code import UnitOfMeasureCode
 from .payment_detail_create_param import PaymentDetailCreateParam
 from .document_attachment_create_param import DocumentAttachmentCreateParam
 
-__all__ = ["DocumentCreateParams", "Allowance", "Charge", "Item", "ItemAllowance", "ItemCharge", "TaxDetail"]
+__all__ = [
+    "DocumentCreateParams",
+    "Allowance",
+    "Charge",
+    "Item",
+    "ItemAllowance",
+    "ItemCharge",
+    "ItemItemAttribute",
+    "TaxDetail",
+]
 
 
 class DocumentCreateParams(TypedDict, total=False):
@@ -815,6 +824,18 @@ class ItemCharge(TypedDict, total=False):
     """The VAT rate, represented as percentage that applies to the charge"""
 
 
+class ItemItemAttribute(TypedDict, total=False):
+    """
+    An item-level attribute (BG-32 / BT-160 + BT-161) from cac:AdditionalItemProperty.
+    """
+
+    name: Required[str]
+    """Attribute name (BT-160)."""
+
+    value: Optional[str]
+    """Attribute value (BT-161)."""
+
+
 class Item(TypedDict, total=False):
     allowances: Optional[Iterable[ItemAllowance]]
     """The allowances of the line item."""
@@ -834,6 +855,9 @@ class Item(TypedDict, total=False):
 
     description: Optional[str]
     """The description of the line item."""
+
+    item_attributes: Optional[Iterable[ItemItemAttribute]]
+    """Item-level attributes (BG-32) from cac:AdditionalItemProperty."""
 
     product_code: Optional[str]
     """The product code of the line item."""
