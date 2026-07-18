@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.38.0 (2026-07-18)
+
+Full Changelog: [v1.37.0...v1.38.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.37.0...v1.38.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([4a6c447](https://github.com/e-invoice-be/e-invoice-py/commit/4a6c447b3cde31164d4bbf8bf5e2671e0409db83))
+
 ## 1.37.0 (2026-07-17)
 
 Full Changelog: [v1.36.0...v1.37.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.36.0...v1.37.0)
