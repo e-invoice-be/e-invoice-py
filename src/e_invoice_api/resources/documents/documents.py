@@ -49,6 +49,7 @@ from ...types.currency_code import CurrencyCode
 from ...types.document_type import DocumentType
 from ...types.document_state import DocumentState
 from ...types.document_response import DocumentResponse
+from ...types.document_timeline import DocumentTimeline
 from ...types.document_direction import DocumentDirection
 from ...types.ubl_document_validation import UblDocumentValidation
 from ...types.document_delete_response import DocumentDeleteResponse
@@ -516,6 +517,40 @@ class DocumentsResource(SyncAPIResource):
                 ),
             ),
             cast_to=DocumentCreateFromPdfResponse,
+        )
+
+    def retrieve_timeline(
+        self,
+        document_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DocumentTimeline:
+        """
+        Get the timeline of events for an invoice or credit note, including creation,
+        validation, transmission, and delivery events
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not document_id:
+            raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
+        return self._get(
+            path_template("/api/documents/{document_id}/timeline", document_id=document_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DocumentTimeline,
         )
 
     def send(
@@ -1070,6 +1105,40 @@ class AsyncDocumentsResource(AsyncAPIResource):
             cast_to=DocumentCreateFromPdfResponse,
         )
 
+    async def retrieve_timeline(
+        self,
+        document_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DocumentTimeline:
+        """
+        Get the timeline of events for an invoice or credit note, including creation,
+        validation, transmission, and delivery events
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not document_id:
+            raise ValueError(f"Expected a non-empty value for `document_id` but received {document_id!r}")
+        return await self._get(
+            path_template("/api/documents/{document_id}/timeline", document_id=document_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DocumentTimeline,
+        )
+
     async def send(
         self,
         document_id: str,
@@ -1177,6 +1246,9 @@ class DocumentsResourceWithRawResponse:
         self.create_from_pdf = to_raw_response_wrapper(
             documents.create_from_pdf,
         )
+        self.retrieve_timeline = to_raw_response_wrapper(
+            documents.retrieve_timeline,
+        )
         self.send = to_raw_response_wrapper(
             documents.send,
         )
@@ -1208,6 +1280,9 @@ class AsyncDocumentsResourceWithRawResponse:
         )
         self.create_from_pdf = async_to_raw_response_wrapper(
             documents.create_from_pdf,
+        )
+        self.retrieve_timeline = async_to_raw_response_wrapper(
+            documents.retrieve_timeline,
         )
         self.send = async_to_raw_response_wrapper(
             documents.send,
@@ -1241,6 +1316,9 @@ class DocumentsResourceWithStreamingResponse:
         self.create_from_pdf = to_streamed_response_wrapper(
             documents.create_from_pdf,
         )
+        self.retrieve_timeline = to_streamed_response_wrapper(
+            documents.retrieve_timeline,
+        )
         self.send = to_streamed_response_wrapper(
             documents.send,
         )
@@ -1272,6 +1350,9 @@ class AsyncDocumentsResourceWithStreamingResponse:
         )
         self.create_from_pdf = async_to_streamed_response_wrapper(
             documents.create_from_pdf,
+        )
+        self.retrieve_timeline = async_to_streamed_response_wrapper(
+            documents.retrieve_timeline,
         )
         self.send = async_to_streamed_response_wrapper(
             documents.send,
