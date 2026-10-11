@@ -48,7 +48,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
 
 
 def _telemetry_headers(request: httpx.Request) -> list[str]:
-    """Names of SDK telemetry headers on the request. The SDK must send none."""
+    """Names of platform, retry-count and read-timeout headers on the request. The SDK must send none."""
     suffixes = (
         "-lang",
         "-package-version",
@@ -61,6 +61,11 @@ def _telemetry_headers(request: httpx.Request) -> list[str]:
         "-read-timeout",
     )
     return [name for name in request.headers if name.lower().endswith(suffixes)]
+
+
+def _raw_response_headers(request: httpx.Request) -> list[str]:
+    """Names of raw-response control headers on the request. The signal must stay inside the SDK."""
+    return [name for name in request.headers if "raw-response" in name.lower()]
 
 
 def mirror_request_content(request: httpx.Request) -> httpx.Response:
@@ -123,6 +128,18 @@ def _get_open_connections(client: EInvoice | AsyncEInvoice) -> int:
 
 
 class TestEInvoice:
+    @pytest.mark.respx(base_url=base_url)
+    def test_raw_response_signal_is_not_sent(self, respx_mock: MockRouter, client: EInvoice) -> None:
+        respx_mock.route().mock(return_value=httpx.Response(200, json={}))
+
+        raw = client.documents.with_raw_response.create()
+        assert raw.http_response.is_closed
+        assert _raw_response_headers(raw.http_request) == []
+
+        with client.documents.with_streaming_response.create() as streamed:
+            assert not streamed.http_response.is_closed
+            assert _raw_response_headers(streamed.http_request) == []
+
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
@@ -991,6 +1008,18 @@ class TestEInvoice:
 
 
 class TestAsyncEInvoice:
+    @pytest.mark.respx(base_url=base_url)
+    async def test_raw_response_signal_is_not_sent(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        respx_mock.route().mock(return_value=httpx.Response(200, json={}))
+
+        raw = await async_client.documents.with_raw_response.create()
+        assert raw.http_response.is_closed
+        assert _raw_response_headers(raw.http_request) == []
+
+        async with async_client.documents.with_streaming_response.create() as streamed:
+            assert not streamed.http_response.is_closed
+            assert _raw_response_headers(streamed.http_request) == []
+
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))

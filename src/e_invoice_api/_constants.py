@@ -1,6 +1,7 @@
 import httpx
 
 RAW_RESPONSE_HEADER = "X-EInvoice-Raw-Response"
+RAW_RESPONSE_EXTENSION = "einvoice_raw_response"
 OVERRIDE_CAST_TO_HEADER = "____einvoice_override_cast_to"
 
 # default timeout is 1 minute

@@ -73,6 +73,7 @@ from ._constants import (
     DEFAULT_MAX_RETRIES,
     INITIAL_RETRY_DELAY,
     RAW_RESPONSE_HEADER,
+    RAW_RESPONSE_EXTENSION,
     OVERRIDE_CAST_TO_HEADER,
     DEFAULT_CONNECTION_LIMITS,
 )
@@ -550,6 +551,13 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             headers.pop("Content-Type", None)
             kwargs.pop("data", None)
 
+        # `.with_raw_response` and `.with_streaming_response` pass their mode as a temporary
+        # header, see _response.py. It is an SDK-internal signal, so it travels on the request
+        # extensions and is not sent to the API.
+        raw_response_mode = headers.pop(RAW_RESPONSE_HEADER, None)
+        if raw_response_mode:
+            kwargs["extensions"] = {RAW_RESPONSE_EXTENSION: raw_response_mode}
+
         # TODO: report this error to httpx
         return self._client.build_request(  # pyright: ignore[reportUnknownMemberType]
             headers=headers,
@@ -612,7 +620,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         return cast_to
 
     def _should_stream_response_body(self, request: httpx.Request) -> bool:
-        return request.headers.get(RAW_RESPONSE_HEADER) == "stream"  # type: ignore[no-any-return]
+        return request.extensions.get(RAW_RESPONSE_EXTENSION) == "stream"
 
     def _process_response_data(
         self,
@@ -1089,7 +1097,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             # we only want to actually return the custom BaseAPIResponse class if we're
             # returning the raw response, or if we're not streaming SSE, as if we're streaming
             # SSE then `cast_to` doesn't actively reflect the type we need to parse into
-            and (not stream or bool(response.request.headers.get(RAW_RESPONSE_HEADER)))
+            and (not stream or bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)))
         ):
             if not issubclass(origin, APIResponse):
                 raise TypeError(f"API Response types must subclass {APIResponse}; Received {origin}")
@@ -1120,7 +1128,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             options=options,
             retries_taken=retries_taken,
         )
-        if bool(response.request.headers.get(RAW_RESPONSE_HEADER)):
+        if bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)):
             return cast(ResponseT, api_response)
 
         return api_response.parse()
@@ -1668,7 +1676,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             # we only want to actually return the custom BaseAPIResponse class if we're
             # returning the raw response, or if we're not streaming SSE, as if we're streaming
             # SSE then `cast_to` doesn't actively reflect the type we need to parse into
-            and (not stream or bool(response.request.headers.get(RAW_RESPONSE_HEADER)))
+            and (not stream or bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)))
         ):
             if not issubclass(origin, AsyncAPIResponse):
                 raise TypeError(f"API Response types must subclass {AsyncAPIResponse}; Received {origin}")
@@ -1699,7 +1707,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             options=options,
             retries_taken=retries_taken,
         )
-        if bool(response.request.headers.get(RAW_RESPONSE_HEADER)):
+        if bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)):
             return cast(ResponseT, api_response)
 
         return await api_response.parse()
