@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List, cast
+from typing import Any, Dict
 from datetime import datetime, timezone
 
 import httpx
 import pytest
-from respx import Route, MockRouter
+from respx import MockRouter
 
+from tests.utils import serve_pages, page_payload, sent_queries
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import DocumentResponse
 from e_invoice_api.pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
@@ -32,35 +33,6 @@ FAILED_CREDIT_NOTE: Dict[str, Any] = {
     "state": "FAILED",
     "document_type": "CREDIT_NOTE",
 }
-
-
-def page_payload(items: List[Dict[str, Any]], *, page: int = 1, pages: int = 1) -> Dict[str, Any]:
-    """A spec-conformant `PaginatedResponse[DocumentResponse]` body."""
-    return {
-        "items": items,
-        "total": len(items),
-        "page": page,
-        "page_size": max(len(items), 1),
-        "pages": pages,
-        "has_next_page": page < pages,
-    }
-
-
-def sent_queries(route: Route) -> List[Dict[str, str]]:
-    """The query string of every request the route received, in order."""
-    requests: List[httpx.Request] = [call.request for call in cast(Any, route.calls)]
-    return [dict(request.url.params) for request in requests]
-
-
-def two_single_item_pages(request: httpx.Request) -> httpx.Response:
-    """Serves 2 drafts over 2 pages of 1 item each; any further page is empty."""
-    page = int(request.url.params.get("page", "1"))
-    drafts = [DRAFT_INVOICE, FAILED_CREDIT_NOTE]
-    items = drafts[page - 1 : page]
-    return httpx.Response(
-        200,
-        json={"items": items, "total": 2, "page": page, "page_size": 1, "pages": 2, "has_next_page": page < 2},
-    )
 
 
 class TestDrafts:
@@ -126,7 +98,7 @@ class TestDrafts:
 
     @pytest.mark.respx(base_url=base_url)
     def test_list_auto_paginates_until_last_page(self, respx_mock: MockRouter, client: EInvoice) -> None:
-        route = respx_mock.get("/api/drafts/").mock(side_effect=two_single_item_pages)
+        route = respx_mock.get("/api/drafts/").mock(side_effect=serve_pages([DRAFT_INVOICE, FAILED_CREDIT_NOTE]))
 
         ids = [document.id for document in client.drafts.list(page_size=1, state="DRAFT")]
 
@@ -196,7 +168,7 @@ class TestAsyncDrafts:
     async def test_list_auto_paginates_until_last_page(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
-        route = respx_mock.get("/api/drafts/").mock(side_effect=two_single_item_pages)
+        route = respx_mock.get("/api/drafts/").mock(side_effect=serve_pages([DRAFT_INVOICE, FAILED_CREDIT_NOTE]))
 
         ids = [document.id async for document in async_client.drafts.list(page_size=1)]
 

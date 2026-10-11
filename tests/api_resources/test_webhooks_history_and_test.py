@@ -21,10 +21,7 @@ HISTORY_PAYLOAD = {
 
 def assert_history(history: types.WebhookRetrieveHistoryResponse) -> None:
     assert isinstance(history, types.WebhookRetrieveHistoryResponse)
-    assert history.history == [
-        {"event_type": "document.sent", "status_code": 200, "attempt": 1},
-        {"event_type": "document.received", "status_code": 500, "error": {"reason": "timeout"}},
-    ]
+    assert history.history == HISTORY_PAYLOAD["history"]
 
 
 class TestWebhooksHistory:
@@ -77,8 +74,8 @@ TEST_RESPONSE_PAYLOAD = {
 def assert_test_response(result: types.WebhookTestResponse) -> None:
     assert isinstance(result, types.WebhookTestResponse)
     assert result.success is True
-    assert result.message == "Test event delivered"
-    assert result.webhook_delivery_result == {"status_code": 200, "duration_ms": 42, "response": {"ok": True}}
+    assert result.message == TEST_RESPONSE_PAYLOAD["message"]
+    assert result.webhook_delivery_result == TEST_RESPONSE_PAYLOAD["webhook_delivery_result"]
 
 
 class TestWebhooksTest:

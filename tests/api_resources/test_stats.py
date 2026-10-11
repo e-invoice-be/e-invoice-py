@@ -142,6 +142,24 @@ class TestAsyncStats:
 
     @pytest.mark.respx(base_url=base_url)
     @parametrize
+    async def test_retrieve_sends_filters_as_query_string(
+        self, respx_mock: MockRouter, async_client: AsyncEInvoice
+    ) -> None:
+        route = respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
+
+        await async_client.stats.retrieve(start_date=date(2026, 1, 1), end_date="2026-01-31", aggregation="MONTH")
+
+        request = route.calls.last.request
+        assert request.method == "GET"
+        assert request.url.path == "/api/stats"
+        assert dict(request.url.params) == {
+            "start_date": "2026-01-01",
+            "end_date": "2026-01-31",
+            "aggregation": "MONTH",
+        }
+
+    @pytest.mark.respx(base_url=base_url)
+    @parametrize
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
