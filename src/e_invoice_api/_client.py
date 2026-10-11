@@ -32,7 +32,7 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import me, inbox, stats, drafts, lookup, outbox, mailbox, validate, webhooks, documents, conversion
+    from . import resources
     from .resources.me import MeResource, AsyncMeResource
     from .resources.inbox import InboxResource, AsyncInboxResource
     from .resources.stats import StatsResource, AsyncStatsResource
@@ -548,67 +548,67 @@ class EInvoiceWithRawResponse:
         self._client = client
 
     @cached_property
-    def documents(self) -> documents.DocumentsResourceWithRawResponse:
+    def documents(self) -> resources.documents.DocumentsResourceWithRawResponse:
         from .resources.documents import DocumentsResourceWithRawResponse
 
         return DocumentsResourceWithRawResponse(self._client.documents)
 
     @cached_property
-    def inbox(self) -> inbox.InboxResourceWithRawResponse:
+    def inbox(self) -> resources.inbox.InboxResourceWithRawResponse:
         from .resources.inbox import InboxResourceWithRawResponse
 
         return InboxResourceWithRawResponse(self._client.inbox)
 
     @cached_property
-    def mailbox(self) -> mailbox.MailboxResourceWithRawResponse:
+    def mailbox(self) -> resources.mailbox.MailboxResourceWithRawResponse:
         from .resources.mailbox import MailboxResourceWithRawResponse
 
         return MailboxResourceWithRawResponse(self._client.mailbox)
 
     @cached_property
-    def drafts(self) -> drafts.DraftsResourceWithRawResponse:
+    def drafts(self) -> resources.drafts.DraftsResourceWithRawResponse:
         from .resources.drafts import DraftsResourceWithRawResponse
 
         return DraftsResourceWithRawResponse(self._client.drafts)
 
     @cached_property
-    def outbox(self) -> outbox.OutboxResourceWithRawResponse:
+    def outbox(self) -> resources.outbox.OutboxResourceWithRawResponse:
         from .resources.outbox import OutboxResourceWithRawResponse
 
         return OutboxResourceWithRawResponse(self._client.outbox)
 
     @cached_property
-    def validate(self) -> validate.ValidateResourceWithRawResponse:
+    def validate(self) -> resources.validate.ValidateResourceWithRawResponse:
         from .resources.validate import ValidateResourceWithRawResponse
 
         return ValidateResourceWithRawResponse(self._client.validate)
 
     @cached_property
-    def lookup(self) -> lookup.LookupResourceWithRawResponse:
+    def lookup(self) -> resources.lookup.LookupResourceWithRawResponse:
         from .resources.lookup import LookupResourceWithRawResponse
 
         return LookupResourceWithRawResponse(self._client.lookup)
 
     @cached_property
-    def me(self) -> me.MeResourceWithRawResponse:
+    def me(self) -> resources.me.MeResourceWithRawResponse:
         from .resources.me import MeResourceWithRawResponse
 
         return MeResourceWithRawResponse(self._client.me)
 
     @cached_property
-    def stats(self) -> stats.StatsResourceWithRawResponse:
+    def stats(self) -> resources.stats.StatsResourceWithRawResponse:
         from .resources.stats import StatsResourceWithRawResponse
 
         return StatsResourceWithRawResponse(self._client.stats)
 
     @cached_property
-    def conversion(self) -> conversion.ConversionResourceWithRawResponse:
+    def conversion(self) -> resources.conversion.ConversionResourceWithRawResponse:
         from .resources.conversion import ConversionResourceWithRawResponse
 
         return ConversionResourceWithRawResponse(self._client.conversion)
 
     @cached_property
-    def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
+    def webhooks(self) -> resources.webhooks.WebhooksResourceWithRawResponse:
         from .resources.webhooks import WebhooksResourceWithRawResponse
 
         return WebhooksResourceWithRawResponse(self._client.webhooks)
@@ -621,67 +621,67 @@ class AsyncEInvoiceWithRawResponse:
         self._client = client
 
     @cached_property
-    def documents(self) -> documents.AsyncDocumentsResourceWithRawResponse:
+    def documents(self) -> resources.documents.AsyncDocumentsResourceWithRawResponse:
         from .resources.documents import AsyncDocumentsResourceWithRawResponse
 
         return AsyncDocumentsResourceWithRawResponse(self._client.documents)
 
     @cached_property
-    def inbox(self) -> inbox.AsyncInboxResourceWithRawResponse:
+    def inbox(self) -> resources.inbox.AsyncInboxResourceWithRawResponse:
         from .resources.inbox import AsyncInboxResourceWithRawResponse
 
         return AsyncInboxResourceWithRawResponse(self._client.inbox)
 
     @cached_property
-    def mailbox(self) -> mailbox.AsyncMailboxResourceWithRawResponse:
+    def mailbox(self) -> resources.mailbox.AsyncMailboxResourceWithRawResponse:
         from .resources.mailbox import AsyncMailboxResourceWithRawResponse
 
         return AsyncMailboxResourceWithRawResponse(self._client.mailbox)
 
     @cached_property
-    def drafts(self) -> drafts.AsyncDraftsResourceWithRawResponse:
+    def drafts(self) -> resources.drafts.AsyncDraftsResourceWithRawResponse:
         from .resources.drafts import AsyncDraftsResourceWithRawResponse
 
         return AsyncDraftsResourceWithRawResponse(self._client.drafts)
 
     @cached_property
-    def outbox(self) -> outbox.AsyncOutboxResourceWithRawResponse:
+    def outbox(self) -> resources.outbox.AsyncOutboxResourceWithRawResponse:
         from .resources.outbox import AsyncOutboxResourceWithRawResponse
 
         return AsyncOutboxResourceWithRawResponse(self._client.outbox)
 
     @cached_property
-    def validate(self) -> validate.AsyncValidateResourceWithRawResponse:
+    def validate(self) -> resources.validate.AsyncValidateResourceWithRawResponse:
         from .resources.validate import AsyncValidateResourceWithRawResponse
 
         return AsyncValidateResourceWithRawResponse(self._client.validate)
 
     @cached_property
-    def lookup(self) -> lookup.AsyncLookupResourceWithRawResponse:
+    def lookup(self) -> resources.lookup.AsyncLookupResourceWithRawResponse:
         from .resources.lookup import AsyncLookupResourceWithRawResponse
 
         return AsyncLookupResourceWithRawResponse(self._client.lookup)
 
     @cached_property
-    def me(self) -> me.AsyncMeResourceWithRawResponse:
+    def me(self) -> resources.me.AsyncMeResourceWithRawResponse:
         from .resources.me import AsyncMeResourceWithRawResponse
 
         return AsyncMeResourceWithRawResponse(self._client.me)
 
     @cached_property
-    def stats(self) -> stats.AsyncStatsResourceWithRawResponse:
+    def stats(self) -> resources.stats.AsyncStatsResourceWithRawResponse:
         from .resources.stats import AsyncStatsResourceWithRawResponse
 
         return AsyncStatsResourceWithRawResponse(self._client.stats)
 
     @cached_property
-    def conversion(self) -> conversion.AsyncConversionResourceWithRawResponse:
+    def conversion(self) -> resources.conversion.AsyncConversionResourceWithRawResponse:
         from .resources.conversion import AsyncConversionResourceWithRawResponse
 
         return AsyncConversionResourceWithRawResponse(self._client.conversion)
 
     @cached_property
-    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
+    def webhooks(self) -> resources.webhooks.AsyncWebhooksResourceWithRawResponse:
         from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
 
         return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
@@ -694,67 +694,67 @@ class EInvoiceWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def documents(self) -> documents.DocumentsResourceWithStreamingResponse:
+    def documents(self) -> resources.documents.DocumentsResourceWithStreamingResponse:
         from .resources.documents import DocumentsResourceWithStreamingResponse
 
         return DocumentsResourceWithStreamingResponse(self._client.documents)
 
     @cached_property
-    def inbox(self) -> inbox.InboxResourceWithStreamingResponse:
+    def inbox(self) -> resources.inbox.InboxResourceWithStreamingResponse:
         from .resources.inbox import InboxResourceWithStreamingResponse
 
         return InboxResourceWithStreamingResponse(self._client.inbox)
 
     @cached_property
-    def mailbox(self) -> mailbox.MailboxResourceWithStreamingResponse:
+    def mailbox(self) -> resources.mailbox.MailboxResourceWithStreamingResponse:
         from .resources.mailbox import MailboxResourceWithStreamingResponse
 
         return MailboxResourceWithStreamingResponse(self._client.mailbox)
 
     @cached_property
-    def drafts(self) -> drafts.DraftsResourceWithStreamingResponse:
+    def drafts(self) -> resources.drafts.DraftsResourceWithStreamingResponse:
         from .resources.drafts import DraftsResourceWithStreamingResponse
 
         return DraftsResourceWithStreamingResponse(self._client.drafts)
 
     @cached_property
-    def outbox(self) -> outbox.OutboxResourceWithStreamingResponse:
+    def outbox(self) -> resources.outbox.OutboxResourceWithStreamingResponse:
         from .resources.outbox import OutboxResourceWithStreamingResponse
 
         return OutboxResourceWithStreamingResponse(self._client.outbox)
 
     @cached_property
-    def validate(self) -> validate.ValidateResourceWithStreamingResponse:
+    def validate(self) -> resources.validate.ValidateResourceWithStreamingResponse:
         from .resources.validate import ValidateResourceWithStreamingResponse
 
         return ValidateResourceWithStreamingResponse(self._client.validate)
 
     @cached_property
-    def lookup(self) -> lookup.LookupResourceWithStreamingResponse:
+    def lookup(self) -> resources.lookup.LookupResourceWithStreamingResponse:
         from .resources.lookup import LookupResourceWithStreamingResponse
 
         return LookupResourceWithStreamingResponse(self._client.lookup)
 
     @cached_property
-    def me(self) -> me.MeResourceWithStreamingResponse:
+    def me(self) -> resources.me.MeResourceWithStreamingResponse:
         from .resources.me import MeResourceWithStreamingResponse
 
         return MeResourceWithStreamingResponse(self._client.me)
 
     @cached_property
-    def stats(self) -> stats.StatsResourceWithStreamingResponse:
+    def stats(self) -> resources.stats.StatsResourceWithStreamingResponse:
         from .resources.stats import StatsResourceWithStreamingResponse
 
         return StatsResourceWithStreamingResponse(self._client.stats)
 
     @cached_property
-    def conversion(self) -> conversion.ConversionResourceWithStreamingResponse:
+    def conversion(self) -> resources.conversion.ConversionResourceWithStreamingResponse:
         from .resources.conversion import ConversionResourceWithStreamingResponse
 
         return ConversionResourceWithStreamingResponse(self._client.conversion)
 
     @cached_property
-    def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
+    def webhooks(self) -> resources.webhooks.WebhooksResourceWithStreamingResponse:
         from .resources.webhooks import WebhooksResourceWithStreamingResponse
 
         return WebhooksResourceWithStreamingResponse(self._client.webhooks)
@@ -767,67 +767,67 @@ class AsyncEInvoiceWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def documents(self) -> documents.AsyncDocumentsResourceWithStreamingResponse:
+    def documents(self) -> resources.documents.AsyncDocumentsResourceWithStreamingResponse:
         from .resources.documents import AsyncDocumentsResourceWithStreamingResponse
 
         return AsyncDocumentsResourceWithStreamingResponse(self._client.documents)
 
     @cached_property
-    def inbox(self) -> inbox.AsyncInboxResourceWithStreamingResponse:
+    def inbox(self) -> resources.inbox.AsyncInboxResourceWithStreamingResponse:
         from .resources.inbox import AsyncInboxResourceWithStreamingResponse
 
         return AsyncInboxResourceWithStreamingResponse(self._client.inbox)
 
     @cached_property
-    def mailbox(self) -> mailbox.AsyncMailboxResourceWithStreamingResponse:
+    def mailbox(self) -> resources.mailbox.AsyncMailboxResourceWithStreamingResponse:
         from .resources.mailbox import AsyncMailboxResourceWithStreamingResponse
 
         return AsyncMailboxResourceWithStreamingResponse(self._client.mailbox)
 
     @cached_property
-    def drafts(self) -> drafts.AsyncDraftsResourceWithStreamingResponse:
+    def drafts(self) -> resources.drafts.AsyncDraftsResourceWithStreamingResponse:
         from .resources.drafts import AsyncDraftsResourceWithStreamingResponse
 
         return AsyncDraftsResourceWithStreamingResponse(self._client.drafts)
 
     @cached_property
-    def outbox(self) -> outbox.AsyncOutboxResourceWithStreamingResponse:
+    def outbox(self) -> resources.outbox.AsyncOutboxResourceWithStreamingResponse:
         from .resources.outbox import AsyncOutboxResourceWithStreamingResponse
 
         return AsyncOutboxResourceWithStreamingResponse(self._client.outbox)
 
     @cached_property
-    def validate(self) -> validate.AsyncValidateResourceWithStreamingResponse:
+    def validate(self) -> resources.validate.AsyncValidateResourceWithStreamingResponse:
         from .resources.validate import AsyncValidateResourceWithStreamingResponse
 
         return AsyncValidateResourceWithStreamingResponse(self._client.validate)
 
     @cached_property
-    def lookup(self) -> lookup.AsyncLookupResourceWithStreamingResponse:
+    def lookup(self) -> resources.lookup.AsyncLookupResourceWithStreamingResponse:
         from .resources.lookup import AsyncLookupResourceWithStreamingResponse
 
         return AsyncLookupResourceWithStreamingResponse(self._client.lookup)
 
     @cached_property
-    def me(self) -> me.AsyncMeResourceWithStreamingResponse:
+    def me(self) -> resources.me.AsyncMeResourceWithStreamingResponse:
         from .resources.me import AsyncMeResourceWithStreamingResponse
 
         return AsyncMeResourceWithStreamingResponse(self._client.me)
 
     @cached_property
-    def stats(self) -> stats.AsyncStatsResourceWithStreamingResponse:
+    def stats(self) -> resources.stats.AsyncStatsResourceWithStreamingResponse:
         from .resources.stats import AsyncStatsResourceWithStreamingResponse
 
         return AsyncStatsResourceWithStreamingResponse(self._client.stats)
 
     @cached_property
-    def conversion(self) -> conversion.AsyncConversionResourceWithStreamingResponse:
+    def conversion(self) -> resources.conversion.AsyncConversionResourceWithStreamingResponse:
         from .resources.conversion import AsyncConversionResourceWithStreamingResponse
 
         return AsyncConversionResourceWithStreamingResponse(self._client.conversion)
 
     @cached_property
-    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
+    def webhooks(self) -> resources.webhooks.AsyncWebhooksResourceWithStreamingResponse:
         from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
 
         return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)

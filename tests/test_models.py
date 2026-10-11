@@ -300,7 +300,7 @@ def test_nested_union_invalid_data() -> None:
         assert m.foo.name == "3"
     else:
         assert isinstance(m.foo, Submodel1)
-        assert m.foo.name == 3  # type: ignore
+        assert m.foo.name == 3  # ty: ignore[unresolved-attribute]
 
 
 def test_list_of_unions() -> None:
@@ -447,7 +447,7 @@ def test_does_not_coerce_int() -> None:
 
     assert Model.construct(bar=1).bar == 1
     assert Model.construct(bar=10.9).bar == 10.9
-    assert Model.construct(bar="19").bar == "19"  # type: ignore[comparison-overlap]
+    assert Model.construct(bar="19").bar == "19"
     assert Model.construct(bar=False).bar is False
 
 
@@ -672,7 +672,7 @@ def test_discriminated_unions_invalid_data() -> None:
     )
     assert isinstance(m, B)
     assert m.type == "b"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
     m = construct_type(
         value={"type": "a", "data": 100},
@@ -685,7 +685,7 @@ def test_discriminated_unions_invalid_data() -> None:
         # if the expected type is a str
         assert m.data == "100"
     else:
-        assert m.data == 100  # type: ignore[comparison-overlap]
+        assert m.data == 100
 
 
 def test_discriminated_unions_unknown_variant() -> None:
@@ -706,8 +706,8 @@ def test_discriminated_unions_unknown_variant() -> None:
 
     # just chooses the first variant
     assert isinstance(m, A)
-    assert m.type == "c"  # type: ignore[comparison-overlap]
-    assert m.data == None  # type: ignore[unreachable]
+    assert m.type == "c"
+    assert m.data == None
     assert m.new_thing == "bar"
 
 
@@ -733,7 +733,7 @@ def test_discriminated_unions_invalid_data_nested_unions() -> None:
     )
     assert isinstance(m, B)
     assert m.type == "b"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
     m = construct_type(
         value={"type": "c", "data": "foo"},
@@ -741,7 +741,7 @@ def test_discriminated_unions_invalid_data_nested_unions() -> None:
     )
     assert isinstance(m, C)
     assert m.type == "c"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
 
 def test_discriminated_unions_with_aliases_invalid_data() -> None:
@@ -761,7 +761,7 @@ def test_discriminated_unions_with_aliases_invalid_data() -> None:
     )
     assert isinstance(m, B)
     assert m.foo_type == "b"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
     m = construct_type(
         value={"type": "a", "data": 100},
@@ -774,7 +774,7 @@ def test_discriminated_unions_with_aliases_invalid_data() -> None:
         # if the expected type is a str
         assert m.data == "100"
     else:
-        assert m.data == 100  # type: ignore[comparison-overlap]
+        assert m.data == 100
 
 
 def test_discriminated_unions_overlapping_discriminators_invalid_data() -> None:
@@ -794,7 +794,7 @@ def test_discriminated_unions_overlapping_discriminators_invalid_data() -> None:
     )
     assert isinstance(m, B)
     assert m.type == "a"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
 
 def test_discriminated_unions_invalid_data_uses_cache() -> None:
@@ -817,7 +817,7 @@ def test_discriminated_unions_invalid_data_uses_cache() -> None:
     )
     assert isinstance(m, B)
     assert m.type == "b"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
     discriminator = DISCRIMINATOR_CACHE.get(UnionType)
     assert discriminator is not None
@@ -827,7 +827,7 @@ def test_discriminated_unions_invalid_data_uses_cache() -> None:
     )
     assert isinstance(m, B)
     assert m.type == "b"
-    assert m.data == "foo"  # type: ignore[comparison-overlap]
+    assert m.data == "foo"
 
     # if the discriminator details object stays the same between invocations then
     # we hit the cache
@@ -836,7 +836,7 @@ def test_discriminated_unions_invalid_data_uses_cache() -> None:
 
 @pytest.mark.skipif(PYDANTIC_V1, reason="TypeAliasType is not supported in Pydantic v1")
 def test_type_alias_type() -> None:
-    Alias = TypeAliasType("Alias", str)  # pyright: ignore
+    Alias = TypeAliasType("Alias", str)
 
     class Model(BaseModel):
         alias: Alias
@@ -943,7 +943,7 @@ def test_extra_properties() -> None:
         prop: int
 
     class Model(BaseModel):
-        __pydantic_extra__: Dict[str, Item] = Field(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
+        __pydantic_extra__: Dict[str, Item] = Field(init=False)  # ty: ignore[invalid-mutable-override]
 
         other: str
 

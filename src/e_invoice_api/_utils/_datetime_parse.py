@@ -100,7 +100,7 @@ def parse_datetime(value: Union[datetime, StrBytesIntFloat]) -> datetime:
     kw_: Dict[str, Union[None, int, timezone]] = {k: int(v) for k, v in kw.items() if v is not None}
     kw_["tzinfo"] = tzinfo
 
-    return datetime(**kw_)  # type: ignore
+    return datetime(**kw_)  # ty: ignore[invalid-argument-type]
 
 
 def parse_date(value: Union[date, StrBytesIntFloat]) -> date:

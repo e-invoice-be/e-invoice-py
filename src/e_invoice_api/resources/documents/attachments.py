@@ -402,10 +402,8 @@ class AttachmentsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             attachments.delete,
         )
-        self.add = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                attachments.add,  # pyright: ignore[reportDeprecated],
-            )
+        self.add = to_raw_response_wrapper(
+            attachments.add,  # ty: ignore[deprecated]
         )
 
 
@@ -422,10 +420,8 @@ class AsyncAttachmentsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             attachments.delete,
         )
-        self.add = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                attachments.add,  # pyright: ignore[reportDeprecated],
-            )
+        self.add = async_to_raw_response_wrapper(
+            attachments.add,  # ty: ignore[deprecated]
         )
 
 
@@ -442,10 +438,8 @@ class AttachmentsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             attachments.delete,
         )
-        self.add = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                attachments.add,  # pyright: ignore[reportDeprecated],
-            )
+        self.add = to_streamed_response_wrapper(
+            attachments.add,  # ty: ignore[deprecated]
         )
 
 
@@ -462,8 +456,6 @@ class AsyncAttachmentsResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             attachments.delete,
         )
-        self.add = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                attachments.add,  # pyright: ignore[reportDeprecated],
-            )
+        self.add = async_to_streamed_response_wrapper(
+            attachments.add,  # ty: ignore[deprecated]
         )

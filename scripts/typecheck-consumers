@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+# Our users check their code with pyright and mypy. These tools are not dev dependencies:
+# `uvx` runs the pinned versions against the package that is installed in the virtual environment.
+PYRIGHT_VERSION=1.1.414
+MYPY_VERSION=2.4.0
+
+FILE=tests/typecheck/consumer.py
+PYTHON="$(rye run python -c 'import sys; print(sys.executable)')"
+
+# 3.9 is the oldest Python version that the SDK supports
+echo "==> Checking $FILE with pyright"
+uvx "pyright@$PYRIGHT_VERSION" --pythonpath "$PYTHON" --pythonversion 3.9 "$FILE"
+
+# 3.10 is the oldest Python version that mypy 2 can check
+echo "==> Checking $FILE with mypy"
+uvx "mypy@$MYPY_VERSION" --strict --python-executable "$PYTHON" --python-version 3.10 "$FILE"

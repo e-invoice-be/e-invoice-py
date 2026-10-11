@@ -118,7 +118,7 @@ $ ./scripts/test tests/api_resources/test_stats.py
 ## Linting and formatting
 
 This repository uses [ruff](https://github.com/astral-sh/ruff) to lint and format the code, and
-[pyright](https://github.com/microsoft/pyright) and [mypy](https://mypy-lang.org/) to check the types.
+[ty](https://github.com/astral-sh/ty) to check the types.
 
 To lint:
 
@@ -131,6 +131,48 @@ To format and fix all ruff issues automatically:
 ```sh
 $ ./scripts/format
 ```
+
+### Type checking
+
+`./scripts/lint` runs `ty check` on `src` and `tests`. To run only the type checker:
+
+```sh
+$ rye run typecheck
+```
+
+The configuration is in the `[tool.ty]` sections of `pyproject.toml`. To suppress a diagnostic, use
+`# ty: ignore[<rule>]` with the name of the rule. A suppression without a rule name, a `# type: ignore` comment
+or a suppression that is not necessary is an error.
+
+Our users check their code with pyright and mypy. These tools are not dev dependencies. A separate script runs
+pinned versions of them with [`uvx`](https://docs.astral.sh/uv/) on one file, `tests/typecheck/consumer.py`,
+which uses the public API as a user does:
+
+```sh
+$ ./scripts/typecheck-consumers
+```
+
+The script needs [uv](https://docs.astral.sh/uv/getting-started/installation/) on your `PATH`.
+`./scripts/bootstrap` installs it on macOS.
+
+When you change the public API, add the new usage to that file.
+
+ty replaced pyright (strict mode) and mypy. With our configuration, ty does not have these checks:
+
+- Reports of unknown or partially unknown types (pyright `reportUnknownMemberType`, `reportUnknownArgumentType`,
+  `reportUnknownVariableType`, `reportUnknownParameterType`; mypy `warn_return_any`).
+- Reports of missing annotations (pyright `reportMissingParameterType`; mypy `disallow_untyped_defs`,
+  `disallow_incomplete_defs`, `disallow_untyped_calls`).
+- Reports of a class that has `Any` as a base class (mypy `disallow_subclassing_any`).
+- Reports of unreachable code (mypy `warn_unreachable`).
+- Reports of unused variables, classes and functions (pyright `reportUnusedVariable`, `reportUnusedClass`,
+  `reportUnusedFunction`). ruff reports unused imports.
+- The check of the public type completeness (`pyright --verifytypes`).
+
+ty has a smaller check for comparisons, `in` tests and `isinstance` calls that always give the same result
+(pyright `reportUnnecessaryComparison`, `reportUnnecessaryContains`, `reportUnnecessaryIsInstance`; mypy
+`strict_equality`). The ty rule `redundant-condition-strict` reports them only when they are a condition, for
+example of an `if` statement, and not when the branch only raises an exception.
 
 ## Publishing and releases
 

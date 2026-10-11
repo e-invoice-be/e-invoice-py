@@ -14,10 +14,8 @@ _ModelT = TypeVar("_ModelT", bound=pydantic.BaseModel)
 
 # --------------- Pydantic v2, v3 compatibility ---------------
 
-# Pyright incorrectly reports some of our functions as overriding a method when they don't
-# pyright: reportIncompatibleMethodOverride=false
-
-PYDANTIC_V1 = pydantic.VERSION.startswith("1.")
+# annotated as `bool` so that ty checks both the Pydantic v1 and the v2 branches
+PYDANTIC_V1: bool = pydantic.VERSION.startswith("1.")
 
 if TYPE_CHECKING:
 
@@ -79,14 +77,14 @@ else:
 # renamed methods / properties
 def parse_obj(model: type[_ModelT], value: object) -> _ModelT:
     if PYDANTIC_V1:
-        return cast(_ModelT, model.parse_obj(value))  # pyright: ignore[reportDeprecated, reportUnnecessaryCast]
+        return model.parse_obj(value)  # ty: ignore[deprecated]
     else:
         return model.model_validate(value)
 
 
 def field_is_required(field: FieldInfo) -> bool:
     if PYDANTIC_V1:
-        return field.required  # type: ignore
+        return field.required  # ty: ignore[unresolved-attribute]
     return field.is_required()
 
 
@@ -103,31 +101,31 @@ def field_get_default(field: FieldInfo) -> Any:
 
 def field_outer_type(field: FieldInfo) -> Any:
     if PYDANTIC_V1:
-        return field.outer_type_  # type: ignore
+        return field.outer_type_  # ty: ignore[unresolved-attribute]
     return field.annotation
 
 
 def get_model_config(model: type[pydantic.BaseModel]) -> Any:
     if PYDANTIC_V1:
-        return model.__config__  # type: ignore
+        return model.__config__  # ty: ignore[unresolved-attribute]
     return model.model_config
 
 
 def get_model_fields(model: type[pydantic.BaseModel]) -> dict[str, FieldInfo]:
     if PYDANTIC_V1:
-        return model.__fields__  # type: ignore
+        return model.__fields__  # ty: ignore[deprecated]
     return model.model_fields
 
 
 def model_copy(model: _ModelT, *, deep: bool = False) -> _ModelT:
     if PYDANTIC_V1:
-        return model.copy(deep=deep)  # type: ignore
+        return model.copy(deep=deep)  # ty: ignore[deprecated]
     return model.model_copy(deep=deep)
 
 
 def model_json(model: pydantic.BaseModel, *, indent: int | None = None) -> str:
     if PYDANTIC_V1:
-        return model.json(indent=indent)  # type: ignore
+        return model.json(indent=indent)  # ty: ignore[deprecated]
     return model.model_dump_json(indent=indent)
 
 
@@ -160,7 +158,7 @@ def model_dump(
         )
     return cast(
         "dict[str, Any]",
-        model.dict(  # pyright: ignore[reportDeprecated, reportUnnecessaryCast]
+        model.dict(
             exclude=exclude, exclude_unset=exclude_unset, exclude_defaults=exclude_defaults, by_alias=bool(by_alias)
         ),
     )
@@ -168,7 +166,7 @@ def model_dump(
 
 def model_parse(model: type[_ModelT], data: Any) -> _ModelT:
     if PYDANTIC_V1:
-        return model.parse_obj(data)  # pyright: ignore[reportDeprecated]
+        return model.parse_obj(data)  # ty: ignore[deprecated]
     return model.model_validate(data)
 
 

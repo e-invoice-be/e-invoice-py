@@ -157,7 +157,7 @@ def is_given(obj: _T | NotGiven | Omit) -> TypeGuard[_T]:
 
 # Type safe methods for narrowing types with TypeVars.
 # The default narrowing for isinstance(obj, dict) is dict[unknown, unknown],
-# however this cause Pyright to rightfully report errors. As we know we don't
+# however this causes type checkers to rightfully report errors. As we know we don't
 # care about the contained types we can safely use `object` in its place.
 #
 # There are two separate functions defined, `is_*` and `is_*_t` for different use cases.
@@ -263,7 +263,8 @@ def required_args(*variants: Sequence[str]) -> Callable[[CallableT], CallableT]:
                     given_params.add(positional[i])
                 except IndexError:
                     raise TypeError(
-                        f"{func.__name__}() takes {len(positional)} argument(s) but {len(args)} were given"
+                        f"{func.__name__}() takes {len(positional)} argument(s) "  # ty: ignore[unresolved-attribute]
+                        f"but {len(args)} were given"
                     ) from None
 
             for key in kwargs.keys():
@@ -291,7 +292,7 @@ def required_args(*variants: Sequence[str]) -> Callable[[CallableT], CallableT]:
                 raise TypeError(msg)
             return func(*args, **kwargs)
 
-        return wrapper  # type: ignore
+        return wrapper  # ty: ignore[invalid-return-type]
 
     return inner
 
@@ -382,8 +383,7 @@ def file_from_path(path: str) -> FileTypes:
 def get_required_header(headers: HeadersLike, header: str) -> str:
     lower_header = header.lower()
     if is_mapping_t(headers):
-        # mypy doesn't understand the type narrowing here
-        for k, v in headers.items():  # type: ignore
+        for k, v in headers.items():
             if k.lower() == lower_header and isinstance(v, str):
                 return v
 
@@ -405,7 +405,7 @@ def lru_cache(*, maxsize: int | None = 128) -> Callable[[CallableT], CallableT]:
     wrapper = functools.lru_cache(  # noqa: TID251
         maxsize=maxsize,
     )
-    return cast(Any, wrapper)  # type: ignore[no-any-return]
+    return cast(Any, wrapper)
 
 
 def json_safe(data: object) -> object:
