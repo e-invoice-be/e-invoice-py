@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.39.0...v1.39.1) (2026-10-11)
+
+
+### Chores
+
+* switch the type checker to ty ([#78](https://github.com/e-invoice-be/e-invoice-py/issues/78)) ([d1c685d](https://github.com/e-invoice-be/e-invoice-py/commit/d1c685dfd336f9774d68403c24413cf58db01387)), closes [#75](https://github.com/e-invoice-be/e-invoice-py/issues/75)
+
 ## [1.39.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.38.0...v1.39.0) (2026-10-11)
 
 
