@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.39.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.38.0...v1.39.0) (2026-10-11)
+
+
+### Features
+
+* **api:** add the 12 public endpoints missing from the SDK and fix pagination ([#73](https://github.com/e-invoice-be/e-invoice-py/issues/73)) ([c03998c](https://github.com/e-invoice-be/e-invoice-py/commit/c03998c9df538bd36685827ac15c17fc73b16f6b))
+* maintain the SDK in this repository without Stainless ([#76](https://github.com/e-invoice-be/e-invoice-py/issues/76)) ([7a5e4c6](https://github.com/e-invoice-be/e-invoice-py/commit/7a5e4c64e05a89e94d7ca4836288cb9a36099bdc)), closes [#74](https://github.com/e-invoice-be/e-invoice-py/issues/74)
+
 ## 1.38.0 (2026-07-18)
 
 Full Changelog: [v1.37.0...v1.38.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.37.0...v1.38.0)
