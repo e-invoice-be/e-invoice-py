@@ -77,18 +77,11 @@ mdurl==0.1.2
 multidict==6.7.0
     # via aiohttp
     # via yarl
-mypy==1.17.0
-mypy-extensions==1.1.0
-    # via mypy
-nodeenv==1.10.0
-    # via pyright
 nox==2025.11.12
 packaging==25.0
     # via dependency-groups
     # via nox
     # via pytest
-pathspec==1.0.3
-    # via mypy
 platformdirs==4.4.0
     # via virtualenv
 pluggy==1.6.0
@@ -103,7 +96,6 @@ pydantic-core==2.41.5
 pygments==2.19.2
     # via pytest
     # via rich
-pyright==1.1.399
 pytest==8.4.2
     # via pytest-asyncio
     # via pytest-xdist
@@ -119,19 +111,17 @@ six==1.17.0
 time-machine==2.19.0
 tomli==2.4.0
     # via dependency-groups
-    # via mypy
     # via nox
     # via pytest
+ty==0.0.86
 typing-extensions==4.15.0
     # via aiosignal
     # via anyio
     # via e-invoice-api
     # via exceptiongroup
     # via multidict
-    # via mypy
     # via pydantic
     # via pydantic-core
-    # via pyright
     # via pytest-asyncio
     # via typing-inspection
     # via virtualenv

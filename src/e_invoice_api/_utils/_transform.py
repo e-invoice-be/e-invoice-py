@@ -249,7 +249,7 @@ def _format_data(data: object, format_: PropertyFormat, format_template: str | N
         elif isinstance(data, io.IOBase):
             binary = data.read()
 
-            if isinstance(binary, str):  # type: ignore[unreachable]
+            if isinstance(binary, str):
                 binary = binary.encode()
 
         if not isinstance(binary, bytes):
@@ -415,7 +415,7 @@ async def _async_format_data(data: object, format_: PropertyFormat, format_templ
         elif isinstance(data, io.IOBase):
             binary = data.read()
 
-            if isinstance(binary, str):  # type: ignore[unreachable]
+            if isinstance(binary, str):
                 binary = binary.encode()
 
         if not isinstance(binary, bytes):

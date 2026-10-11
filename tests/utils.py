@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import contextlib
-from typing import Any, Dict, List, Callable, Iterator, cast
+from typing import Any, Dict, List, Callable, Generator, cast
 
 import httpx
 from respx import Route, MockRouter
@@ -11,7 +11,7 @@ from e_invoice_api._types import Omit
 
 
 @contextlib.contextmanager
-def update_env(**new_env: str | Omit) -> Iterator[None]:
+def update_env(**new_env: str | Omit) -> Generator[None, None, None]:
     old = os.environ.copy()
 
     try:

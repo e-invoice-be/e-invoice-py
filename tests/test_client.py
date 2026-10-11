@@ -124,7 +124,7 @@ def _get_open_connections(client: EInvoice | AsyncEInvoice) -> int:
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
     pool = transport._pool
-    return len(pool._requests)
+    return len(pool._requests)  # ty: ignore[unresolved-attribute]
 
 
 class TestEInvoice:
@@ -259,10 +259,7 @@ class TestEInvoice:
 
     def test_copy_signature(self, client: EInvoice) -> None:
         # ensure the same parameters that can be passed to the client are defined in the `.copy()` method
-        init_signature = inspect.signature(
-            # mypy doesn't like that we access the `__init__` property.
-            client.__init__,  # type: ignore[misc]
-        )
+        init_signature = inspect.signature(client.__init__)
         copy_signature = inspect.signature(client.copy)
         exclude_params = {"transport", "proxies", "_strict_response_validation"}
 
@@ -338,11 +335,11 @@ class TestEInvoice:
 
     def test_request_timeout(self, client: EInvoice) -> None:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == DEFAULT_TIMEOUT
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo", timeout=httpx.Timeout(100.0)))
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
@@ -351,7 +348,7 @@ class TestEInvoice:
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == httpx.Timeout(0)
 
         client.close()
@@ -364,7 +361,7 @@ class TestEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == httpx.Timeout(None)
 
             client.close()
@@ -376,7 +373,7 @@ class TestEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == DEFAULT_TIMEOUT
 
             client.close()
@@ -388,7 +385,7 @@ class TestEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == DEFAULT_TIMEOUT  # our default
 
             client.close()
@@ -733,7 +730,7 @@ class TestEInvoice:
         client = EInvoice(base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
-        client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
+        client.base_url = "https://example.com/from_setter"
 
         assert client.base_url == "https://example.com/from_setter/"
 
@@ -866,7 +863,7 @@ class TestEInvoice:
         non_strict_client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = non_strict_client.get("/foo", cast_to=Model)
-        assert isinstance(response, str)  # type: ignore[unreachable]
+        assert isinstance(response, str)
 
         strict_client.close()
         non_strict_client.close()
@@ -899,7 +896,7 @@ class TestEInvoice:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        assert calculated == pytest.approx(timeout, 0.5 * 0.875)
 
     @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
@@ -1139,10 +1136,7 @@ class TestAsyncEInvoice:
 
     def test_copy_signature(self, async_client: AsyncEInvoice) -> None:
         # ensure the same parameters that can be passed to the client are defined in the `.copy()` method
-        init_signature = inspect.signature(
-            # mypy doesn't like that we access the `__init__` property.
-            async_client.__init__,  # type: ignore[misc]
-        )
+        init_signature = inspect.signature(async_client.__init__)
         copy_signature = inspect.signature(async_client.copy)
         exclude_params = {"transport", "proxies", "_strict_response_validation"}
 
@@ -1218,13 +1212,13 @@ class TestAsyncEInvoice:
 
     async def test_request_timeout(self, async_client: AsyncEInvoice) -> None:
         request = async_client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == DEFAULT_TIMEOUT
 
         request = async_client._build_request(
             FinalRequestOptions(method="get", url="/foo", timeout=httpx.Timeout(100.0))
         )
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
@@ -1233,7 +1227,7 @@ class TestAsyncEInvoice:
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+        timeout = httpx.Timeout(**request.extensions["timeout"])
         assert timeout == httpx.Timeout(0)
 
         await client.close()
@@ -1246,7 +1240,7 @@ class TestAsyncEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == httpx.Timeout(None)
 
             await client.close()
@@ -1258,7 +1252,7 @@ class TestAsyncEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == DEFAULT_TIMEOUT
 
             await client.close()
@@ -1270,7 +1264,7 @@ class TestAsyncEInvoice:
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-            timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
+            timeout = httpx.Timeout(**request.extensions["timeout"])
             assert timeout == DEFAULT_TIMEOUT  # our default
 
             await client.close()
@@ -1621,7 +1615,7 @@ class TestAsyncEInvoice:
         )
         assert client.base_url == "https://example.com/from_init/"
 
-        client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
+        client.base_url = "https://example.com/from_setter"
 
         assert client.base_url == "https://example.com/from_setter/"
 
@@ -1763,7 +1757,7 @@ class TestAsyncEInvoice:
         non_strict_client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = await non_strict_client.get("/foo", cast_to=Model)
-        assert isinstance(response, str)  # type: ignore[unreachable]
+        assert isinstance(response, str)
 
         await strict_client.close()
         await non_strict_client.close()
@@ -1796,7 +1790,7 @@ class TestAsyncEInvoice:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = async_client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        assert calculated == pytest.approx(timeout, 0.5 * 0.875)
 
     @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)

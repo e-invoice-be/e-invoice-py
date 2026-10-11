@@ -390,10 +390,8 @@ class OutboxResourceWithRawResponse:
     def __init__(self, outbox: OutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_draft_documents = to_raw_response_wrapper(
+            outbox.list_draft_documents,  # ty: ignore[deprecated]
         )
         self.list_received_documents = to_raw_response_wrapper(
             outbox.list_received_documents,
@@ -404,10 +402,8 @@ class AsyncOutboxResourceWithRawResponse:
     def __init__(self, outbox: AsyncOutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_draft_documents = async_to_raw_response_wrapper(
+            outbox.list_draft_documents,  # ty: ignore[deprecated]
         )
         self.list_received_documents = async_to_raw_response_wrapper(
             outbox.list_received_documents,
@@ -418,10 +414,8 @@ class OutboxResourceWithStreamingResponse:
     def __init__(self, outbox: OutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_draft_documents = to_streamed_response_wrapper(
+            outbox.list_draft_documents,  # ty: ignore[deprecated]
         )
         self.list_received_documents = to_streamed_response_wrapper(
             outbox.list_received_documents,
@@ -432,10 +426,8 @@ class AsyncOutboxResourceWithStreamingResponse:
     def __init__(self, outbox: AsyncOutboxResource) -> None:
         self._outbox = outbox
 
-        self.list_draft_documents = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                outbox.list_draft_documents,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_draft_documents = async_to_streamed_response_wrapper(
+            outbox.list_draft_documents,  # ty: ignore[deprecated]
         )
         self.list_received_documents = async_to_streamed_response_wrapper(
             outbox.list_received_documents,

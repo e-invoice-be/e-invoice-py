@@ -46,9 +46,7 @@ def is_required_type(typ: type) -> bool:
 
 
 def is_typevar(typ: type) -> bool:
-    # type ignore is required because type checkers
-    # think this expression will always return False
-    return type(typ) == TypeVar  # type: ignore
+    return type(typ) == TypeVar
 
 
 _TYPE_ALIAS_TYPES: tuple[type[typing_extensions.TypeAliasType], ...] = (typing_extensions.TypeAliasType,)
@@ -115,7 +113,7 @@ def extract_type_var_from_base(
     ```
     """
     cls = cast(object, get_origin(typ) or typ)
-    if cls in generic_bases:  # pyright: ignore[reportUnnecessaryContains]
+    if cls in generic_bases:
         # we're given the class directly
         return extract_type_arg(typ, index)
 
@@ -127,7 +125,7 @@ def extract_type_var_from_base(
     # without using it.
     if isinstance(cls, InheritsGeneric):
         target_base_class: Any | None = None
-        for base in cls.__orig_bases__:
+        for base in cls.__orig_bases__:  # ty: ignore[unresolved-attribute]
             if base.__origin__ in generic_bases:
                 target_base_class = base
                 break
