@@ -3,6 +3,8 @@
 from typing import List, Generic, TypeVar, Optional
 from typing_extensions import override
 
+from pydantic import Field as FieldInfo
+
 from ._base_client import BasePage, PageInfo, BaseSyncPage, BaseAsyncPage
 
 __all__ = ["SyncDocumentsNumberPage", "AsyncDocumentsNumberPage"]
@@ -14,6 +16,9 @@ class SyncDocumentsNumberPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
     items: List[_T]
     page: Optional[int] = None
     page_size: Optional[int] = None
+    pages: Optional[int] = None
+    has_next: Optional[bool] = FieldInfo(alias="has_next_page", default=None)
+    """Declared under an alias so the response field cannot shadow `has_next_page()`."""
     total: Optional[int] = None
 
     @override
@@ -29,7 +34,7 @@ class SyncDocumentsNumberPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         if current_page is None:
             current_page = 1
 
-        total_pages = self.total
+        total_pages = self.pages
         if total_pages is not None and current_page >= total_pages:
             return None
 
@@ -40,6 +45,9 @@ class AsyncDocumentsNumberPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
     items: List[_T]
     page: Optional[int] = None
     page_size: Optional[int] = None
+    pages: Optional[int] = None
+    has_next: Optional[bool] = FieldInfo(alias="has_next_page", default=None)
+    """Declared under an alias so the response field cannot shadow `has_next_page()`."""
     total: Optional[int] = None
 
     @override
@@ -55,7 +63,7 @@ class AsyncDocumentsNumberPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
         if current_page is None:
             current_page = 1
 
-        total_pages = self.total
+        total_pages = self.pages
         if total_pages is not None and current_page >= total_pages:
             return None
 

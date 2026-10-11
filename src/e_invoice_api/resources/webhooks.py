@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Dict, Optional
 
 import httpx
 
-from ..types import webhook_create_params, webhook_update_params
+from ..types import webhook_test_params, webhook_create_params, webhook_update_params
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -20,7 +20,9 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.webhook_response import WebhookResponse
 from ..types.webhook_list_response import WebhookListResponse
+from ..types.webhook_test_response import WebhookTestResponse
 from ..types.webhook_delete_response import WebhookDeleteResponse
+from ..types.webhook_retrieve_history_response import WebhookRetrieveHistoryResponse
 
 __all__ = ["WebhooksResource", "AsyncWebhooksResource"]
 
@@ -215,6 +217,85 @@ class WebhooksResource(SyncAPIResource):
             cast_to=WebhookDeleteResponse,
         )
 
+    def retrieve_history(
+        self,
+        webhook_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WebhookRetrieveHistoryResponse:
+        """
+        Get the history of a webhook
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
+        return self._get(
+            path_template("/api/webhooks/{webhook_id}/history", webhook_id=webhook_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WebhookRetrieveHistoryResponse,
+        )
+
+    def test(
+        self,
+        webhook_id: str,
+        *,
+        data: Dict[str, object],
+        event_type: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WebhookTestResponse:
+        """
+        Send a test event to a webhook for testing and debugging purposes
+
+        Args:
+          data: Custom event data payload
+
+          event_type: Must be valid WebhookEventType
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
+        return self._post(
+            path_template("/api/webhooks/{webhook_id}/test", webhook_id=webhook_id),
+            body=maybe_transform(
+                {
+                    "data": data,
+                    "event_type": event_type,
+                },
+                webhook_test_params.WebhookTestParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WebhookTestResponse,
+        )
+
 
 class AsyncWebhooksResource(AsyncAPIResource):
     @cached_property
@@ -406,6 +487,85 @@ class AsyncWebhooksResource(AsyncAPIResource):
             cast_to=WebhookDeleteResponse,
         )
 
+    async def retrieve_history(
+        self,
+        webhook_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WebhookRetrieveHistoryResponse:
+        """
+        Get the history of a webhook
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
+        return await self._get(
+            path_template("/api/webhooks/{webhook_id}/history", webhook_id=webhook_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WebhookRetrieveHistoryResponse,
+        )
+
+    async def test(
+        self,
+        webhook_id: str,
+        *,
+        data: Dict[str, object],
+        event_type: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WebhookTestResponse:
+        """
+        Send a test event to a webhook for testing and debugging purposes
+
+        Args:
+          data: Custom event data payload
+
+          event_type: Must be valid WebhookEventType
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not webhook_id:
+            raise ValueError(f"Expected a non-empty value for `webhook_id` but received {webhook_id!r}")
+        return await self._post(
+            path_template("/api/webhooks/{webhook_id}/test", webhook_id=webhook_id),
+            body=await async_maybe_transform(
+                {
+                    "data": data,
+                    "event_type": event_type,
+                },
+                webhook_test_params.WebhookTestParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WebhookTestResponse,
+        )
+
 
 class WebhooksResourceWithRawResponse:
     def __init__(self, webhooks: WebhooksResource) -> None:
@@ -425,6 +585,12 @@ class WebhooksResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             webhooks.delete,
+        )
+        self.retrieve_history = to_raw_response_wrapper(
+            webhooks.retrieve_history,
+        )
+        self.test = to_raw_response_wrapper(
+            webhooks.test,
         )
 
 
@@ -447,6 +613,12 @@ class AsyncWebhooksResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             webhooks.delete,
         )
+        self.retrieve_history = async_to_raw_response_wrapper(
+            webhooks.retrieve_history,
+        )
+        self.test = async_to_raw_response_wrapper(
+            webhooks.test,
+        )
 
 
 class WebhooksResourceWithStreamingResponse:
@@ -468,6 +640,12 @@ class WebhooksResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             webhooks.delete,
         )
+        self.retrieve_history = to_streamed_response_wrapper(
+            webhooks.retrieve_history,
+        )
+        self.test = to_streamed_response_wrapper(
+            webhooks.test,
+        )
 
 
 class AsyncWebhooksResourceWithStreamingResponse:
@@ -488,4 +666,10 @@ class AsyncWebhooksResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             webhooks.delete,
+        )
+        self.retrieve_history = async_to_streamed_response_wrapper(
+            webhooks.retrieve_history,
+        )
+        self.test = async_to_streamed_response_wrapper(
+            webhooks.test,
         )

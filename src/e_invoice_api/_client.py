@@ -35,13 +35,17 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import me, inbox, lookup, outbox, validate, webhooks, documents
+    from .resources import me, inbox, stats, drafts, lookup, outbox, mailbox, validate, webhooks, documents, conversion
     from .resources.me import MeResource, AsyncMeResource
     from .resources.inbox import InboxResource, AsyncInboxResource
+    from .resources.stats import StatsResource, AsyncStatsResource
+    from .resources.drafts import DraftsResource, AsyncDraftsResource
     from .resources.lookup import LookupResource, AsyncLookupResource
     from .resources.outbox import OutboxResource, AsyncOutboxResource
+    from .resources.mailbox import MailboxResource, AsyncMailboxResource
     from .resources.validate import ValidateResource, AsyncValidateResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
+    from .resources.conversion import ConversionResource, AsyncConversionResource
     from .resources.documents.documents import DocumentsResource, AsyncDocumentsResource
 
 __all__ = [
@@ -133,6 +137,18 @@ class EInvoice(SyncAPIClient):
         return InboxResource(self)
 
     @cached_property
+    def mailbox(self) -> MailboxResource:
+        from .resources.mailbox import MailboxResource
+
+        return MailboxResource(self)
+
+    @cached_property
+    def drafts(self) -> DraftsResource:
+        from .resources.drafts import DraftsResource
+
+        return DraftsResource(self)
+
+    @cached_property
     def outbox(self) -> OutboxResource:
         from .resources.outbox import OutboxResource
 
@@ -155,6 +171,18 @@ class EInvoice(SyncAPIClient):
         from .resources.me import MeResource
 
         return MeResource(self)
+
+    @cached_property
+    def stats(self) -> StatsResource:
+        from .resources.stats import StatsResource
+
+        return StatsResource(self)
+
+    @cached_property
+    def conversion(self) -> ConversionResource:
+        from .resources.conversion import ConversionResource
+
+        return ConversionResource(self)
 
     @cached_property
     def webhooks(self) -> WebhooksResource:
@@ -352,6 +380,18 @@ class AsyncEInvoice(AsyncAPIClient):
         return AsyncInboxResource(self)
 
     @cached_property
+    def mailbox(self) -> AsyncMailboxResource:
+        from .resources.mailbox import AsyncMailboxResource
+
+        return AsyncMailboxResource(self)
+
+    @cached_property
+    def drafts(self) -> AsyncDraftsResource:
+        from .resources.drafts import AsyncDraftsResource
+
+        return AsyncDraftsResource(self)
+
+    @cached_property
     def outbox(self) -> AsyncOutboxResource:
         from .resources.outbox import AsyncOutboxResource
 
@@ -374,6 +414,18 @@ class AsyncEInvoice(AsyncAPIClient):
         from .resources.me import AsyncMeResource
 
         return AsyncMeResource(self)
+
+    @cached_property
+    def stats(self) -> AsyncStatsResource:
+        from .resources.stats import AsyncStatsResource
+
+        return AsyncStatsResource(self)
+
+    @cached_property
+    def conversion(self) -> AsyncConversionResource:
+        from .resources.conversion import AsyncConversionResource
+
+        return AsyncConversionResource(self)
 
     @cached_property
     def webhooks(self) -> AsyncWebhooksResource:
@@ -513,6 +565,18 @@ class EInvoiceWithRawResponse:
         return InboxResourceWithRawResponse(self._client.inbox)
 
     @cached_property
+    def mailbox(self) -> mailbox.MailboxResourceWithRawResponse:
+        from .resources.mailbox import MailboxResourceWithRawResponse
+
+        return MailboxResourceWithRawResponse(self._client.mailbox)
+
+    @cached_property
+    def drafts(self) -> drafts.DraftsResourceWithRawResponse:
+        from .resources.drafts import DraftsResourceWithRawResponse
+
+        return DraftsResourceWithRawResponse(self._client.drafts)
+
+    @cached_property
     def outbox(self) -> outbox.OutboxResourceWithRawResponse:
         from .resources.outbox import OutboxResourceWithRawResponse
 
@@ -535,6 +599,18 @@ class EInvoiceWithRawResponse:
         from .resources.me import MeResourceWithRawResponse
 
         return MeResourceWithRawResponse(self._client.me)
+
+    @cached_property
+    def stats(self) -> stats.StatsResourceWithRawResponse:
+        from .resources.stats import StatsResourceWithRawResponse
+
+        return StatsResourceWithRawResponse(self._client.stats)
+
+    @cached_property
+    def conversion(self) -> conversion.ConversionResourceWithRawResponse:
+        from .resources.conversion import ConversionResourceWithRawResponse
+
+        return ConversionResourceWithRawResponse(self._client.conversion)
 
     @cached_property
     def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
@@ -562,6 +638,18 @@ class AsyncEInvoiceWithRawResponse:
         return AsyncInboxResourceWithRawResponse(self._client.inbox)
 
     @cached_property
+    def mailbox(self) -> mailbox.AsyncMailboxResourceWithRawResponse:
+        from .resources.mailbox import AsyncMailboxResourceWithRawResponse
+
+        return AsyncMailboxResourceWithRawResponse(self._client.mailbox)
+
+    @cached_property
+    def drafts(self) -> drafts.AsyncDraftsResourceWithRawResponse:
+        from .resources.drafts import AsyncDraftsResourceWithRawResponse
+
+        return AsyncDraftsResourceWithRawResponse(self._client.drafts)
+
+    @cached_property
     def outbox(self) -> outbox.AsyncOutboxResourceWithRawResponse:
         from .resources.outbox import AsyncOutboxResourceWithRawResponse
 
@@ -584,6 +672,18 @@ class AsyncEInvoiceWithRawResponse:
         from .resources.me import AsyncMeResourceWithRawResponse
 
         return AsyncMeResourceWithRawResponse(self._client.me)
+
+    @cached_property
+    def stats(self) -> stats.AsyncStatsResourceWithRawResponse:
+        from .resources.stats import AsyncStatsResourceWithRawResponse
+
+        return AsyncStatsResourceWithRawResponse(self._client.stats)
+
+    @cached_property
+    def conversion(self) -> conversion.AsyncConversionResourceWithRawResponse:
+        from .resources.conversion import AsyncConversionResourceWithRawResponse
+
+        return AsyncConversionResourceWithRawResponse(self._client.conversion)
 
     @cached_property
     def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
@@ -611,6 +711,18 @@ class EInvoiceWithStreamedResponse:
         return InboxResourceWithStreamingResponse(self._client.inbox)
 
     @cached_property
+    def mailbox(self) -> mailbox.MailboxResourceWithStreamingResponse:
+        from .resources.mailbox import MailboxResourceWithStreamingResponse
+
+        return MailboxResourceWithStreamingResponse(self._client.mailbox)
+
+    @cached_property
+    def drafts(self) -> drafts.DraftsResourceWithStreamingResponse:
+        from .resources.drafts import DraftsResourceWithStreamingResponse
+
+        return DraftsResourceWithStreamingResponse(self._client.drafts)
+
+    @cached_property
     def outbox(self) -> outbox.OutboxResourceWithStreamingResponse:
         from .resources.outbox import OutboxResourceWithStreamingResponse
 
@@ -633,6 +745,18 @@ class EInvoiceWithStreamedResponse:
         from .resources.me import MeResourceWithStreamingResponse
 
         return MeResourceWithStreamingResponse(self._client.me)
+
+    @cached_property
+    def stats(self) -> stats.StatsResourceWithStreamingResponse:
+        from .resources.stats import StatsResourceWithStreamingResponse
+
+        return StatsResourceWithStreamingResponse(self._client.stats)
+
+    @cached_property
+    def conversion(self) -> conversion.ConversionResourceWithStreamingResponse:
+        from .resources.conversion import ConversionResourceWithStreamingResponse
+
+        return ConversionResourceWithStreamingResponse(self._client.conversion)
 
     @cached_property
     def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
@@ -660,6 +784,18 @@ class AsyncEInvoiceWithStreamedResponse:
         return AsyncInboxResourceWithStreamingResponse(self._client.inbox)
 
     @cached_property
+    def mailbox(self) -> mailbox.AsyncMailboxResourceWithStreamingResponse:
+        from .resources.mailbox import AsyncMailboxResourceWithStreamingResponse
+
+        return AsyncMailboxResourceWithStreamingResponse(self._client.mailbox)
+
+    @cached_property
+    def drafts(self) -> drafts.AsyncDraftsResourceWithStreamingResponse:
+        from .resources.drafts import AsyncDraftsResourceWithStreamingResponse
+
+        return AsyncDraftsResourceWithStreamingResponse(self._client.drafts)
+
+    @cached_property
     def outbox(self) -> outbox.AsyncOutboxResourceWithStreamingResponse:
         from .resources.outbox import AsyncOutboxResourceWithStreamingResponse
 
@@ -682,6 +818,18 @@ class AsyncEInvoiceWithStreamedResponse:
         from .resources.me import AsyncMeResourceWithStreamingResponse
 
         return AsyncMeResourceWithStreamingResponse(self._client.me)
+
+    @cached_property
+    def stats(self) -> stats.AsyncStatsResourceWithStreamingResponse:
+        from .resources.stats import AsyncStatsResourceWithStreamingResponse
+
+        return AsyncStatsResourceWithStreamingResponse(self._client.stats)
+
+    @cached_property
+    def conversion(self) -> conversion.AsyncConversionResourceWithStreamingResponse:
+        from .resources.conversion import AsyncConversionResourceWithStreamingResponse
+
+        return AsyncConversionResourceWithStreamingResponse(self._client.conversion)
 
     @cached_property
     def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
