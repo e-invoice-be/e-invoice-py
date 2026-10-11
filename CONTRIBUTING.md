@@ -34,13 +34,31 @@ $ pip install -r requirements-dev.lock
 
 ## Modifying/Adding code
 
-Most of the SDK is generated code. Modifications to code will be persisted between generations, but may
-result in merge conflicts between manual patches and changes from the generator. The generator will never
-modify the contents of the `src/e_invoice_api/lib/` and `examples/` directories.
+All code in this repository is maintained by hand. There is no code generator, so you can edit any file,
+and your changes go through a normal pull request.
+
+The SDK follows the [OpenAPI spec](https://api.e-invoice.be/api/openapi.json) of the API. When the spec changes,
+the SDK is updated by hand.
+
+### Adding or changing an endpoint
+
+1. Add or change the method in the resource module in `src/e_invoice_api/resources/`, for example
+   `src/e_invoice_api/resources/stats.py`. Each resource has a synchronous and an asynchronous class
+   (`StatsResource` and `AsyncStatsResource`) and the matching `WithRawResponse` and `WithStreamingResponse`
+   classes. Keep all of them in sync.
+2. Add or change the types in `src/e_invoice_api/types/`. Request params are `TypedDict`s
+   (for example `stats_retrieve_params.py`) and responses are Pydantic models (for example
+   `stats_retrieve_response.py`). Export new types from `src/e_invoice_api/types/__init__.py`.
+3. For a new resource, also export its classes from `src/e_invoice_api/resources/__init__.py` and add it to the
+   clients in `src/e_invoice_api/_client.py`.
+4. Add or change the entry for the method in `api.md`.
+5. Add tests in `tests/api_resources/`, for example `tests/api_resources/test_stats.py`. The tests mock the HTTP
+   layer with [respx](https://lundberg.github.io/respx/). `tests/utils.py` has helpers for paginated endpoints.
+6. Run the linters and the tests as described below.
 
 ## Adding and running examples
 
-All files in the `examples/` directory are not modified by the generator and can be freely edited or added to.
+You can add example scripts to the `examples/` directory.
 
 ```py
 # add an example to examples/<your-example>.py
@@ -73,8 +91,6 @@ To create a distributable version of the library, all you have to do is run this
 
 ```sh
 $ rye build
-# or
-$ python -m build
 ```
 
 Then to install:
@@ -85,14 +101,24 @@ $ pip install ./path-to-wheel-file.whl
 
 ## Running tests
 
+The tests use [pytest](https://docs.pytest.org/) and mock the HTTP layer with [respx](https://lundberg.github.io/respx/).
+You do not have to start a server.
+
 ```sh
 $ ./scripts/test
 ```
 
+This runs the test suite, and then runs it again with Pydantic v1. Arguments are passed on to `pytest`, so you can
+run one file:
+
+```sh
+$ ./scripts/test tests/api_resources/test_stats.py
+```
+
 ## Linting and formatting
 
-This repository uses [ruff](https://github.com/astral-sh/ruff) and
-[black](https://github.com/psf/black) to format the code in the repository.
+This repository uses [ruff](https://github.com/astral-sh/ruff) to lint and format the code, and
+[pyright](https://github.com/microsoft/pyright) and [mypy](https://mypy-lang.org/) to check the types.
 
 To lint:
 
@@ -108,12 +134,18 @@ $ ./scripts/format
 
 ## Publishing and releases
 
-Changes made to this repository via the automated release PR pipeline should publish to PyPI automatically. If
-the changes aren't made through the automated pipeline, you may want to make releases manually.
+Releases are automated. A GitHub workflow keeps a release pull request with the title `release: X.Y.Z` up to date
+with the changes on `main`. When this pull request is merged, the version is tagged, a GitHub release is created
+and the package is published to PyPI.
+
+The release pull request builds the changelog from the commit messages, so use
+[Conventional Commits](https://www.conventionalcommits.org/) (for example `feat:` and `fix:`) for the commits that land on `main`.
+
+If the automated publish fails, you may want to publish manually.
 
 ### Publish with a GitHub workflow
 
-You can release to package managers by using [the `Publish PyPI` GitHub action](https://www.github.com/e-invoice-be/e-invoice-py/actions/workflows/publish-pypi.yml). This requires a setup organization or repository secret to be set up.
+You can publish to PyPI by running [the `Publish PyPI` GitHub action](https://www.github.com/e-invoice-be/e-invoice-py/actions/workflows/publish-pypi.yml). This requires an organization or repository secret to be set up.
 
 ### Publish manually
 

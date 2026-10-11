@@ -19,8 +19,6 @@ from pathlib import Path
 from datetime import date, datetime
 from typing_extensions import TypeGuard, get_args
 
-import sniffio
-
 from .._types import Omit, NotGiven, FileTypes, ArrayFormat, HeadersLike
 
 _T = TypeVar("_T")
@@ -389,7 +387,7 @@ def get_required_header(headers: HeadersLike, header: str) -> str:
             if k.lower() == lower_header and isinstance(v, str):
                 return v
 
-    # to deal with the case where the header looks like Stainless-Event-Id
+    # to deal with the case where the header looks like Webhook-Event-Id
     intercaps_header = re.sub(r"([^\w])(\w)", lambda pat: pat.group(1) + pat.group(2).upper(), header.capitalize())
 
     for normalized_header in [header, lower_header, header.upper(), intercaps_header]:
@@ -398,13 +396,6 @@ def get_required_header(headers: HeadersLike, header: str) -> str:
             return value
 
     raise ValueError(f"Could not find {header} header")
-
-
-def get_async_library() -> str:
-    try:
-        return sniffio.current_async_library()
-    except Exception:
-        return "false"
 
 
 def lru_cache(*, maxsize: int | None = 128) -> Callable[[CallableT], CallableT]:

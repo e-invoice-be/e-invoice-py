@@ -1,5 +1,3 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 from __future__ import annotations
 
 import gc
@@ -21,17 +19,14 @@ from pydantic import ValidationError
 
 from e_invoice_api import EInvoice, AsyncEInvoice, APIResponseValidationError
 from e_invoice_api._types import Omit
-from e_invoice_api._utils import asyncify
 from e_invoice_api._models import BaseModel, FinalRequestOptions
 from e_invoice_api._exceptions import EInvoiceError, APIStatusError, APITimeoutError, APIResponseValidationError
 from e_invoice_api._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
-    OtherPlatform,
     DefaultHttpxClient,
     DefaultAsyncHttpxClient,
-    get_platform,
     make_request_options,
 )
 
@@ -50,6 +45,22 @@ def _get_params(client: BaseClient[Any, Any]) -> dict[str, str]:
 
 def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
+
+
+def _telemetry_headers(request: httpx.Request) -> list[str]:
+    """Names of SDK telemetry headers on the request. The SDK must send none."""
+    suffixes = (
+        "-lang",
+        "-package-version",
+        "-os",
+        "-arch",
+        "-runtime",
+        "-runtime-version",
+        "-async",
+        "-retry-count",
+        "-read-timeout",
+    )
+    return [name for name in request.headers if name.lower().endswith(suffixes)]
 
 
 def mirror_request_content(request: httpx.Request) -> httpx.Response:
@@ -167,13 +178,13 @@ class TestEInvoice:
         assert copied.default_headers["X-Foo"] == "bar"
 
         # merges already given headers
-        copied = client.copy(default_headers={"X-Bar": "stainless"})
+        copied = client.copy(default_headers={"X-Bar": "custom"})
         assert copied.default_headers["X-Foo"] == "bar"
-        assert copied.default_headers["X-Bar"] == "stainless"
+        assert copied.default_headers["X-Bar"] == "custom"
 
         # uses new values for any already given headers
-        copied = client.copy(default_headers={"X-Foo": "stainless"})
-        assert copied.default_headers["X-Foo"] == "stainless"
+        copied = client.copy(default_headers={"X-Foo": "custom"})
+        assert copied.default_headers["X-Foo"] == "custom"
 
         # set_default_headers
 
@@ -202,14 +213,14 @@ class TestEInvoice:
         assert _get_params(copied)["foo"] == "bar"
 
         # merges already given params
-        copied = client.copy(default_query={"bar": "stainless"})
+        copied = client.copy(default_query={"bar": "custom"})
         params = _get_params(copied)
         assert params["foo"] == "bar"
-        assert params["bar"] == "stainless"
+        assert params["bar"] == "custom"
 
         # uses new values for any already given headers
-        copied = client.copy(default_query={"foo": "stainless"})
-        assert _get_params(copied)["foo"] == "stainless"
+        copied = client.copy(default_query={"foo": "custom"})
+        assert _get_params(copied)["foo"] == "custom"
 
         # set_default_query
 
@@ -381,20 +392,21 @@ class TestEInvoice:
         )
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
-        assert request.headers.get("x-stainless-lang") == "python"
+        assert request.headers.get("user-agent") == test_client.user_agent
+        assert _telemetry_headers(request) == []
 
         test_client2 = EInvoice(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
             default_headers={
-                "X-Foo": "stainless",
-                "X-Stainless-Lang": "my-overriding-header",
+                "X-Foo": "baz",
+                "User-Agent": "my-overriding-header",
             },
         )
         request = test_client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("x-foo") == "stainless"
-        assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+        assert request.headers.get("x-foo") == "baz"
+        assert request.headers.get("user-agent") == "my-overriding-header"
 
         test_client.close()
         test_client2.close()
@@ -920,53 +932,7 @@ class TestEInvoice:
         response = client.documents.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
-        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
-
-    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    def test_omit_retry_count_header(
-        self, client: EInvoice, failures_before_success: int, respx_mock: MockRouter
-    ) -> None:
-        client = client.with_options(max_retries=4)
-
-        nb_retries = 0
-
-        def retry_handler(_request: httpx.Request) -> httpx.Response:
-            nonlocal nb_retries
-            if nb_retries < failures_before_success:
-                nb_retries += 1
-                return httpx.Response(500)
-            return httpx.Response(200)
-
-        respx_mock.post("/api/documents/").mock(side_effect=retry_handler)
-
-        response = client.documents.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
-
-        assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
-
-    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    def test_overwrite_retry_count_header(
-        self, client: EInvoice, failures_before_success: int, respx_mock: MockRouter
-    ) -> None:
-        client = client.with_options(max_retries=4)
-
-        nb_retries = 0
-
-        def retry_handler(_request: httpx.Request) -> httpx.Response:
-            nonlocal nb_retries
-            if nb_retries < failures_before_success:
-                nb_retries += 1
-                return httpx.Response(500)
-            return httpx.Response(200)
-
-        respx_mock.post("/api/documents/").mock(side_effect=retry_handler)
-
-        response = client.documents.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
-
-        assert response.http_request.headers.get("x-stainless-retry-count") == "42"
+        assert _telemetry_headers(response.http_request) == []
 
     def test_proxy_environment_variables(self, monkeypatch: pytest.MonkeyPatch) -> None:
         # Test that the proxy environment variables are set correctly
@@ -1080,13 +1046,13 @@ class TestAsyncEInvoice:
         assert copied.default_headers["X-Foo"] == "bar"
 
         # merges already given headers
-        copied = client.copy(default_headers={"X-Bar": "stainless"})
+        copied = client.copy(default_headers={"X-Bar": "custom"})
         assert copied.default_headers["X-Foo"] == "bar"
-        assert copied.default_headers["X-Bar"] == "stainless"
+        assert copied.default_headers["X-Bar"] == "custom"
 
         # uses new values for any already given headers
-        copied = client.copy(default_headers={"X-Foo": "stainless"})
-        assert copied.default_headers["X-Foo"] == "stainless"
+        copied = client.copy(default_headers={"X-Foo": "custom"})
+        assert copied.default_headers["X-Foo"] == "custom"
 
         # set_default_headers
 
@@ -1115,14 +1081,14 @@ class TestAsyncEInvoice:
         assert _get_params(copied)["foo"] == "bar"
 
         # merges already given params
-        copied = client.copy(default_query={"bar": "stainless"})
+        copied = client.copy(default_query={"bar": "custom"})
         params = _get_params(copied)
         assert params["foo"] == "bar"
-        assert params["bar"] == "stainless"
+        assert params["bar"] == "custom"
 
         # uses new values for any already given headers
-        copied = client.copy(default_query={"foo": "stainless"})
-        assert _get_params(copied)["foo"] == "stainless"
+        copied = client.copy(default_query={"foo": "custom"})
+        assert _get_params(copied)["foo"] == "custom"
 
         # set_default_query
 
@@ -1296,20 +1262,21 @@ class TestAsyncEInvoice:
         )
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
-        assert request.headers.get("x-stainless-lang") == "python"
+        assert request.headers.get("user-agent") == test_client.user_agent
+        assert _telemetry_headers(request) == []
 
         test_client2 = AsyncEInvoice(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
             default_headers={
-                "X-Foo": "stainless",
-                "X-Stainless-Lang": "my-overriding-header",
+                "X-Foo": "baz",
+                "User-Agent": "my-overriding-header",
             },
         )
         request = test_client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("x-foo") == "stainless"
-        assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+        assert request.headers.get("x-foo") == "baz"
+        assert request.headers.get("user-agent") == "my-overriding-header"
 
         await test_client.close()
         await test_client2.close()
@@ -1854,57 +1821,7 @@ class TestAsyncEInvoice:
         response = await client.documents.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
-        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
-
-    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    async def test_omit_retry_count_header(
-        self, async_client: AsyncEInvoice, failures_before_success: int, respx_mock: MockRouter
-    ) -> None:
-        client = async_client.with_options(max_retries=4)
-
-        nb_retries = 0
-
-        def retry_handler(_request: httpx.Request) -> httpx.Response:
-            nonlocal nb_retries
-            if nb_retries < failures_before_success:
-                nb_retries += 1
-                return httpx.Response(500)
-            return httpx.Response(200)
-
-        respx_mock.post("/api/documents/").mock(side_effect=retry_handler)
-
-        response = await client.documents.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
-
-        assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
-
-    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("e_invoice_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    async def test_overwrite_retry_count_header(
-        self, async_client: AsyncEInvoice, failures_before_success: int, respx_mock: MockRouter
-    ) -> None:
-        client = async_client.with_options(max_retries=4)
-
-        nb_retries = 0
-
-        def retry_handler(_request: httpx.Request) -> httpx.Response:
-            nonlocal nb_retries
-            if nb_retries < failures_before_success:
-                nb_retries += 1
-                return httpx.Response(500)
-            return httpx.Response(200)
-
-        respx_mock.post("/api/documents/").mock(side_effect=retry_handler)
-
-        response = await client.documents.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
-
-        assert response.http_request.headers.get("x-stainless-retry-count") == "42"
-
-    async def test_get_platform(self) -> None:
-        platform = await asyncify(get_platform)()
-        assert isinstance(platform, (str, OtherPlatform))
+        assert _telemetry_headers(response.http_request) == []
 
     async def test_proxy_environment_variables(self, monkeypatch: pytest.MonkeyPatch) -> None:
         # Test that the proxy environment variables are set correctly
