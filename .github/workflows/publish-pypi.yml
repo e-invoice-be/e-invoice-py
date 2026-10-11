@@ -1,17 +1,27 @@
-# This workflow is triggered when a GitHub release is created.
+# This workflow publishes the package to PyPI.
+# The `Release Please` workflow calls it when it creates a GitHub release.
 # It can also be run manually to re-publish to PyPI in case it failed for some reason.
 # You can run this workflow by navigating to https://www.github.com/e-invoice-be/e-invoice-py/actions/workflows/publish-pypi.yml
+#
+# There is no `release: published` trigger on purpose: the release workflow calls this
+# workflow directly, and a second trigger would publish the same version two times.
 name: Publish PyPI
 on:
   workflow_dispatch:
 
-  release:
-    types: [published]
+  workflow_call:
+    secrets:
+      E_INVOICE_PYPI_TOKEN:
+        required: false
+      PYPI_TOKEN:
+        required: false
 
 jobs:
   publish:
     name: publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

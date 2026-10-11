@@ -1,5 +1,3 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 from __future__ import annotations
 
 import os
@@ -15,8 +13,6 @@ from e_invoice_api._utils import is_dict
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest  # pyright: ignore[reportPrivateImportUsage]
-
-pytest.register_assert_rewrite("tests.utils")
 
 logging.getLogger("e_invoice_api").setLevel(logging.DEBUG)
 

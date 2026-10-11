@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 import json
 import time
 import uuid
@@ -8,7 +7,6 @@ import email
 import asyncio
 import inspect
 import logging
-import platform
 import warnings
 import email.utils
 from types import TracebackType
@@ -34,7 +32,6 @@ from typing_extensions import Literal, override, get_origin
 
 import anyio
 import httpx
-import distro
 import pydantic
 from httpx import URL
 from pydantic import PrivateAttr
@@ -61,7 +58,7 @@ from ._types import (
     ModelBuilderProtocol,
     not_given,
 )
-from ._utils import is_dict, is_list, asyncify, is_given, lru_cache, is_mapping
+from ._utils import is_dict, is_list, is_given, is_mapping
 from ._compat import PYDANTIC_V1, model_copy, model_dump
 from ._models import GenericModel, FinalRequestOptions, validate_type, construct_type
 from ._response import (
@@ -76,6 +73,7 @@ from ._constants import (
     DEFAULT_MAX_RETRIES,
     INITIAL_RETRY_DELAY,
     RAW_RESPONSE_HEADER,
+    RAW_RESPONSE_EXTENSION,
     OVERRIDE_CAST_TO_HEADER,
     DEFAULT_CONNECTION_LIMITS,
 )
@@ -389,7 +387,6 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         self._custom_query = custom_query or {}
         self._strict_response_validation = _strict_response_validation
         self._idempotency_header = None
-        self._platform: Platform | None = None
 
         if max_retries is None:  # pyright: ignore[reportUnnecessaryComparison]
             raise TypeError(
@@ -432,7 +429,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
     ) -> _exceptions.APIStatusError:
         raise NotImplementedError()
 
-    def _build_headers(self, options: FinalRequestOptions, *, retries_taken: int = 0) -> httpx.Headers:
+    def _build_headers(self, options: FinalRequestOptions) -> httpx.Headers:
         custom_headers = options.headers or {}
         headers_dict = _merge_mappings(self.default_headers, custom_headers)
         self._validate_headers(headers_dict, custom_headers)
@@ -443,18 +440,6 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         idempotency_header = self._idempotency_header
         if idempotency_header and options.idempotency_key and idempotency_header not in headers:
             headers[idempotency_header] = options.idempotency_key
-
-        # Don't set these headers if they were already set or removed by the caller. We check
-        # `custom_headers`, which can contain `Omit()`, instead of `headers` to account for the removal case.
-        lower_custom_headers = [header.lower() for header in custom_headers]
-        if "x-stainless-retry-count" not in lower_custom_headers:
-            headers["x-stainless-retry-count"] = str(retries_taken)
-        if "x-stainless-read-timeout" not in lower_custom_headers:
-            timeout = self.timeout if isinstance(options.timeout, NotGiven) else options.timeout
-            if isinstance(timeout, Timeout):
-                timeout = timeout.read
-            if timeout is not None:
-                headers["x-stainless-read-timeout"] = str(timeout)
 
         return headers
 
@@ -477,8 +462,6 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
     def _build_request(
         self,
         options: FinalRequestOptions,
-        *,
-        retries_taken: int = 0,
     ) -> httpx.Request:
         if log.isEnabledFor(logging.DEBUG):
             log.debug(
@@ -505,7 +488,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             else:
                 raise RuntimeError(f"Unexpected JSON data type, {type(json_data)}, cannot merge with `extra_body`")
 
-        headers = self._build_headers(options, retries_taken=retries_taken)
+        headers = self._build_headers(options)
         params = _merge_mappings(self.default_query, options.params)
         content_type = headers.get("Content-Type")
         files = options.files
@@ -567,6 +550,13 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         else:
             headers.pop("Content-Type", None)
             kwargs.pop("data", None)
+
+        # `.with_raw_response` and `.with_streaming_response` pass their mode as a temporary
+        # header, see _response.py. It is an SDK-internal signal, so it travels on the request
+        # extensions and is not sent to the API.
+        raw_response_mode = headers.pop(RAW_RESPONSE_HEADER, None)
+        if raw_response_mode:
+            kwargs["extensions"] = {RAW_RESPONSE_EXTENSION: raw_response_mode}
 
         # TODO: report this error to httpx
         return self._client.build_request(  # pyright: ignore[reportUnknownMemberType]
@@ -630,7 +620,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         return cast_to
 
     def _should_stream_response_body(self, request: httpx.Request) -> bool:
-        return request.headers.get(RAW_RESPONSE_HEADER) == "stream"  # type: ignore[no-any-return]
+        return request.extensions.get(RAW_RESPONSE_EXTENSION) == "stream"
 
     def _process_response_data(
         self,
@@ -674,7 +664,6 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             "Accept": "application/json",
             "Content-Type": "application/json",
             "User-Agent": self.user_agent,
-            **self.platform_headers(),
             **self.auth_headers,
             **self._custom_headers,
         }
@@ -707,12 +696,6 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
     @base_url.setter
     def base_url(self, url: URL | str) -> None:
         self._base_url = self._enforce_trailing_slash(url if isinstance(url, URL) else URL(url))
-
-    def platform_headers(self) -> Dict[str, str]:
-        # the actual implementation is in a separate `lru_cache` decorated
-        # function because adding `lru_cache` to methods will leak memory
-        # https://github.com/python/cpython/issues/88476
-        return platform_headers(self._version, platform=self._platform)
 
     def _parse_retry_after_header(self, response_headers: Optional[httpx.Headers] = None) -> float | None:
         """Returns a float of the number of seconds (not milliseconds) to wait after retrying, or None if unspecified.
@@ -808,7 +791,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         return False
 
     def _idempotency_key(self) -> str:
-        return f"stainless-python-retry-{uuid.uuid4()}"
+        return f"e-invoice-python-retry-{uuid.uuid4()}"
 
 
 class _DefaultHttpxClient(httpx.Client):
@@ -990,7 +973,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             options = self._prepare_options(options)
 
             remaining_retries = max_retries - retries_taken
-            request = self._build_request(options, retries_taken=retries_taken)
+            request = self._build_request(options)
             self._prepare_request(request)
 
             kwargs: HttpxSendArgs = {}
@@ -1114,7 +1097,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             # we only want to actually return the custom BaseAPIResponse class if we're
             # returning the raw response, or if we're not streaming SSE, as if we're streaming
             # SSE then `cast_to` doesn't actively reflect the type we need to parse into
-            and (not stream or bool(response.request.headers.get(RAW_RESPONSE_HEADER)))
+            and (not stream or bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)))
         ):
             if not issubclass(origin, APIResponse):
                 raise TypeError(f"API Response types must subclass {APIResponse}; Received {origin}")
@@ -1145,7 +1128,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             options=options,
             retries_taken=retries_taken,
         )
-        if bool(response.request.headers.get(RAW_RESPONSE_HEADER)):
+        if bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)):
             return cast(ResponseT, api_response)
 
         return api_response.parse()
@@ -1550,11 +1533,6 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         stream: bool = False,
         stream_cls: type[_AsyncStreamT] | None = None,
     ) -> ResponseT | _AsyncStreamT:
-        if self._platform is None:
-            # `get_platform` can make blocking IO calls so we
-            # execute it earlier while we are in an async context
-            self._platform = await asyncify(get_platform)()
-
         cast_to = self._maybe_override_cast_to(cast_to, options)
 
         # create a copy of the options we were given so that if the
@@ -1574,7 +1552,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             options = await self._prepare_options(options)
 
             remaining_retries = max_retries - retries_taken
-            request = self._build_request(options, retries_taken=retries_taken)
+            request = self._build_request(options)
             await self._prepare_request(request)
 
             kwargs: HttpxSendArgs = {}
@@ -1698,7 +1676,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             # we only want to actually return the custom BaseAPIResponse class if we're
             # returning the raw response, or if we're not streaming SSE, as if we're streaming
             # SSE then `cast_to` doesn't actively reflect the type we need to parse into
-            and (not stream or bool(response.request.headers.get(RAW_RESPONSE_HEADER)))
+            and (not stream or bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)))
         ):
             if not issubclass(origin, AsyncAPIResponse):
                 raise TypeError(f"API Response types must subclass {AsyncAPIResponse}; Received {origin}")
@@ -1729,7 +1707,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             options=options,
             retries_taken=retries_taken,
         )
-        if bool(response.request.headers.get(RAW_RESPONSE_HEADER)):
+        if bool(response.request.extensions.get(RAW_RESPONSE_EXTENSION)):
             return cast(ResponseT, api_response)
 
         return await api_response.parse()
@@ -1987,136 +1965,6 @@ def make_request_options(
 class ForceMultipartDict(Dict[str, None]):
     def __bool__(self) -> bool:
         return True
-
-
-class OtherPlatform:
-    def __init__(self, name: str) -> None:
-        self.name = name
-
-    @override
-    def __str__(self) -> str:
-        return f"Other:{self.name}"
-
-
-Platform = Union[
-    OtherPlatform,
-    Literal[
-        "MacOS",
-        "Linux",
-        "Windows",
-        "FreeBSD",
-        "OpenBSD",
-        "iOS",
-        "Android",
-        "Unknown",
-    ],
-]
-
-
-def get_platform() -> Platform:
-    try:
-        system = platform.system().lower()
-        platform_name = platform.platform().lower()
-    except Exception:
-        return "Unknown"
-
-    if "iphone" in platform_name or "ipad" in platform_name:
-        # Tested using Python3IDE on an iPhone 11 and Pythonista on an iPad 7
-        # system is Darwin and platform_name is a string like:
-        # - Darwin-21.6.0-iPhone12,1-64bit
-        # - Darwin-21.6.0-iPad7,11-64bit
-        return "iOS"
-
-    if system == "darwin":
-        return "MacOS"
-
-    if system == "windows":
-        return "Windows"
-
-    if "android" in platform_name:
-        # Tested using Pydroid 3
-        # system is Linux and platform_name is a string like 'Linux-5.10.81-android12-9-00001-geba40aecb3b7-ab8534902-aarch64-with-libc'
-        return "Android"
-
-    if system == "linux":
-        # https://distro.readthedocs.io/en/latest/#distro.id
-        distro_id = distro.id()
-        if distro_id == "freebsd":
-            return "FreeBSD"
-
-        if distro_id == "openbsd":
-            return "OpenBSD"
-
-        return "Linux"
-
-    if platform_name:
-        return OtherPlatform(platform_name)
-
-    return "Unknown"
-
-
-@lru_cache(maxsize=None)
-def platform_headers(version: str, *, platform: Platform | None) -> Dict[str, str]:
-    return {
-        "X-Stainless-Lang": "python",
-        "X-Stainless-Package-Version": version,
-        "X-Stainless-OS": str(platform or get_platform()),
-        "X-Stainless-Arch": str(get_architecture()),
-        "X-Stainless-Runtime": get_python_runtime(),
-        "X-Stainless-Runtime-Version": get_python_version(),
-    }
-
-
-class OtherArch:
-    def __init__(self, name: str) -> None:
-        self.name = name
-
-    @override
-    def __str__(self) -> str:
-        return f"other:{self.name}"
-
-
-Arch = Union[OtherArch, Literal["x32", "x64", "arm", "arm64", "unknown"]]
-
-
-def get_python_runtime() -> str:
-    try:
-        return platform.python_implementation()
-    except Exception:
-        return "unknown"
-
-
-def get_python_version() -> str:
-    try:
-        return platform.python_version()
-    except Exception:
-        return "unknown"
-
-
-def get_architecture() -> Arch:
-    try:
-        machine = platform.machine().lower()
-    except Exception:
-        return "unknown"
-
-    if machine in ("arm64", "aarch64"):
-        return "arm64"
-
-    # TODO: untested
-    if machine == "arm":
-        return "arm"
-
-    if machine == "x86_64":
-        return "x64"
-
-    # TODO: untested
-    if sys.maxsize <= 2**32:
-        return "x32"
-
-    if machine:
-        return OtherArch(machine)
-
-    return "unknown"
 
 
 def _merge_mappings(

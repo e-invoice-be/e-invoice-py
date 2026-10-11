@@ -1,5 +1,3 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 from __future__ import annotations
 
 import os
@@ -22,7 +20,6 @@ from ._types import (
 from ._utils import (
     is_given,
     is_mapping_t,
-    get_async_library,
 )
 from ._compat import cached_property
 from ._version import __version__
@@ -214,7 +211,6 @@ class EInvoice(SyncAPIClient):
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
-            "X-Stainless-Async": "false",
             **self._custom_headers,
         }
 
@@ -457,7 +453,6 @@ class AsyncEInvoice(AsyncAPIClient):
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
-            "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
 

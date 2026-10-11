@@ -13,8 +13,6 @@ dependencies = [
   "pydantic>=1.9.0, <3",
   "typing-extensions>=4.14, <5",
   "anyio>=3.5.0, <5",
-  "distro>=1.7.0, <2",
-  "sniffio",
 ]
 
 requires-python = ">= 3.9"
@@ -199,7 +197,7 @@ cache_fine_grained = true
 # result = ...
 # assert result is None
 # ```
-# Changing this codegen to make mypy happy would increase complexity
+# Changing this code to make mypy happy would increase complexity
 # and would not be worth it.
 disable_error_code = "func-returns-value,overload-cannot-match"
 

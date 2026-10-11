@@ -1,9 +1,8 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import httpx
 
-RAW_RESPONSE_HEADER = "X-Stainless-Raw-Response"
-OVERRIDE_CAST_TO_HEADER = "____stainless_override_cast_to"
+RAW_RESPONSE_HEADER = "X-EInvoice-Raw-Response"
+RAW_RESPONSE_EXTENSION = "einvoice_raw_response"
+OVERRIDE_CAST_TO_HEADER = "____einvoice_override_cast_to"
 
 # default timeout is 1 minute
 DEFAULT_TIMEOUT = httpx.Timeout(timeout=60, connect=5.0)

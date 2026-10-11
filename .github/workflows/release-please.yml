@@ -1,0 +1,51 @@
+# This workflow runs release-please on each push to `main`.
+#
+# - If `main` has releasable commits, it opens or updates the release PR (`release: X.Y.Z`).
+# - If the push is the merge of the release PR, it creates the tag `vX.Y.Z` and the GitHub
+#   release, and then publishes the package to PyPI.
+#
+# Token: events that the default `GITHUB_TOKEN` creates do not start other workflows.
+# Thus CI does not run on the release PR unless the optional secret `RELEASE_PLEASE_TOKEN`
+# (a personal access token or a GitHub App token) is set. Without that secret, the workflow
+# uses `GITHUB_TOKEN`, and the repository setting "Allow GitHub Actions to create and
+# approve pull requests" must be on.
+#
+# The PyPI publish does not depend on a `release` event. It is a job in this workflow.
+name: Release Please
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  release-please:
+    name: release please
+    runs-on: ubuntu-latest
+    if: github.repository == 'e-invoice-be/e-invoice-py'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    name: publish
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/publish-pypi.yml
+    secrets:
+      E_INVOICE_PYPI_TOKEN: ${{ secrets.E_INVOICE_PYPI_TOKEN }}
+      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
