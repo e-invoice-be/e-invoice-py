@@ -8,6 +8,7 @@ __all__ = ["DocumentSendParams"]
 
 class DocumentSendParams(TypedDict, total=False):
     email: Optional[str]
+    """Deprecated."""
 
     receiver_peppol_id: Optional[str]
 

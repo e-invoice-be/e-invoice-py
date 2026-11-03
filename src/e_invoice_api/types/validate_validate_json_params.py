@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import datetime
 from typing import Union, Iterable, Optional
-from datetime import date
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
@@ -39,6 +39,12 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     billing_address_recipient: Optional[str]
     """The recipient name at the billing address"""
 
+    buyer_reference: Optional[str]
+    """
+    The buyer reference (BT-10), e.g. a cost centre or accounting reference
+    requested by the buyer
+    """
+
     charges: Optional[Iterable[Charge]]
 
     currency: CurrencyCode
@@ -69,6 +75,9 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     customer_peppol_id: Optional[str]
     """Customer Peppol ID"""
 
+    customer_phone: Optional[str]
+    """The telephone number of the customer contact (BT-57)"""
+
     customer_tax_id: Optional[str]
     """Customer tax ID.
 
@@ -81,10 +90,10 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     document_type: DocumentType
     """The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE"""
 
-    due_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    due_date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
     """The date when payment is due"""
 
-    invoice_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    invoice_date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
     """The date when the invoice was issued"""
 
     invoice_id: Optional[str]
@@ -107,6 +116,15 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     payment_term: Optional[str]
     """The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')"""
 
+    preceding_invoice_date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
+    """The preceding invoice issue date (BT-26)"""
+
+    preceding_invoice_id: Optional[str]
+    """
+    The preceding invoice reference (BT-25): the number of the invoice this document
+    corrects, for example the invoice a credit note credits
+    """
+
     previous_unpaid_balance: Union[float, str, None]
     """The previous unpaid balance from prior invoices, if any.
 
@@ -122,16 +140,27 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     remittance_address_recipient: Optional[str]
     """The recipient name at the remittance address"""
 
+    rounding_amount: Union[float, str, None]
+    """
+    The amount added to the invoice total to round the amount for payment (BT-114),
+    for example to whole kronor (amount_due = invoice_total + rounding_amount when
+    nothing is prepaid). Can be negative. Between -5.00 and 5.00, rounded to maximum
+    2 decimals
+    """
+
+    sales_order: Optional[str]
+    """The sales order reference (BT-14) assigned by the seller"""
+
     service_address: Optional[str]
     """The address where services were performed or goods were delivered"""
 
     service_address_recipient: Optional[str]
     """The recipient name at the service address"""
 
-    service_end_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    service_end_date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
     """The end date of the service period or delivery period"""
 
-    service_start_date: Annotated[Union[str, date, None], PropertyInfo(format="iso8601")]
+    service_start_date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
     """The start date of the service period or delivery period"""
 
     shipping_address: Optional[str]
@@ -157,6 +186,13 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     for exempt)
     """
 
+    tax_currency: Optional[str]
+    """
+    The VAT accounting currency (BT-6, ISO 4217 currency code), when VAT is
+    accounted in a currency other than the invoice currency. Must differ from
+    currency and requires total_tax_in_tax_currency
+    """
+
     tax_details: Optional[Iterable[TaxDetail]]
 
     total_discount: Union[float, str, None]
@@ -170,6 +206,13 @@ class ValidateValidateJsonParams(TypedDict, total=False):
     """The total tax amount of the invoice.
 
     Must be positive and rounded to maximum 2 decimals
+    """
+
+    total_tax_in_tax_currency: Union[float, str, None]
+    """The total VAT amount in the VAT accounting currency tax_currency (BT-111).
+
+    Does not add to invoice_total. Requires tax_currency. Rounded to maximum 2
+    decimals
     """
 
     vatex: Optional[
@@ -264,6 +307,13 @@ class ValidateValidateJsonParams(TypedDict, total=False):
 
     vendor_name: Optional[str]
     """The name of the vendor/seller/supplier"""
+
+    vendor_phone: Optional[str]
+    """The telephone number of the vendor contact (BT-42).
+
+    Required when vendor and customer are both in Germany (DE-R-006); it must then
+    hold at least 3 digits (DE-R-027, a warning).
+    """
 
     vendor_tax_id: Optional[str]
     """Vendor tax ID.
@@ -843,13 +893,29 @@ class Item(TypedDict, total=False):
     charges: Optional[Iterable[ItemCharge]]
     """The charges of the line item."""
 
-    date: None
+    date: Annotated[Union[str, datetime.date, None], PropertyInfo(format="iso8601")]
 
     description: Optional[str]
     """The description of the line item."""
 
     item_attributes: Optional[Iterable[ItemItemAttribute]]
     """Item-level attributes (BG-32) from cac:AdditionalItemProperty."""
+
+    name: Optional[str]
+    """The item name (BT-153), for example the product name.
+
+    Written to cac:Item/cbc:Name. When omitted or blank, `description` (BT-154) is
+    used as the item name. A posted line item needs a `name` or a `description`; a
+    line item with neither is rejected with 422.
+    """
+
+    price_base_quantity: Union[float, str]
+    """The item price base quantity (BT-149).
+
+    The number of item units to which the unit price applies, for example 100 when
+    the unit price is a price for each 100 units. Must be greater than 0. Defaults
+    to 1.
+    """
 
     product_code: Optional[str]
     """The product code of the line item."""

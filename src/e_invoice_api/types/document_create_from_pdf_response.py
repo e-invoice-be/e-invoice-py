@@ -1,5 +1,5 @@
+import datetime
 from typing import List, Optional
-from datetime import date
 from typing_extensions import Literal
 
 from .charge import Charge
@@ -43,13 +43,29 @@ class Item(BaseModel):
     charges: Optional[List[Charge]] = None
     """The charges of the line item."""
 
-    date: None = None
+    date: Optional[datetime.date] = None
 
     description: Optional[str] = None
     """The description of the line item."""
 
     item_attributes: Optional[List[ItemItemAttribute]] = None
     """Item-level attributes (BG-32) from cac:AdditionalItemProperty."""
+
+    name: Optional[str] = None
+    """The item name (BT-153), for example the product name.
+
+    Written to cac:Item/cbc:Name. When omitted or blank, `description` (BT-154) is
+    used as the item name. A posted line item needs a `name` or a `description`; a
+    line item with neither is rejected with 422.
+    """
+
+    price_base_quantity: Optional[str] = None
+    """The item price base quantity (BT-149).
+
+    The number of item units to which the unit price applies, for example 100 when
+    the unit price is a price for each 100 units. Must be greater than 0. Defaults
+    to 1.
+    """
 
     product_code: Optional[str] = None
     """The product code of the line item."""
@@ -104,6 +120,12 @@ class DocumentCreateFromPdfResponse(BaseModel):
     billing_address_recipient: Optional[str] = None
     """The recipient name at the billing address"""
 
+    buyer_reference: Optional[str] = None
+    """
+    The buyer reference (BT-10), e.g. a cost centre or accounting reference
+    requested by the buyer
+    """
+
     charges: Optional[List[Charge]] = None
 
     currency: Optional[CurrencyCode] = None
@@ -134,6 +156,9 @@ class DocumentCreateFromPdfResponse(BaseModel):
     customer_peppol_id: Optional[str] = None
     """Customer Peppol ID"""
 
+    customer_phone: Optional[str] = None
+    """The telephone number of the customer contact (BT-57)"""
+
     customer_tax_id: Optional[str] = None
     """Customer tax ID.
 
@@ -146,7 +171,7 @@ class DocumentCreateFromPdfResponse(BaseModel):
     document_type: Optional[DocumentType] = None
     """The type of document: INVOICE, CREDIT_NOTE, or DEBIT_NOTE"""
 
-    due_date: Optional[date] = None
+    due_date: Optional[datetime.date] = None
     """The date when payment is due"""
 
     error_message: Optional[str] = None
@@ -155,7 +180,7 @@ class DocumentCreateFromPdfResponse(BaseModel):
     error_type: Optional[str] = None
     """Error type/category when success is False"""
 
-    invoice_date: Optional[date] = None
+    invoice_date: Optional[datetime.date] = None
     """The date when the invoice was issued"""
 
     invoice_id: Optional[str] = None
@@ -178,6 +203,15 @@ class DocumentCreateFromPdfResponse(BaseModel):
     payment_term: Optional[str] = None
     """The payment terms (e.g., 'Net 30', 'Due on receipt', '2/10 Net 30')"""
 
+    preceding_invoice_date: Optional[datetime.date] = None
+    """The preceding invoice issue date (BT-26)"""
+
+    preceding_invoice_id: Optional[str] = None
+    """
+    The preceding invoice reference (BT-25): the number of the invoice this document
+    corrects, for example the invoice a credit note credits
+    """
+
     purchase_order: Optional[str] = None
     """The purchase order reference number"""
 
@@ -187,16 +221,27 @@ class DocumentCreateFromPdfResponse(BaseModel):
     remittance_address_recipient: Optional[str] = None
     """The recipient name at the remittance address"""
 
+    rounding_amount: Optional[str] = None
+    """
+    The amount added to the invoice total to round the amount for payment (BT-114),
+    for example to whole kronor (amount_due = invoice_total + rounding_amount when
+    nothing is prepaid). Can be negative. Between -5.00 and 5.00, rounded to maximum
+    2 decimals
+    """
+
+    sales_order: Optional[str] = None
+    """The sales order reference (BT-14) assigned by the seller"""
+
     service_address: Optional[str] = None
     """The address where services were performed or goods were delivered"""
 
     service_address_recipient: Optional[str] = None
     """The recipient name at the service address"""
 
-    service_end_date: Optional[date] = None
+    service_end_date: Optional[datetime.date] = None
     """The end date of the service period or delivery period"""
 
-    service_start_date: Optional[date] = None
+    service_start_date: Optional[datetime.date] = None
     """The start date of the service period or delivery period"""
 
     shipping_address: Optional[str] = None
@@ -225,6 +270,13 @@ class DocumentCreateFromPdfResponse(BaseModel):
     for exempt)
     """
 
+    tax_currency: Optional[str] = None
+    """
+    The VAT accounting currency (BT-6, ISO 4217 currency code), when VAT is
+    accounted in a currency other than the invoice currency. Must differ from
+    currency and requires total_tax_in_tax_currency
+    """
+
     tax_details: Optional[List[TaxDetail]] = None
 
     total_discount: Optional[str] = None
@@ -238,6 +290,13 @@ class DocumentCreateFromPdfResponse(BaseModel):
     """The total tax amount of the invoice.
 
     Must be positive and rounded to maximum 2 decimals
+    """
+
+    total_tax_in_tax_currency: Optional[str] = None
+    """The total VAT amount in the VAT accounting currency tax_currency (BT-111).
+
+    Does not add to invoice_total. Requires tax_currency. Rounded to maximum 2
+    decimals
     """
 
     ubl_document: Optional[str] = None
@@ -335,6 +394,13 @@ class DocumentCreateFromPdfResponse(BaseModel):
 
     vendor_name: Optional[str] = None
     """The name of the vendor/seller/supplier"""
+
+    vendor_phone: Optional[str] = None
+    """The telephone number of the vendor contact (BT-42).
+
+    Required when vendor and customer are both in Germany (DE-R-006); it must then
+    hold at least 3 digits (DE-R-027, a warning).
+    """
 
     vendor_tax_id: Optional[str] = None
     """Vendor tax ID.

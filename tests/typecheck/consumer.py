@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 from pathlib import Path
-from datetime import datetime
+from datetime import date, datetime
 from typing_extensions import assert_type
 
 import httpx
@@ -18,6 +18,7 @@ from e_invoice_api import EInvoice, APIResponse, AsyncEInvoice, AsyncAPIResponse
 from e_invoice_api.types import (
     WebhookResponse,
     DocumentResponse,
+    DocumentLifecycle,
     MeRetrieveResponse,
     StatsRetrieveResponse,
     UblDocumentValidation,
@@ -37,7 +38,19 @@ def sync_usage() -> None:
         invoice_id="INV-1",
         invoice_date="2026-01-31",
         customer_name="Customer BV",
-        items=[{"description": "Consulting", "quantity": 2, "unit_price": "100.00"}],
+        buyer_reference="CC-42",
+        preceding_invoice_date=date(2026, 1, 1),
+        rounding_amount=-0.25,
+        items=[
+            {
+                "name": "Consulting",
+                "description": "Consulting",
+                "date": date(2026, 1, 15),
+                "quantity": 2,
+                "price_base_quantity": 1,
+                "unit_price": "100.00",
+            }
+        ],
     )
     assert_type(document, DocumentResponse)
     assert_type(document.id, str)
@@ -45,10 +58,18 @@ def sync_usage() -> None:
     assert_type(document.invoice_total, Optional[str])
     for item in document.items or []:
         assert_type(item.description, Optional[str])
+        assert_type(item.date, Optional[date])
+        assert_type(item.price_base_quantity, Optional[str])
+    assert_type(document.preceding_invoice_date, Optional[date])
 
     assert_type(client.documents.retrieve("doc_123"), DocumentResponse)
     assert_type(client.documents.send("doc_123", receiver_peppol_id="0208:0123456789"), DocumentResponse)
     assert_type(client.documents.attachments.list("doc_123"), List[DocumentAttachment])
+    lifecycle = client.documents.retrieve_lifecycle("doc_123")
+    assert_type(lifecycle, DocumentLifecycle)
+    for event in lifecycle.events:
+        assert_type(event.occurred_at, datetime)
+        assert_type(event.native_code, Optional[str])
     assert_type(client.me.retrieve(), MeRetrieveResponse)
     assert_type(client.with_options(timeout=5.0).me.retrieve().name, str)
     assert_type(client.stats.retrieve(aggregation="MONTH"), StatsRetrieveResponse)
