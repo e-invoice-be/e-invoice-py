@@ -10,6 +10,7 @@ from e_invoice_api.types import (
     DocumentAttachmentCreate,
     DocumentCreate,
     DocumentDirection,
+    DocumentLifecycle,
     DocumentResponse,
     DocumentTimeline,
     DocumentType,
@@ -26,6 +27,7 @@ Methods:
 - <code title="get /api/documents/{document_id}">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">retrieve</a>(document_id) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
 - <code title="delete /api/documents/{document_id}">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">delete</a>(document_id) -> <a href="./src/e_invoice_api/types/document_delete_response.py">DocumentDeleteResponse</a></code>
 - <code title="post /api/documents/pdf">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">create_from_pdf</a>(\*\*<a href="src/e_invoice_api/types/document_create_from_pdf_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_create_from_pdf_response.py">DocumentCreateFromPdfResponse</a></code>
+- <code title="get /api/documents/{document_id}/lifecycle">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">retrieve_lifecycle</a>(document_id) -> <a href="./src/e_invoice_api/types/document_lifecycle.py">DocumentLifecycle</a></code>
 - <code title="get /api/documents/{document_id}/timeline">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">retrieve_timeline</a>(document_id) -> <a href="./src/e_invoice_api/types/document_timeline.py">DocumentTimeline</a></code>
 - <code title="post /api/documents/{document_id}/send">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">send</a>(document_id, \*\*<a href="src/e_invoice_api/types/document_send_params.py">params</a>) -> <a href="./src/e_invoice_api/types/document_response.py">DocumentResponse</a></code>
 - <code title="post /api/documents/{document_id}/validate">client.documents.<a href="./src/e_invoice_api/resources/documents/documents.py">validate</a>(document_id) -> <a href="./src/e_invoice_api/types/ubl_document_validation.py">UblDocumentValidation</a></code>

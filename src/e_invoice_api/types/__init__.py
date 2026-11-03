@@ -13,6 +13,7 @@ from .document_timeline import DocumentTimeline as DocumentTimeline
 from .draft_list_params import DraftListParams as DraftListParams
 from .inbox_list_params import InboxListParams as InboxListParams
 from .document_direction import DocumentDirection as DocumentDirection
+from .document_lifecycle import DocumentLifecycle as DocumentLifecycle
 from .conversion_pdf_task import ConversionPdfTask as ConversionPdfTask
 from .mailbox_list_params import MailboxListParams as MailboxListParams
 from .webhook_test_params import WebhookTestParams as WebhookTestParams
