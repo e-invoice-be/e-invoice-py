@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.40.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.39.1...v1.40.0) (2026-11-03)
+
+
+### Features
+
+* **api:** sync the SDK with the live OpenAPI spec ([#80](https://github.com/e-invoice-be/e-invoice-py/issues/80)) ([5329619](https://github.com/e-invoice-be/e-invoice-py/commit/53296195e559e57656ed98de5bd81e390542d7d4))
+
 ## [1.39.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.39.0...v1.39.1) (2026-10-11)
 
 
