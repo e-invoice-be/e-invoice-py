@@ -2,6 +2,9 @@
 
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/e-invoice-api.svg?label=pypi%20(stable))](https://pypi.org/project/e-invoice-api/)
+[![CI](https://github.com/e-invoice-be/e-invoice-py/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/e-invoice-be/e-invoice-py/actions/workflows/ci.yml?query=branch%3Amain)
+[![Python versions](https://img.shields.io/pypi/pyversions/e-invoice-api.svg)](https://pypi.org/project/e-invoice-api/)
+[![License](https://img.shields.io/pypi/l/e-invoice-api.svg)](https://github.com/e-invoice-be/e-invoice-py/blob/main/LICENSE)
 
 The e-invoice.be Peppol library provides convenient access to the E Invoice REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
