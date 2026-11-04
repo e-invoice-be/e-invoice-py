@@ -1,6 +1,6 @@
 import re
 import json
-from typing import Any, List, Union, cast
+from typing import Any, List, Union, Iterator, AsyncIterator, cast
 from typing_extensions import Annotated
 
 import httpx
@@ -14,6 +14,7 @@ from e_invoice_api._response import (
     AsyncAPIResponse,
     BinaryAPIResponse,
     AsyncBinaryAPIResponse,
+    MissingStreamClassError,
     extract_response_type,
 )
 from e_invoice_api._streaming import Stream
@@ -282,3 +283,48 @@ async def test_async_response_parse_expect_model_union_non_json_content(async_cl
     obj = await response.parse(to=cast(Any, Union[CustomModel, OtherModel]))
     assert isinstance(obj, str)
     assert obj == "foo"
+
+
+def _sync_body() -> Iterator[bytes]:
+    yield b"foo"
+
+
+async def _async_body() -> AsyncIterator[bytes]:
+    yield b"foo"
+
+
+def test_response_parse_missing_stream_class_closes_response(client: EInvoice) -> None:
+    raw = httpx.Response(200, content=_sync_body())
+    response = APIResponse(
+        raw=raw,
+        client=client,
+        stream=True,
+        stream_cls=None,
+        cast_to=str,
+        options=FinalRequestOptions.construct(method="get", url="/foo"),
+    )
+    assert raw.is_closed is False
+
+    with pytest.raises(MissingStreamClassError):
+        response.parse()
+
+    assert raw.is_closed is True
+
+
+@pytest.mark.asyncio
+async def test_async_response_parse_missing_stream_class_closes_response(async_client: AsyncEInvoice) -> None:
+    raw = httpx.Response(200, content=_async_body())
+    response = AsyncAPIResponse(
+        raw=raw,
+        client=async_client,
+        stream=True,
+        stream_cls=None,
+        cast_to=str,
+        options=FinalRequestOptions.construct(method="get", url="/foo"),
+    )
+    assert raw.is_closed is False
+
+    with pytest.raises(MissingStreamClassError):
+        await response.parse()
+
+    assert raw.is_closed is True

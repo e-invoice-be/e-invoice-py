@@ -311,7 +311,12 @@ class APIResponse(BaseAPIResponse[R]):
         if not self._is_sse_stream:
             self.read()
 
-        parsed = self._parse(to=to)
+        try:
+            parsed = self._parse(to=to)
+        except MissingStreamClassError:
+            # Nothing will consume the stream, so release the connection.
+            self.close()
+            raise
         if is_given(self._options.post_parser):
             parsed = self._options.post_parser(parsed)
 
@@ -408,7 +413,12 @@ class AsyncAPIResponse(BaseAPIResponse[R]):
         if not self._is_sse_stream:
             await self.read()
 
-        parsed = self._parse(to=to)
+        try:
+            parsed = self._parse(to=to)
+        except MissingStreamClassError:
+            # Nothing will consume the stream, so release the connection.
+            await self.close()
+            raise
         if is_given(self._options.post_parser):
             parsed = self._options.post_parser(parsed)
 
