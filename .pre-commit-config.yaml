@@ -1,0 +1,45 @@
+# Optional pre-commit hooks for contributors: https://pre-commit.com/
+# Install them with `uvx pre-commit install`. CI does not use this file: it runs the same checks with
+# ./scripts/lint and ./scripts/check-repo.
+#
+# The ruff version must be the one in requirements-dev.lock (./scripts/check-repo checks it).
+# The local hooks run ./scripts/check-repo, which pins the versions of the other tools, and need uv.
+minimum_pre_commit_version: '3.2.0'
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.13
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        entry: ./scripts/check-repo shellcheck
+        language: system
+        files: ^(scripts|bin)/
+        pass_filenames: false
+      - id: actionlint
+        name: actionlint
+        entry: ./scripts/check-repo actionlint
+        language: system
+        files: ^\.github/workflows/
+        pass_filenames: false
+      - id: zizmor
+        name: zizmor
+        entry: ./scripts/check-repo zizmor
+        language: system
+        files: ^\.github/
+        pass_filenames: false
+      - id: typos
+        name: typos
+        entry: ./scripts/check-repo typos
+        language: system
+        pass_filenames: false
+      - id: validate-pyproject
+        name: validate-pyproject
+        entry: ./scripts/check-repo pyproject
+        language: system
+        files: ^pyproject\.toml$
+        pass_filenames: false

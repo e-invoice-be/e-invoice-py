@@ -36,6 +36,8 @@ certifi==2026.1.4
     # via httpx
 colorlog==6.10.1
     # via nox
+coverage==7.10.7
+    # via pytest-cov
 dependency-groups==1.3.1
     # via nox
 dirty-equals==0.11
@@ -86,6 +88,7 @@ platformdirs==4.4.0
     # via virtualenv
 pluggy==1.6.0
     # via pytest
+    # via pytest-cov
 propcache==0.4.1
     # via aiohttp
     # via yarl
@@ -98,8 +101,10 @@ pygments==2.19.2
     # via rich
 pytest==8.4.2
     # via pytest-asyncio
+    # via pytest-cov
     # via pytest-xdist
 pytest-asyncio==1.2.0
+pytest-cov==7.1.0
 pytest-xdist==3.8.0
 python-dateutil==2.9.0.post0
     # via time-machine
@@ -110,6 +115,7 @@ six==1.17.0
     # via python-dateutil
 time-machine==2.19.0
 tomli==2.4.0
+    # via coverage
     # via dependency-groups
     # via nox
     # via pytest

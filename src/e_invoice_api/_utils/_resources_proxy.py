@@ -17,8 +17,7 @@ class ResourcesProxy(LazyProxy[Any]):
     def __load__(self) -> Any:
         import importlib
 
-        mod = importlib.import_module("e_invoice_api.resources")
-        return mod
+        return importlib.import_module("e_invoice_api.resources")
 
 
 resources = ResourcesProxy().__as_proxied__()

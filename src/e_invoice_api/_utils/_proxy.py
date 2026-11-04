@@ -48,7 +48,7 @@ class LazyProxy(Generic[T], ABC):
     def __class__(self) -> type:
         try:
             proxied = self.__get_proxied__()
-        except Exception:
+        except Exception:  # noqa: BLE001 - any failure to load the proxied object falls back to the proxy type
             return type(self)
         if issubclass(type(proxied), LazyProxy):
             return type(proxied)

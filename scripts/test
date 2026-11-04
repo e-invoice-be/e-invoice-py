@@ -6,8 +6,24 @@ cd "$(dirname "$0")/.."
 
 export DEFER_PYDANTIC_BUILD=false
 
+# Set COVERAGE=1 to measure coverage across both runs. The `fail_under` threshold in
+# pyproject.toml is checked once, on the combined data, so run the whole suite when you use it.
+cov_args=()
+if [ "${COVERAGE:-}" = "1" ]; then
+  rm -rf .coverage .coverage.* coverage.xml htmlcov
+  # collect only, appending to one data file: the threshold applies to the combined data, not to each run
+  cov_args=(--cov --cov-append --cov-report= --cov-fail-under=0)
+fi
+
 echo "==> Running tests"
-rye run pytest "$@"
+rye run pytest "${cov_args[@]}" "$@"
 
 echo "==> Running Pydantic v1 tests"
-rye run nox -s test-pydantic-v1 -- "$@"
+rye run nox -s test-pydantic-v1 -- "${cov_args[@]}" "$@"
+
+if [ "${COVERAGE:-}" = "1" ]; then
+  echo "==> Coverage report"
+  rye run coverage xml --fail-under=0 -q
+  rye run coverage html --fail-under=0 -q
+  rye run coverage report
+fi

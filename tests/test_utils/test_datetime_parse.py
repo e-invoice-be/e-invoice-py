@@ -16,7 +16,7 @@ def create_tz(minutes: int) -> timezone:
 
 
 @pytest.mark.parametrize(
-    "value,result",
+    ("value", "result"),
     [
         # Valid inputs
         ("1494012444.883309", date(2017, 5, 5)),
@@ -51,7 +51,7 @@ def create_tz(minutes: int) -> timezone:
     ],
 )
 def test_date_parsing(value: Union[str, bytes, int, float], result: Union[date, Type[Exception]]) -> None:
-    if type(result) == type and issubclass(result, Exception):  # ty: ignore[invalid-argument-type]
+    if type(result) is type and issubclass(result, Exception):
         with pytest.raises(result):
             parse_date(value)
     else:
@@ -59,7 +59,7 @@ def test_date_parsing(value: Union[str, bytes, int, float], result: Union[date, 
 
 
 @pytest.mark.parametrize(
-    "value,result",
+    ("value", "result"),
     [
         # Valid inputs
         # values in seconds
@@ -103,7 +103,7 @@ def test_date_parsing(value: Union[str, bytes, int, float], result: Union[date, 
     ],
 )
 def test_datetime_parsing(value: Union[str, bytes, int, float], result: Union[datetime, Type[Exception]]) -> None:
-    if type(result) == type and issubclass(result, Exception):  # ty: ignore[invalid-argument-type]
+    if type(result) is type and issubclass(result, Exception):
         with pytest.raises(result):
             parse_datetime(value)
     else:

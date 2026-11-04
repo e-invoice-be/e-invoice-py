@@ -45,8 +45,7 @@ class Stream(Generic[_T]):
         return self._iterator.__next__()
 
     def __iter__(self) -> Iterator[_T]:
-        for item in self._iterator:
-            yield item
+        yield from self._iterator
 
     def _iter_events(self) -> Iterator[ServerSentEvent]:
         yield from self._decoder.iter_bytes(self.response.iter_bytes())
@@ -248,7 +247,7 @@ class SSEDecoder:
             yield data
 
     def decode(self, line: str) -> ServerSentEvent | None:
-        # See: https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation  # noqa: E501
+        # See: https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation
 
         if not line:
             if not self._event and not self._data and not self._last_event_id and self._retry is None:

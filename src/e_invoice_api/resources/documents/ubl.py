@@ -20,7 +20,7 @@ from ...types.documents import ubl_create_from_ubl_params
 from ...types.document_response import DocumentResponse
 from ...types.documents.ubl_get_response import UblGetResponse
 
-__all__ = ["UblResource", "AsyncUblResource"]
+__all__ = ["AsyncUblResource", "UblResource"]
 
 
 class UblResource(SyncAPIResource):

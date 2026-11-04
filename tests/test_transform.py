@@ -298,7 +298,7 @@ async def test_pydantic_mismatched_types(use_async: bool) -> None:
     if PYDANTIC_V1:
         params = await transform(model, Any, use_async)
     else:
-        with pytest.warns(UserWarning):
+        with pytest.warns(UserWarning, match="Pydantic serializer warnings"):
             params = await transform(model, Any, use_async)
     assert cast(Any, params) == {"foo": True}
 
@@ -310,7 +310,7 @@ async def test_pydantic_mismatched_object_type(use_async: bool) -> None:
     if PYDANTIC_V1:
         params = await transform(model, Any, use_async)
     else:
-        with pytest.warns(UserWarning):
+        with pytest.warns(UserWarning, match="Pydantic serializer warnings"):
             params = await transform(model, Any, use_async)
     assert cast(Any, params) == {"foo": {"hello": "world"}}
 

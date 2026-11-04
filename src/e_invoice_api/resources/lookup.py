@@ -19,7 +19,7 @@ from .._base_client import make_request_options
 from ..types.lookup_retrieve_response import LookupRetrieveResponse
 from ..types.lookup_retrieve_participants_response import LookupRetrieveParticipantsResponse
 
-__all__ = ["LookupResource", "AsyncLookupResource"]
+__all__ = ["AsyncLookupResource", "LookupResource"]
 
 
 class LookupResource(SyncAPIResource):

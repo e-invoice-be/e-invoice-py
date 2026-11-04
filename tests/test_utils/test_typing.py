@@ -31,7 +31,7 @@ def test_extract_type_var() -> None:
             index=0,
             generic_bases=cast("tuple[type, ...]", (BaseGeneric,)),
         )
-        == int
+        is int
     )
 
 
@@ -42,7 +42,7 @@ def test_extract_type_var_generic_subclass() -> None:
             index=0,
             generic_bases=cast("tuple[type, ...]", (BaseGeneric,)),
         )
-        == int
+        is int
     )
 
 
@@ -50,24 +50,24 @@ def test_extract_type_var_multiple() -> None:
     typ = BaseGenericMultipleTypeArgs[int, str, None]
 
     generic_bases = cast("tuple[type, ...]", (BaseGenericMultipleTypeArgs,))
-    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) == int
-    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) == str
-    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) == type(None)
+    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) is int
+    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) is str
+    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) is type(None)
 
 
 def test_extract_type_var_generic_subclass_multiple() -> None:
     typ = SubclassGenericMultipleTypeArgs[int, str, None]
 
     generic_bases = cast("tuple[type, ...]", (BaseGenericMultipleTypeArgs,))
-    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) == int
-    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) == str
-    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) == type(None)
+    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) is int
+    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) is str
+    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) is type(None)
 
 
 def test_extract_type_var_generic_subclass_different_ordering_multiple() -> None:
     typ = SubclassDifferentOrderGenericMultipleTypeArgs[int, str, None]
 
     generic_bases = cast("tuple[type, ...]", (BaseGenericMultipleTypeArgs,))
-    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) == int
-    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) == str
-    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) == type(None)
+    assert extract_type_var_from_base(typ, index=0, generic_bases=generic_bases) is int
+    assert extract_type_var_from_base(typ, index=1, generic_bases=generic_bases) is str
+    assert extract_type_var_from_base(typ, index=2, generic_bases=generic_bases) is type(None)

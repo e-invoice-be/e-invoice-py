@@ -115,6 +115,23 @@ run one file:
 $ ./scripts/test tests/api_resources/test_stats.py
 ```
 
+### Coverage
+
+CI measures test coverage with [coverage.py](https://coverage.readthedocs.io/) through `pytest-cov`. To measure it
+locally, run the whole suite with `COVERAGE=1`:
+
+```sh
+$ COVERAGE=1 ./scripts/test
+```
+
+This combines the data of the Pydantic v2 and v1 runs, prints a report of the files that are not fully covered, and
+writes `coverage.xml` and an HTML report to `htmlcov/`. The run fails when the total is below `fail_under` in the
+`[tool.coverage.report]` section of `pyproject.toml`. That threshold is a ratchet: when your change raises the total,
+raise `fail_under` to the new total rounded down. Do not lower it.
+
+Plain `pytest` and `./scripts/test` without `COVERAGE=1` do not measure coverage. To mark code that tests cannot
+reach, add `# pragma: no cover`. CI uploads the reports as the `coverage` artifact of the `test` job.
+
 ## Linting and formatting
 
 This repository uses [ruff](https://github.com/astral-sh/ruff) to lint and format the code, and
@@ -173,6 +190,43 @@ ty has a smaller check for comparisons, `in` tests and `isinstance` calls that a
 (pyright `reportUnnecessaryComparison`, `reportUnnecessaryContains`, `reportUnnecessaryIsInstance`; mypy
 `strict_equality`). The ty rule `redundant-condition-strict` reports them only when they are a condition, for
 example of an `if` statement, and not when the branch only raises an exception.
+
+### Checks of the other files
+
+`./scripts/check-repo` checks the files that are not Python code. Like `./scripts/typecheck-consumers`, it runs
+pinned versions of the tools with `uvx`, so it needs [uv](https://docs.astral.sh/uv/getting-started/installation/):
+
+- [shellcheck](https://www.shellcheck.net/) checks the shell scripts in `scripts/` and `bin/`.
+- [actionlint](https://github.com/rhysd/actionlint) checks the GitHub workflows, also with shellcheck for the `run:` steps.
+- [zizmor](https://docs.zizmor.sh/) audits the GitHub workflows for security problems. The configuration is in
+  `.github/zizmor.yml`. With a `GH_TOKEN` in the environment, it also runs the online audits, as CI does.
+- [typos](https://github.com/crate-ci/typos) checks the spelling. To accept a word, add it to `.typos.toml`.
+- [validate-pyproject](https://github.com/abravalheri/validate-pyproject) validates `pyproject.toml`.
+
+```sh
+$ ./scripts/check-repo
+# or only some of the checks
+$ ./scripts/check-repo shellcheck typos
+```
+
+`./scripts/check-dist` checks the built packages in `dist/` with `twine check --strict` and
+[check-wheel-contents](https://github.com/jwodder/check-wheel-contents). Run `rye build` first.
+
+The versions of the tools are in the scripts. CI runs both scripts.
+
+### Pre-commit hooks
+
+You can run ruff and the checks above on each commit with [pre-commit](https://pre-commit.com/). The hooks are
+optional:
+
+```sh
+$ uvx pre-commit install
+# or once on all files
+$ uvx pre-commit run --all-files
+```
+
+The ruff version in `.pre-commit-config.yaml` must be the one in `requirements-dev.lock`. `./scripts/check-repo`
+checks this, so update both when you update ruff.
 
 ## Publishing and releases
 

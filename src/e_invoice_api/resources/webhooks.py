@@ -22,7 +22,7 @@ from ..types.webhook_test_response import WebhookTestResponse
 from ..types.webhook_delete_response import WebhookDeleteResponse
 from ..types.webhook_retrieve_history_response import WebhookRetrieveHistoryResponse
 
-__all__ = ["WebhooksResource", "AsyncWebhooksResource"]
+__all__ = ["AsyncWebhooksResource", "WebhooksResource"]
 
 
 class WebhooksResource(SyncAPIResource):

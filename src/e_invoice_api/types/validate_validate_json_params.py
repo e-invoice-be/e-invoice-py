@@ -14,7 +14,6 @@ from .payment_detail_create_param import PaymentDetailCreateParam
 from .document_attachment_create_param import DocumentAttachmentCreateParam
 
 __all__ = [
-    "ValidateValidateJsonParams",
     "Allowance",
     "Charge",
     "Item",
@@ -22,6 +21,7 @@ __all__ = [
     "ItemCharge",
     "ItemItemAttribute",
     "TaxDetail",
+    "ValidateValidateJsonParams",
 ]
 
 

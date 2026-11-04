@@ -5,7 +5,7 @@ from pydantic import Field as FieldInfo
 
 from ._base_client import BasePage, PageInfo, BaseSyncPage, BaseAsyncPage
 
-__all__ = ["SyncDocumentsNumberPage", "AsyncDocumentsNumberPage"]
+__all__ = ["AsyncDocumentsNumberPage", "SyncDocumentsNumberPage"]
 
 _T = TypeVar("_T")
 

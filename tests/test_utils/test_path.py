@@ -8,7 +8,7 @@ from e_invoice_api._utils._path import path_template
 
 
 @pytest.mark.parametrize(
-    "template, kwargs, expected",
+    ("template", "kwargs", "expected"),
     [
         ("/v1/{id}", dict(id="abc"), "/v1/abc"),
         ("/v1/{a}/{b}", dict(a="x", b="y"), "/v1/x/y"),
@@ -66,7 +66,7 @@ def test_missing_kwarg_raises_key_error() -> None:
 
 
 @pytest.mark.parametrize(
-    "template, kwargs",
+    ("template", "kwargs"),
     [
         ("{a}/path", dict(a=".")),
         ("{a}/path", dict(a="..")),

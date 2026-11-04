@@ -11,7 +11,7 @@ from .document_direction import DocumentDirection
 from .unit_of_measure_code import UnitOfMeasureCode
 from .documents.document_attachment import DocumentAttachment
 
-__all__ = ["DocumentResponse", "Allowance", "Charge", "Item", "ItemItemAttribute", "PaymentDetail", "TaxDetail"]
+__all__ = ["Allowance", "Charge", "DocumentResponse", "Item", "ItemItemAttribute", "PaymentDetail", "TaxDetail"]
 
 
 class Allowance(BaseModel):

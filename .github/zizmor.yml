@@ -1,0 +1,8 @@
+# Configuration of zizmor: https://docs.zizmor.sh/configuration/
+# ./scripts/check-repo runs it.
+rules:
+  # This audit asks for the `$/` syntax for a reusable workflow of the same repository. The release
+  # workflow calls the publish workflow with `./`, which works, and actionlint does not know `$/`.
+  # We do not change how the release publishes to PyPI for a style suggestion.
+  self-repository:
+    disable: true

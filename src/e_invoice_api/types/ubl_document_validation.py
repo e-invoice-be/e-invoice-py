@@ -3,7 +3,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["UblDocumentValidation", "Issue"]
+__all__ = ["Issue", "UblDocumentValidation"]
 
 
 class Issue(BaseModel):

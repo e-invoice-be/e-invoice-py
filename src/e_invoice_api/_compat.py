@@ -19,26 +19,19 @@ PYDANTIC_V1: bool = pydantic.VERSION.startswith("1.")
 
 if TYPE_CHECKING:
 
-    def parse_date(value: date | StrBytesIntFloat) -> date:  # noqa: ARG001
-        ...
+    def parse_date(value: date | StrBytesIntFloat) -> date: ...
 
-    def parse_datetime(value: Union[datetime, StrBytesIntFloat]) -> datetime:  # noqa: ARG001
-        ...
+    def parse_datetime(value: Union[datetime, StrBytesIntFloat]) -> datetime: ...
 
-    def get_args(t: type[Any]) -> tuple[Any, ...]:  # noqa: ARG001
-        ...
+    def get_args(t: type[Any]) -> tuple[Any, ...]: ...
 
-    def is_union(tp: type[Any] | None) -> bool:  # noqa: ARG001
-        ...
+    def is_union(tp: type[Any] | None) -> bool: ...
 
-    def get_origin(t: type[Any]) -> type[Any] | None:  # noqa: ARG001
-        ...
+    def get_origin(t: type[Any]) -> type[Any] | None: ...
 
-    def is_literal_type(type_: type[Any]) -> bool:  # noqa: ARG001
-        ...
+    def is_literal_type(type_: type[Any]) -> bool: ...
 
-    def is_typeddict(type_: type[Any]) -> bool:  # noqa: ARG001
-        ...
+    def is_typeddict(type_: type[Any]) -> bool: ...
 
 else:
     # v1 re-exports
@@ -78,8 +71,7 @@ else:
 def parse_obj(model: type[_ModelT], value: object) -> _ModelT:
     if PYDANTIC_V1:
         return model.parse_obj(value)  # ty: ignore[deprecated]
-    else:
-        return model.model_validate(value)
+    return model.model_validate(value)
 
 
 def field_is_required(field: FieldInfo) -> bool:
@@ -199,7 +191,8 @@ if TYPE_CHECKING:
     # `@property` and we don't want to cause issues just to have
     # more helpful internal types.
 
-    class typed_cached_property(Generic[_T]):
+    # mirrors functools.cached_property
+    class typed_cached_property(Generic[_T]):  # noqa: N801
         func: Callable[[Any], _T]
         attrname: str | None
 

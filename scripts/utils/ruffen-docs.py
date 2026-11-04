@@ -10,11 +10,11 @@ import subprocess
 from typing import Match, Optional, Sequence, Generator, NamedTuple, cast
 
 MD_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)```\s*python\n)" r"(?P<code>.*?)" r"(?P<after>^(?P=indent)```\s*$)",
+    r"(?P<before>^(?P<indent> *)```\s*python\n)(?P<code>.*?)(?P<after>^(?P=indent)```\s*$)",
     re.DOTALL | re.MULTILINE,
 )
 MD_PYCON_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)```\s*pycon\n)" r"(?P<code>.*?)" r"(?P<after>^(?P=indent)```.*$)",
+    r"(?P<before>^(?P<indent> *)```\s*pycon\n)(?P<code>.*?)(?P<after>^(?P=indent)```.*$)",
     re.DOTALL | re.MULTILINE,
 )
 PYCON_PREFIX = ">>> "
@@ -39,7 +39,7 @@ def format_str(
     def _collect_error(match: Match[str]) -> Generator[None, None, None]:
         try:
             yield
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - collect every formatting error
             errors.append(CodeBlockError(match.start(), e))
 
     def _md_match(match: Match[str]) -> str:
@@ -136,8 +136,7 @@ def format_file(
         with open(filename, "w", encoding="UTF-8") as f:
             f.write(new_contents)
         return 0
-    else:
-        return 0
+    return 0
 
 
 def main(argv: Sequence[str] | None = None) -> int:

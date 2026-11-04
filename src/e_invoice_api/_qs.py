@@ -91,26 +91,25 @@ class Querystring:
                         ",".join(self._primitive_value_to_str(item) for item in value if item is not None),
                     ),
                 ]
-            elif array_format == "repeat":
+            if array_format == "repeat":
                 items = []
                 for item in value:
                     items.extend(self._stringify_item(key, item, opts))
                 return items
-            elif array_format == "indices":
+            if array_format == "indices":
                 items = []
                 for i, item in enumerate(value):
                     items.extend(self._stringify_item(f"{key}[{i}]", item, opts))
                 return items
-            elif array_format == "brackets":
+            if array_format == "brackets":
                 items = []
                 key = key + "[]"
                 for item in value:
                     items.extend(self._stringify_item(key, item, opts))
                 return items
-            else:
-                raise NotImplementedError(
-                    f"Unknown array_format value: {array_format}, choose from {', '.join(get_args(ArrayFormat))}"
-                )
+            raise NotImplementedError(
+                f"Unknown array_format value: {array_format}, choose from {', '.join(get_args(ArrayFormat))}"
+            )
 
         serialised = self._primitive_value_to_str(value)
         if not serialised:
@@ -121,9 +120,9 @@ class Querystring:
         # copied from httpx
         if value is True:
             return "true"
-        elif value is False:
+        if value is False:
             return "false"
-        elif value is None:
+        if value is None:
             return ""
         return str(value)
 

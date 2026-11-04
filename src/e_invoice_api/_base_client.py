@@ -251,8 +251,7 @@ class BaseSyncPage(BasePage[_T], Generic[_T]):
     @override
     def __iter__(self) -> Iterator[_T]:  # ty: ignore[invalid-method-override]
         for page in self.iter_pages():
-            for item in page._get_page_items():
-                yield item
+            yield from page._get_page_items()
 
     def iter_pages(self: SyncPageT) -> Iterator[SyncPageT]:
         page = self
@@ -411,7 +410,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             try:
                 body = json.loads(err_text)
                 err_msg = f"Error code: {response.status_code} - {body}"
-            except Exception:
+            except Exception:  # noqa: BLE001 - fall back to the raw text for any unparsable body
                 err_msg = err_text or f"Error code: {response.status_code}"
 
         return self._make_status_error(err_msg, body=body, response=response)
@@ -747,7 +746,8 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
         sleep_seconds = min(INITIAL_RETRY_DELAY * pow(2.0, nb_retries), MAX_RETRY_DELAY)
 
         # Apply some jitter, plus-or-minus half a second.
-        jitter = 1 - 0.25 * random()
+        # retry jitter, not security sensitive
+        jitter = 1 - 0.25 * random()  # noqa: S311
         timeout = sleep_seconds * jitter
         return timeout if timeout >= 0 else 0
 
@@ -817,7 +817,7 @@ class SyncHttpxClientWrapper(DefaultHttpxClient):
 
         try:
             self.close()
-        except Exception:
+        except Exception:  # noqa: BLE001, S110 - never raise from a finalizer
             pass
 
 
@@ -895,7 +895,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
 
     def _prepare_options(
         self,
-        options: FinalRequestOptions,  # noqa: ARG002
+        options: FinalRequestOptions,
     ) -> FinalRequestOptions:
         """Hook for mutating the given options"""
         return options
@@ -909,7 +909,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         This is useful for cases where you want to add certain headers based off of
         the request properties, e.g. `url`, `method` etc.
         """
-        return None
+        return
 
     @overload
     def request(
@@ -1049,7 +1049,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
 
             break
 
-        assert response is not None, "could not resolve response (should never happen)"
+        assert response is not None, "could not resolve response (should never happen)"  # noqa: S101
         return self._process_response(
             cast_to=cast_to,
             options=options,
@@ -1395,7 +1395,7 @@ class AsyncHttpxClientWrapper(DefaultAsyncHttpxClient):
         try:
             # TODO(someday): support non asyncio runtimes here
             asyncio.get_running_loop().create_task(self.aclose())
-        except Exception:
+        except Exception:  # noqa: BLE001, S110 - never raise from a finalizer
             pass
 
 
@@ -1470,7 +1470,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
 
     async def _prepare_options(
         self,
-        options: FinalRequestOptions,  # noqa: ARG002
+        options: FinalRequestOptions,
     ) -> FinalRequestOptions:
         """Hook for mutating the given options"""
         return options
@@ -1484,7 +1484,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         This is useful for cases where you want to add certain headers based off of
         the request properties, e.g. `url`, `method` etc.
         """
-        return None
+        return
 
     @overload
     async def request(
@@ -1624,7 +1624,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
 
             break
 
-        assert response is not None, "could not resolve response (should never happen)"
+        assert response is not None, "could not resolve response (should never happen)"  # noqa: S101
         return await self._process_response(
             cast_to=cast_to,
             options=options,

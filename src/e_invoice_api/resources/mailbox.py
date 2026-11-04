@@ -29,7 +29,7 @@ from ..pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.inbound_email import InboundEmail
 
-__all__ = ["MailboxResource", "AsyncMailboxResource"]
+__all__ = ["AsyncMailboxResource", "MailboxResource"]
 
 
 class MailboxResource(SyncAPIResource):

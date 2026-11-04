@@ -25,11 +25,9 @@ from .._response import (
 )
 from ..pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.document_type import DocumentType
-from ..types.document_state import DocumentState
 from ..types.document_response import DocumentResponse
 
-__all__ = ["OutboxResource", "AsyncOutboxResource"]
+__all__ = ["AsyncOutboxResource", "OutboxResource"]
 
 
 class OutboxResource(SyncAPIResource):

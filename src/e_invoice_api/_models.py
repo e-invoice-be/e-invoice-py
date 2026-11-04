@@ -202,7 +202,7 @@ class BaseModel(pydantic.BaseModel):
     @classmethod
     @override
     def construct(
-        __cls: Type[ModelT],
+        __cls: Type[ModelT],  # noqa: N804 - `cls` could clash with a field passed in `**values`
         _fields_set: set[str] | None = None,
         **values: object,
     ) -> ModelT:
@@ -436,7 +436,7 @@ class _EagerIterable(list[_T], Generic[_T]):
         )
 
     @staticmethod
-    def _validate(v: Iterable[_T], handler: "ValidatorFunctionWrapHandler") -> Any:
+    def _validate(v: Iterable[_T], handler: ValidatorFunctionWrapHandler) -> Any:
         original_type: type[Any] = type(v)
 
         # Normalize to list so list_schema can validate each item
@@ -479,10 +479,7 @@ def _construct_field(value: object, field: FieldInfo, key: str) -> object:
     if value is None:
         return field_get_default(field)
 
-    if PYDANTIC_V1:
-        type_ = cast(type, field.outer_type_)  # ty: ignore[unresolved-attribute]
-    else:
-        type_ = field.annotation
+    type_ = cast(type, field.outer_type_) if PYDANTIC_V1 else field.annotation  # ty: ignore[unresolved-attribute]
 
     if type_ is None:
         raise RuntimeError(f"Unexpected field type is None for {key}")
@@ -510,11 +507,7 @@ def _get_extra_fields_type(cls: type[pydantic.BaseModel]) -> type | None:
 def is_basemodel(type_: type) -> bool:
     """Returns whether or not the given type is either a `BaseModel` or a union of `BaseModel`"""
     if is_union(type_):
-        for variant in get_args(type_):
-            if is_basemodel(variant):
-                return True
-
-        return False
+        return any(is_basemodel(variant) for variant in get_args(type_))
 
     return is_basemodel_type(type_)
 
@@ -582,7 +575,7 @@ def construct_type(*, value: object, type_: object, metadata: Optional[List[Any]
         meta = get_args(type_)[1:]
         type_ = extract_type_arg(type_, 0)
     else:
-        meta = tuple()
+        meta = ()
 
     # we need to use the origin class for any types that are subscripted generics
     # e.g. Dict[str, object]
@@ -626,7 +619,7 @@ def construct_type(*, value: object, type_: object, metadata: Optional[List[Any]
 
         raise RuntimeError(f"Could not convert data into a valid instance of {type_}")
 
-    if origin == dict:
+    if origin is dict:
         if not is_mapping(value):
             return value
 
@@ -647,14 +640,14 @@ def construct_type(*, value: object, type_: object, metadata: Optional[List[Any]
 
             return cast(Any, type_).construct(**value)
 
-    if origin == list:
+    if origin is list:
         if not is_list(value):
             return value
 
         inner_type = args[0]  # List[inner_type]
         return [construct_type(value=entry, type_=inner_type) for entry in value]
 
-    if origin == float:
+    if origin is float:
         if isinstance(value, int):
             coerced = float(value)
             if coerced != value:

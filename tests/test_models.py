@@ -634,8 +634,7 @@ def test_forwards_compat_model_dump_json_method() -> None:
 def test_type_compat() -> None:
     # our model type can be assigned to Pydantic's model type
 
-    def takes_pydantic(model: pydantic.BaseModel) -> None:  # noqa: ARG001
-        ...
+    def takes_pydantic(model: pydantic.BaseModel) -> None: ...
 
     class OurModel(BaseModel):
         foo: Optional[str] = None
@@ -707,7 +706,7 @@ def test_discriminated_unions_unknown_variant() -> None:
     # just chooses the first variant
     assert isinstance(m, A)
     assert m.type == "c"
-    assert m.data == None
+    assert m.data is None
     assert m.new_thing == "bar"
 
 
@@ -969,15 +968,15 @@ def test_extra_properties() -> None:
 # during serialization, which can cause subsequent dumps to return empty data.
 # See: https://github.com/pydantic/pydantic/issues/9541
 @pytest.mark.parametrize(
-    "data, expected_validated",
+    ("data", "expected_validated"),
     [
         ([1, 2, 3], [1, 2, 3]),
         ((1, 2, 3), (1, 2, 3)),
-        (set([1, 2, 3]), set([1, 2, 3])),
+        ({1, 2, 3}, {1, 2, 3}),
         (iter([1, 2, 3]), [1, 2, 3]),
         ([], []),
         ((x for x in [1, 2, 3]), [1, 2, 3]),
-        (map(lambda x: x, [1, 2, 3]), [1, 2, 3]),
+        (map(int, [1, 2, 3]), [1, 2, 3]),
         (frozenset([1, 2, 3]), frozenset([1, 2, 3])),
         (deque([1, 2, 3]), deque([1, 2, 3])),
     ],

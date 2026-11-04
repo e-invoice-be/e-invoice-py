@@ -17,7 +17,7 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from e_invoice_api import EInvoice, AsyncEInvoice, APIResponseValidationError
+from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api._types import Omit
 from e_invoice_api._models import BaseModel, FinalRequestOptions
 from e_invoice_api._exceptions import EInvoiceError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -121,7 +121,7 @@ async def _make_async_iterator(iterable: Iterable[T], counter: Optional[Counter]
 
 def _get_open_connections(client: EInvoice | AsyncEInvoice) -> int:
     transport = client._client._transport
-    assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
+    assert isinstance(transport, (httpx.HTTPTransport, httpx.AsyncHTTPTransport))
 
     pool = transport._pool
     return len(pool._requests)  # ty: ignore[unresolved-attribute]
@@ -263,7 +263,7 @@ class TestEInvoice:
         copy_signature = inspect.signature(client.copy)
         exclude_params = {"transport", "proxies", "_strict_response_validation"}
 
-        for name in init_signature.parameters.keys():
+        for name in init_signature.parameters:
             if name in exclude_params:
                 continue
 
@@ -430,10 +430,8 @@ class TestEInvoice:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EInvoiceError):
-            with update_env(**{"E_INVOICE_API_KEY": Omit()}):
-                client2 = EInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(E_INVOICE_API_KEY=Omit()), pytest.raises(EInvoiceError):
+            EInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
 
     def test_default_query_option(self) -> None:
         client = EInvoice(
@@ -869,24 +867,24 @@ class TestEInvoice:
         non_strict_client.close()
 
     @pytest.mark.parametrize(
-        "remaining_retries,retry_after,timeout",
+        ("remaining_retries", "retry_after", "timeout"),
         [
-            [3, "20", 20],
-            [3, "0", 0.5],
-            [3, "-10", 0.5],
-            [3, "60", 60],
-            [3, "61", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:57 GMT", 20],
-            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:27:37 GMT", 60],
-            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5],
-            [3, "99999999999999999999999999999999999", 0.5],
-            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "", 0.5],
-            [2, "", 0.5 * 2.0],
-            [1, "", 0.5 * 4.0],
-            [-1100, "", 8],  # test large number potentially overflowing
+            (3, "20", 20),
+            (3, "0", 0.5),
+            (3, "-10", 0.5),
+            (3, "60", 60),
+            (3, "61", 0.5),
+            (3, "Fri, 29 Sep 2023 16:26:57 GMT", 20),
+            (3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5),
+            (3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5),
+            (3, "Fri, 29 Sep 2023 16:27:37 GMT", 60),
+            (3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5),
+            (3, "99999999999999999999999999999999999", 0.5),
+            (3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5),
+            (3, "", 0.5),
+            (2, "", 0.5 * 2.0),
+            (1, "", 0.5 * 4.0),
+            (-1100, "", 8),  # test large number potentially overflowing
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
@@ -1140,7 +1138,7 @@ class TestAsyncEInvoice:
         copy_signature = inspect.signature(async_client.copy)
         exclude_params = {"transport", "proxies", "_strict_response_validation"}
 
-        for name in init_signature.parameters.keys():
+        for name in init_signature.parameters:
             if name in exclude_params:
                 continue
 
@@ -1270,14 +1268,13 @@ class TestAsyncEInvoice:
             await client.close()
 
     def test_invalid_http_client(self) -> None:
-        with pytest.raises(TypeError, match="Invalid `http_client` arg"):
-            with httpx.Client() as http_client:
-                AsyncEInvoice(
-                    base_url=base_url,
-                    api_key=api_key,
-                    _strict_response_validation=True,
-                    http_client=cast(Any, http_client),
-                )
+        with pytest.raises(TypeError, match="Invalid `http_client` arg"), httpx.Client() as http_client:
+            AsyncEInvoice(
+                base_url=base_url,
+                api_key=api_key,
+                _strict_response_validation=True,
+                http_client=cast(Any, http_client),
+            )
 
     async def test_default_headers_option(self) -> None:
         test_client = AsyncEInvoice(
@@ -1309,10 +1306,8 @@ class TestAsyncEInvoice:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EInvoiceError):
-            with update_env(**{"E_INVOICE_API_KEY": Omit()}):
-                client2 = AsyncEInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(E_INVOICE_API_KEY=Omit()), pytest.raises(EInvoiceError):
+            AsyncEInvoice(base_url=base_url, api_key=None, _strict_response_validation=True)
 
     async def test_default_query_option(self) -> None:
         client = AsyncEInvoice(
@@ -1763,24 +1758,24 @@ class TestAsyncEInvoice:
         await non_strict_client.close()
 
     @pytest.mark.parametrize(
-        "remaining_retries,retry_after,timeout",
+        ("remaining_retries", "retry_after", "timeout"),
         [
-            [3, "20", 20],
-            [3, "0", 0.5],
-            [3, "-10", 0.5],
-            [3, "60", 60],
-            [3, "61", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:57 GMT", 20],
-            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:27:37 GMT", 60],
-            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5],
-            [3, "99999999999999999999999999999999999", 0.5],
-            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "", 0.5],
-            [2, "", 0.5 * 2.0],
-            [1, "", 0.5 * 4.0],
-            [-1100, "", 8],  # test large number potentially overflowing
+            (3, "20", 20),
+            (3, "0", 0.5),
+            (3, "-10", 0.5),
+            (3, "60", 60),
+            (3, "61", 0.5),
+            (3, "Fri, 29 Sep 2023 16:26:57 GMT", 20),
+            (3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5),
+            (3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5),
+            (3, "Fri, 29 Sep 2023 16:27:37 GMT", 60),
+            (3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5),
+            (3, "99999999999999999999999999999999999", 0.5),
+            (3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5),
+            (3, "", 0.5),
+            (2, "", 0.5 * 2.0),
+            (1, "", 0.5 * 4.0),
+            (-1100, "", 8),  # test large number potentially overflowing
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))

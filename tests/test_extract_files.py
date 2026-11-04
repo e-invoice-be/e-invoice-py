@@ -42,23 +42,23 @@ def test_top_level_file_array() -> None:
 
 
 @pytest.mark.parametrize(
-    "query,paths,expected",
+    ("query", "paths", "expected"),
     [
-        [
+        (
             {"foo": {"bar": "baz"}},
             [["foo", "<array>", "bar"]],
             [],
-        ],
-        [
+        ),
+        (
             {"foo": ["bar", "baz"]},
             [["foo", "bar"]],
             [],
-        ],
-        [
+        ),
+        (
             {"foo": {"bar": "baz"}},
             [["foo", "foo"]],
             [],
-        ],
+        ),
     ],
     ids=["dict expecting array", "array expecting dict", "unknown keys"],
 )
@@ -71,7 +71,7 @@ def test_ignores_incorrect_paths(
 
 
 @pytest.mark.parametrize(
-    "array_format,expected_top_level,expected_nested",
+    ("array_format", "expected_top_level", "expected_nested"),
     [
         ("brackets", [("files[]", b"a"), ("files[]", b"b")], [("items[][file]", b"a"), ("items[][file]", b"b")]),
         ("repeat", [("files", b"a"), ("files", b"b")], [("items[file]", b"a"), ("items[file]", b"b")]),
