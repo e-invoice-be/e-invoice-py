@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# Checks the files of the repository that are not Python code: the shell scripts, the GitHub workflows,
+# the spelling and pyproject.toml. These tools are not dev dependencies: `uvx` runs the pinned versions.
+#
+# Usage: ./scripts/check-repo [shellcheck|actionlint|zizmor|typos|pyproject|pre-commit]...
+# Without arguments, all checks run.
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+SHELLCHECK_VERSION=0.11.0.1
+ACTIONLINT_VERSION=1.7.12.25
+ZIZMOR_VERSION=1.32.0
+TYPOS_VERSION=1.52.0
+VALIDATE_PYPROJECT_VERSION=0.27
+
+check_shellcheck() {
+  # The shell scripts are the files in scripts/ and bin/ with a sh or bash shebang.
+  # A `while read` loop and not `mapfile`, because macOS has bash 3.2.
+  local scripts=() script
+  while IFS= read -r script; do
+    scripts+=("$script")
+  done < <(grep -rlE '^#!.*[/ ](bash|sh)$' scripts bin | sort)
+  echo "==> Checking ${#scripts[@]} shell scripts with shellcheck"
+  uvx --from "shellcheck-py==$SHELLCHECK_VERSION" shellcheck "${scripts[@]}"
+}
+
+check_actionlint() {
+  # actionlint also runs shellcheck on the `run:` steps when shellcheck is on the PATH.
+  echo "==> Checking the GitHub workflows with actionlint"
+  uvx --from "actionlint-py==$ACTIONLINT_VERSION" --with "shellcheck-py==$SHELLCHECK_VERSION" actionlint
+}
+
+check_zizmor() {
+  # Without a GitHub token (GH_TOKEN or GITHUB_TOKEN), zizmor runs only the offline audits.
+  # The configuration is in .github/zizmor.yml.
+  echo "==> Auditing the GitHub workflows with zizmor"
+  uvx "zizmor==$ZIZMOR_VERSION" .
+}
+
+check_typos() {
+  # The configuration is in .typos.toml.
+  echo "==> Checking the spelling with typos"
+  uvx "typos==$TYPOS_VERSION"
+}
+
+check_pyproject() {
+  echo "==> Validating pyproject.toml with validate-pyproject"
+  uvx --from "validate-pyproject[all]==$VALIDATE_PYPROJECT_VERSION" validate-pyproject pyproject.toml
+}
+
+check_pre-commit() {
+  # .pre-commit-config.yaml pins ruff separately. Make sure that it is the version in requirements-dev.lock.
+  echo "==> Checking that .pre-commit-config.yaml uses the ruff version of requirements-dev.lock"
+  local locked configured
+  locked="$(sed -n 's/^ruff==//p' requirements-dev.lock)"
+  configured="$(sed -n '/ruff-pre-commit/{n;s/^ *rev: v//p;}' .pre-commit-config.yaml)"
+  if [ "$locked" != "$configured" ]; then
+    echo "ruff is $locked in requirements-dev.lock, but v$configured in .pre-commit-config.yaml" >&2
+    return 1
+  fi
+}
+
+if [ "$#" -eq 0 ]; then
+  set -- shellcheck actionlint zizmor typos pyproject pre-commit
+fi
+
+for check in "$@"; do
+  case "$check" in
+    shellcheck | actionlint | zizmor | typos | pyproject | pre-commit) "check_$check" ;;
+    *)
+      echo "Unknown check: $check" >&2
+      exit 2
+      ;;
+  esac
+done

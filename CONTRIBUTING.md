@@ -174,6 +174,43 @@ ty has a smaller check for comparisons, `in` tests and `isinstance` calls that a
 `strict_equality`). The ty rule `redundant-condition-strict` reports them only when they are a condition, for
 example of an `if` statement, and not when the branch only raises an exception.
 
+### Checks of the other files
+
+`./scripts/check-repo` checks the files that are not Python code. Like `./scripts/typecheck-consumers`, it runs
+pinned versions of the tools with `uvx`, so it needs [uv](https://docs.astral.sh/uv/getting-started/installation/):
+
+- [shellcheck](https://www.shellcheck.net/) checks the shell scripts in `scripts/` and `bin/`.
+- [actionlint](https://github.com/rhysd/actionlint) checks the GitHub workflows, also with shellcheck for the `run:` steps.
+- [zizmor](https://docs.zizmor.sh/) audits the GitHub workflows for security problems. The configuration is in
+  `.github/zizmor.yml`. With a `GH_TOKEN` in the environment, it also runs the online audits, as CI does.
+- [typos](https://github.com/crate-ci/typos) checks the spelling. To accept a word, add it to `.typos.toml`.
+- [validate-pyproject](https://github.com/abravalheri/validate-pyproject) validates `pyproject.toml`.
+
+```sh
+$ ./scripts/check-repo
+# or only some of the checks
+$ ./scripts/check-repo shellcheck typos
+```
+
+`./scripts/check-dist` checks the built packages in `dist/` with `twine check --strict` and
+[check-wheel-contents](https://github.com/jwodder/check-wheel-contents). Run `rye build` first.
+
+The versions of the tools are in the scripts. CI runs both scripts.
+
+### Pre-commit hooks
+
+You can run ruff and the checks above on each commit with [pre-commit](https://pre-commit.com/). The hooks are
+optional:
+
+```sh
+$ uvx pre-commit install
+# or once on all files
+$ uvx pre-commit run --all-files
+```
+
+The ruff version in `.pre-commit-config.yaml` must be the one in `requirements-dev.lock`. `./scripts/check-repo`
+checks this, so update both when you update ruff.
+
 ## Publishing and releases
 
 Releases are automated. A GitHub workflow keeps a release pull request with the title `release: X.Y.Z` up to date

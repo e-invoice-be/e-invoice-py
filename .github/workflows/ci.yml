@@ -5,6 +5,9 @@ on:
       - '**'
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     timeout-minutes: 10
@@ -13,11 +16,13 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install Rye
         run: |
           curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+          echo "$HOME/.rye/shims" >> "$GITHUB_PATH"
         env:
           RYE_VERSION: '0.44.0'
           RYE_INSTALL_OPTION: '--yes'
@@ -28,6 +33,25 @@ jobs:
       - name: Run lints
         run: ./scripts/lint
 
+  check-repo:
+    timeout-minutes: 10
+    name: check-repo
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+
+      - name: Check the shell scripts, the workflows, the spelling and pyproject.toml
+        run: ./scripts/check-repo
+        env:
+          # zizmor runs its online audits (for example known vulnerable actions) with this token.
+          GH_TOKEN: ${{ github.token }}
+
   typecheck-consumers:
     timeout-minutes: 10
     name: typecheck-consumers
@@ -35,11 +59,13 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install Rye
         run: |
           curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+          echo "$HOME/.rye/shims" >> "$GITHUB_PATH"
         env:
           RYE_VERSION: '0.44.0'
           RYE_INSTALL_OPTION: '--yes'
@@ -62,11 +88,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install Rye
         run: |
           curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+          echo "$HOME/.rye/shims" >> "$GITHUB_PATH"
         env:
           RYE_VERSION: '0.44.0'
           RYE_INSTALL_OPTION: '--yes'
@@ -77,6 +105,12 @@ jobs:
       - name: Run build
         run: rye build
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+
+      - name: Check the distributions
+        run: ./scripts/check-dist
+
   test:
     timeout-minutes: 10
     name: test
@@ -84,11 +118,13 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install Rye
         run: |
           curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+          echo "$HOME/.rye/shims" >> "$GITHUB_PATH"
         env:
           RYE_VERSION: '0.44.0'
           RYE_INSTALL_OPTION: '--yes'

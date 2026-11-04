@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Checks the built distributions in dist/ (run `rye build` first): the metadata and the README
+# render on PyPI, and the wheel has the expected files. `uvx` runs the pinned versions.
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+TWINE_VERSION=7.0.0
+CHECK_WHEEL_CONTENTS_VERSION=0.6.3
+
+shopt -s nullglob
+dists=(dist/*.whl dist/*.tar.gz)
+wheels=(dist/*.whl)
+if [ "${#wheels[@]}" -eq 0 ]; then
+  echo "There is no wheel in dist/. Run \`rye build\` first." >&2
+  exit 1
+fi
+
+echo "==> Checking the distributions with twine"
+uvx "twine==$TWINE_VERSION" check --strict "${dists[@]}"
+
+echo "==> Checking the wheel contents with check-wheel-contents"
+uvx "check-wheel-contents==$CHECK_WHEEL_CONTENTS_VERSION" "${wheels[@]}"

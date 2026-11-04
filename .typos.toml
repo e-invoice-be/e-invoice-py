@@ -1,0 +1,25 @@
+# Configuration of the spell checker typos: https://github.com/crate-ci/typos
+# ./scripts/check-repo runs it.
+
+[files]
+# Also check .github/ and the other dotfiles.
+ignore-hidden = false
+extend-exclude = [
+  ".git",
+  "*.lock",
+  # The changelog is built from commit messages, which we do not rewrite.
+  "CHANGELOG.md",
+]
+
+[default]
+extend-ignore-re = [
+  # The code lists of the API (UN/ECE units of measure, UNTDID charge reasons and similar)
+  # are string literals of two or three capital letters and digits, for example "CAF" or "HAA".
+  '"[A-Z0-9]{2,3}"',
+]
+
+[default.extend-words]
+# The mixed-case "TrUe" in the test of the bool parsing.
+Ue = "Ue"
+# Part of the pydantic-core function name `plain_serializer_function_ser_schema`.
+ser = "ser"
