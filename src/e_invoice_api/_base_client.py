@@ -410,7 +410,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             try:
                 body = json.loads(err_text)
                 err_msg = f"Error code: {response.status_code} - {body}"
-            except Exception:  # noqa: BLE001 - fall back to the raw text for any unparseable body
+            except Exception:  # noqa: BLE001 - fall back to the raw text for any unparsable body
                 err_msg = err_text or f"Error code: {response.status_code}"
 
         return self._make_status_error(err_msg, body=body, response=response)
