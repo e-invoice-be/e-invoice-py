@@ -293,15 +293,19 @@ class TestOutbox:
     @pytest.mark.respx(base_url=base_url)
     @parametrize_endpoints
     def test_streaming_response(self, respx_mock: MockRouter, client: EInvoice, method: str, path: str) -> None:
-        respx_mock.get(path).mock(return_value=httpx.Response(200, json=page_payload([DRAFT_DOCUMENT])))
+        route = respx_mock.get(path).mock(return_value=httpx.Response(200, json=page_payload([DRAFT_DOCUMENT])))
 
-        with deprecation_of(method), getattr(client.outbox.with_streaming_response, method)() as response:
-            assert not response.is_closed
-            assert response.http_request.url.path == path
-            page = response.parse()
-            assert isinstance(page, SyncDocumentsNumberPage)
-            assert len(page.items) == 1
-            assert_draft_document(page.items[0])
+        with deprecation_of(method):
+            stream = getattr(client.outbox.with_streaming_response, method)()
+            assert route.call_count == 0
+
+            with stream as response:
+                assert not response.is_closed
+                assert response.http_request.url.path == path
+                page = response.parse()
+                assert isinstance(page, SyncDocumentsNumberPage)
+                assert len(page.items) == 1
+                assert_draft_document(page.items[0])
 
         assert response.is_closed is True
 
@@ -451,10 +455,12 @@ class TestAsyncOutbox:
     async def test_streaming_response(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice, method: str, path: str
     ) -> None:
-        respx_mock.get(path).mock(return_value=httpx.Response(200, json=page_payload([DRAFT_DOCUMENT])))
+        route = respx_mock.get(path).mock(return_value=httpx.Response(200, json=page_payload([DRAFT_DOCUMENT])))
 
         with deprecation_of(method):
             stream = getattr(async_client.outbox.with_streaming_response, method)()
+            assert route.call_count == 0
+
             async with stream as response:
                 assert not response.is_closed
                 assert response.http_request.url.path == path
