@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.40.1](https://github.com/e-invoice-be/e-invoice-py/compare/v1.40.0...v1.40.1) (2026-11-04)
+
+
+### Bug Fixes
+
+* close the response when stream=True has no stream class ([#97](https://github.com/e-invoice-be/e-invoice-py/issues/97)) ([3bc86be](https://github.com/e-invoice-be/e-invoice-py/commit/3bc86be0bf0954600f57f5d626930af9a89f6d63)), closes [#95](https://github.com/e-invoice-be/e-invoice-py/issues/95)
+
+
+### Chores
+
+* add stricter linting, coverage and repo checks ([#82](https://github.com/e-invoice-be/e-invoice-py/issues/82)) ([a727a71](https://github.com/e-invoice-be/e-invoice-py/commit/a727a719d9632ece463cc03175510559dd6374d9))
+* remove the unused _utils/_reflection.py ([#91](https://github.com/e-invoice-be/e-invoice-py/issues/91)) ([0fcebbc](https://github.com/e-invoice-be/e-invoice-py/commit/0fcebbcc8cc45550b2bd8dcaed5654b2c7339333))
+
+
+### Documentation
+
+* add CI, Python version and license badges to the README ([#84](https://github.com/e-invoice-be/e-invoice-py/issues/84)) ([fc97ecc](https://github.com/e-invoice-be/e-invoice-py/commit/fc97ecc7db1f75f4f7b6680dbcf80253898fc8de))
+
 ## [1.40.0](https://github.com/e-invoice-be/e-invoice-py/compare/v1.39.1...v1.40.0) (2026-11-03)
 
 
