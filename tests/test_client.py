@@ -9,6 +9,7 @@ import inspect
 import dataclasses
 import tracemalloc
 from typing import Any, Union, TypeVar, Callable, Iterable, Iterator, Optional, Coroutine, cast
+from datetime import date
 from unittest import mock
 from typing_extensions import Literal, AsyncIterator, override
 
@@ -17,7 +18,7 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from e_invoice_api import EInvoice, AsyncEInvoice
+from e_invoice_api import EInvoice, AsyncEInvoice, DefaultAioHttpClient
 from e_invoice_api._types import Omit
 from e_invoice_api._models import BaseModel, FinalRequestOptions
 from e_invoice_api._exceptions import EInvoiceError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -862,6 +863,27 @@ class TestEInvoice:
 
         response = non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)
+
+        strict_client.close()
+        non_strict_client.close()
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_loose_validation_constructs_json_models(self, respx_mock: MockRouter) -> None:
+        class Model(BaseModel):
+            name: str
+            day: date
+
+        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"name": {"no": "pe"}, "day": "2026-01-31"}))
+
+        strict_client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        with pytest.raises(APIResponseValidationError):
+            strict_client.get("/foo", cast_to=Model)
+
+        non_strict_client = EInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        parsed = non_strict_client.get("/foo", cast_to=Model)
+        assert isinstance(parsed, Model)
+        assert parsed.name == {"no": "pe"}
+        assert parsed.day == date(2026, 1, 31)
 
         strict_client.close()
         non_strict_client.close()
@@ -1756,6 +1778,38 @@ class TestAsyncEInvoice:
 
         await strict_client.close()
         await non_strict_client.close()
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_loose_validation_constructs_json_models(self, respx_mock: MockRouter) -> None:
+        class Model(BaseModel):
+            name: str
+            day: date
+
+        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"name": {"no": "pe"}, "day": "2026-01-31"}))
+
+        strict_client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        with pytest.raises(APIResponseValidationError):
+            await strict_client.get("/foo", cast_to=Model)
+
+        non_strict_client = AsyncEInvoice(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        parsed = await non_strict_client.get("/foo", cast_to=Model)
+        assert isinstance(parsed, Model)
+        assert parsed.name == {"no": "pe"}
+        assert parsed.day == date(2026, 1, 31)
+
+        await strict_client.close()
+        await non_strict_client.close()
+
+    @pytest.mark.parametrize("async_client", [{"http_client": "aiohttp"}], indirect=True)
+    async def test_aiohttp_client_uses_sdk_http_defaults(self, async_client: AsyncEInvoice) -> None:
+        http_client = async_client._client
+        assert isinstance(http_client, DefaultAioHttpClient)
+        assert http_client.follow_redirects is True
+        assert http_client.timeout == DEFAULT_TIMEOUT
+
+        request = async_client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        timeout = httpx.Timeout(**request.extensions["timeout"])
+        assert timeout == DEFAULT_TIMEOUT
 
     @pytest.mark.parametrize(
         ("remaining_retries", "retry_after", "timeout"),
