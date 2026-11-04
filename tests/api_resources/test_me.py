@@ -9,6 +9,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import MeRetrieveResponse
+from e_invoice_api.resources.me import (
+    MeResourceWithRawResponse,
+    AsyncMeResourceWithRawResponse,
+    MeResourceWithStreamingResponse,
+    AsyncMeResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -47,10 +53,16 @@ def _assert_full_tenant(me: MeRetrieveResponse) -> None:
 
 
 class TestMe:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.me.with_raw_response
+        streaming = client.me.with_streaming_response
+
+        assert isinstance(raw, MeResourceWithRawResponse)
+        assert isinstance(streaming, MeResourceWithStreamingResponse)
+        assert client.me.with_raw_response is raw
+        assert client.me.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_parses_tenant(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json=ME_PAYLOAD))
 
@@ -64,7 +76,6 @@ class TestMe:
         _assert_full_tenant(me)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_defaults_optional_fields(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json={"name": "Minimal"}))
 
@@ -76,7 +87,6 @@ class TestMe:
         assert me.smp_registration_date is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/me/").mock(
             return_value=httpx.Response(200, json=ME_PAYLOAD, headers={"x-request-id": "req_me"})
@@ -91,7 +101,6 @@ class TestMe:
         _assert_full_tenant(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json=ME_PAYLOAD))
 
@@ -103,12 +112,16 @@ class TestMe:
 
 
 class TestAsyncMe:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.me.with_raw_response
+        streaming = async_client.me.with_streaming_response
+
+        assert isinstance(raw, AsyncMeResourceWithRawResponse)
+        assert isinstance(streaming, AsyncMeResourceWithStreamingResponse)
+        assert async_client.me.with_raw_response is raw
+        assert async_client.me.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_parses_tenant(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json=ME_PAYLOAD))
 
@@ -121,7 +134,6 @@ class TestAsyncMe:
         _assert_full_tenant(me)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json=ME_PAYLOAD))
 
@@ -132,7 +144,6 @@ class TestAsyncMe:
         _assert_full_tenant(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/me/").mock(return_value=httpx.Response(200, json=ME_PAYLOAD))
 

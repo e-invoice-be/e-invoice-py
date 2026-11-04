@@ -12,6 +12,12 @@ from tests.utils import serve_pages, page_payload, sent_queries
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import DocumentResponse
 from e_invoice_api.pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
+from e_invoice_api.resources.drafts import (
+    DraftsResourceWithRawResponse,
+    AsyncDraftsResourceWithRawResponse,
+    DraftsResourceWithStreamingResponse,
+    AsyncDraftsResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -36,6 +42,15 @@ FAILED_CREDIT_NOTE: Dict[str, Any] = {
 
 
 class TestDrafts:
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.drafts.with_raw_response
+        streaming = client.drafts.with_streaming_response
+
+        assert isinstance(raw, DraftsResourceWithRawResponse)
+        assert isinstance(streaming, DraftsResourceWithStreamingResponse)
+        assert client.drafts.with_raw_response is raw
+        assert client.drafts.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     def test_list_parses_page_of_documents(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/drafts/").mock(
@@ -135,6 +150,15 @@ class TestDrafts:
 
 
 class TestAsyncDrafts:
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.drafts.with_raw_response
+        streaming = async_client.drafts.with_streaming_response
+
+        assert isinstance(raw, AsyncDraftsResourceWithRawResponse)
+        assert isinstance(streaming, AsyncDraftsResourceWithStreamingResponse)
+        assert async_client.drafts.with_raw_response is raw
+        assert async_client.drafts.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     async def test_list_parses_page_and_sends_filters(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice

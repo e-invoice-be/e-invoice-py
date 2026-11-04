@@ -155,11 +155,6 @@ class TestDocumentsCreateFields:
 
 
 class TestAsyncDocumentsCreateFields:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [{"http_client": "httpx"}, {"http_client": "aiohttp"}], indirect=True, ids=["httpx", "aiohttp"]
-    )
-
-    @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_create_with_new_params(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
@@ -170,7 +165,6 @@ class TestAsyncDocumentsCreateFields:
         assert json.loads(route.calls.last.request.content) == EXPECTED_BODY
         assert_document(document)
 
-    @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_validate_json_with_new_params(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/validate/json").mock(

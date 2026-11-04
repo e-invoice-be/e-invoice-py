@@ -261,6 +261,29 @@ class TestAsyncUbl:
         assert_document(document)
 
     @pytest.mark.respx(base_url=base_url)
+    async def test_create_from_ubl_accepts_raw_bytes(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        route = respx_mock.post("/api/documents/ubl").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
+
+        await async_client.documents.ubl.create_from_ubl(file=UBL_BYTES)
+
+        request = route.calls.last.request
+        assert request.headers["content-type"].startswith("multipart/form-data; boundary=")
+        body = request.read()
+        assert b'Content-Disposition: form-data; name="file"; filename="upload"' in body
+        assert UBL_BYTES in body
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_create_from_ubl_validation_error(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        respx_mock.post("/api/documents/ubl").mock(
+            return_value=httpx.Response(422, json={"detail": [{"msg": "Invalid UBL", "loc": ["body", "file"]}]})
+        )
+
+        with pytest.raises(UnprocessableEntityError) as exc_info:
+            await async_client.with_options(max_retries=0).documents.ubl.create_from_ubl(file=("bad.xml", b"<nope/>"))
+
+        assert exc_info.value.status_code == 422
+
+    @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_create_from_ubl(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/ubl").mock(
             return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD, headers={"x-request-id": "req_2"})
@@ -301,6 +324,19 @@ class TestAsyncUbl:
         assert route.calls.last.request.method == "GET"
         assert route.calls.last.request.url.query == b""
         assert_ubl_info(info)
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_get_parses_minimal_metadata(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        respx_mock.get("/api/documents/doc_456/ubl").mock(return_value=httpx.Response(200, json=MINIMAL_UBL_INFO))
+
+        info = await async_client.documents.ubl.get("doc_456")
+
+        assert info.id == "ubl_02"
+        assert info.file_name == "draft.xml"
+        assert info.file_hash is None
+        assert info.file_size is None
+        assert info.signed_url is None
+        assert info.validated_at is None
 
     async def test_get_rejects_empty_document_id(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):

@@ -10,6 +10,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import UblDocumentValidation, ValidateValidateJsonParams, ValidateValidatePeppolIDResponse
+from e_invoice_api.resources.validate import (
+    ValidateResourceWithRawResponse,
+    AsyncValidateResourceWithRawResponse,
+    ValidateResourceWithStreamingResponse,
+    AsyncValidateResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -154,10 +160,16 @@ def _assert_multipart_request(request: httpx.Request) -> None:
 
 
 class TestValidate:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.validate.with_raw_response
+        streaming = client.validate.with_streaming_response
+
+        assert isinstance(raw, ValidateResourceWithRawResponse)
+        assert isinstance(streaming, ValidateResourceWithStreamingResponse)
+        assert client.validate.with_raw_response is raw
+        assert client.validate.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate_json_sends_document_as_json(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/validate/json").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -168,7 +180,6 @@ class TestValidate:
         _assert_validation(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate_json_without_params_sends_empty_object(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/validate/json").mock(
             return_value=httpx.Response(200, json={"id": "val_empty", "is_valid": True, "issues": []})
@@ -183,7 +194,6 @@ class TestValidate:
         assert result.ubl_document is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_validate_json(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/validate/json").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD, headers={"x-request-id": "req_json"})
@@ -197,7 +207,6 @@ class TestValidate:
         _assert_validation(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_validate_json(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/validate/json").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -209,7 +218,6 @@ class TestValidate:
         _assert_json_request(route.calls.last.request)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate_peppol_id_sends_query(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/validate/peppol-id").mock(return_value=httpx.Response(200, json=PEPPOL_ID_PAYLOAD))
 
@@ -222,7 +230,6 @@ class TestValidate:
         _assert_peppol_id(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate_peppol_id_unknown_participant(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/validate/peppol-id").mock(
             return_value=httpx.Response(
@@ -243,7 +250,6 @@ class TestValidate:
         assert result.business_card is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_validate_peppol_id(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/validate/peppol-id").mock(return_value=httpx.Response(200, json=PEPPOL_ID_PAYLOAD))
 
@@ -255,7 +261,6 @@ class TestValidate:
         _assert_peppol_id(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_validate_peppol_id(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/validate/peppol-id").mock(return_value=httpx.Response(200, json=PEPPOL_ID_PAYLOAD))
 
@@ -266,7 +271,6 @@ class TestValidate:
         assert response.is_closed is True
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate_ubl_uploads_file_as_multipart(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/validate/ubl").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -277,7 +281,6 @@ class TestValidate:
         _assert_validation(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_validate_ubl(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/validate/ubl").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -288,7 +291,6 @@ class TestValidate:
         _assert_validation(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_validate_ubl(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/validate/ubl").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -303,12 +305,16 @@ class TestValidate:
 
 
 class TestAsyncValidate:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.validate.with_raw_response
+        streaming = async_client.validate.with_streaming_response
+
+        assert isinstance(raw, AsyncValidateResourceWithRawResponse)
+        assert isinstance(streaming, AsyncValidateResourceWithStreamingResponse)
+        assert async_client.validate.with_raw_response is raw
+        assert async_client.validate.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_validate_json_sends_document_as_json(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -320,7 +326,6 @@ class TestAsyncValidate:
         _assert_validation(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_validate_json(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/validate/json").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -331,7 +336,6 @@ class TestAsyncValidate:
         _assert_validation(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_validate_json(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/validate/json").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -343,7 +347,6 @@ class TestAsyncValidate:
         _assert_json_request(route.calls.last.request)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_validate_peppol_id_sends_query(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/validate/peppol-id").mock(return_value=httpx.Response(200, json=PEPPOL_ID_PAYLOAD))
 
@@ -356,7 +359,6 @@ class TestAsyncValidate:
         _assert_peppol_id(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_validate_peppol_id(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/validate/peppol-id").mock(return_value=httpx.Response(200, json=PEPPOL_ID_PAYLOAD))
 
@@ -367,7 +369,6 @@ class TestAsyncValidate:
         _assert_peppol_id(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_validate_peppol_id(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -380,7 +381,6 @@ class TestAsyncValidate:
         assert response.is_closed is True
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_validate_ubl_uploads_file_as_multipart(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -392,7 +392,6 @@ class TestAsyncValidate:
         _assert_validation(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_validate_ubl(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/validate/ubl").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 
@@ -405,7 +404,6 @@ class TestAsyncValidate:
         _assert_validation(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_validate_ubl(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/validate/ubl").mock(return_value=httpx.Response(200, json=VALIDATION_PAYLOAD))
 

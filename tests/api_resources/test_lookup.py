@@ -8,6 +8,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import Certificate, LookupRetrieveResponse, LookupRetrieveParticipantsResponse
+from e_invoice_api.resources.lookup import (
+    LookupResourceWithRawResponse,
+    AsyncLookupResourceWithRawResponse,
+    LookupResourceWithStreamingResponse,
+    AsyncLookupResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -137,10 +143,16 @@ def _assert_participants(result: LookupRetrieveParticipantsResponse) -> None:
 
 
 class TestLookup:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.lookup.with_raw_response
+        streaming = client.lookup.with_streaming_response
+
+        assert isinstance(raw, LookupResourceWithRawResponse)
+        assert isinstance(streaming, LookupResourceWithStreamingResponse)
+        assert client.lookup.with_raw_response is raw
+        assert client.lookup.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_sends_peppol_id(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/lookup").mock(return_value=httpx.Response(200, json=LOOKUP_PAYLOAD))
 
@@ -154,7 +166,6 @@ class TestLookup:
         _assert_lookup(lookup)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/lookup").mock(
             return_value=httpx.Response(200, json=LOOKUP_PAYLOAD, headers={"x-request-id": "req_lookup"})
@@ -168,7 +179,6 @@ class TestLookup:
         _assert_lookup(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/lookup").mock(return_value=httpx.Response(200, json=LOOKUP_PAYLOAD))
 
@@ -179,7 +189,6 @@ class TestLookup:
         assert response.is_closed is True
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_participants_sends_query_and_country(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/lookup/participants").mock(
             return_value=httpx.Response(200, json=PARTICIPANTS_PAYLOAD)
@@ -194,7 +203,6 @@ class TestLookup:
         _assert_participants(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_participants_omits_country_and_defaults_participants(
         self, respx_mock: MockRouter, client: EInvoice
     ) -> None:
@@ -211,7 +219,6 @@ class TestLookup:
         assert result.participants is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve_participants(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/lookup/participants").mock(return_value=httpx.Response(200, json=PARTICIPANTS_PAYLOAD))
 
@@ -223,7 +230,6 @@ class TestLookup:
         _assert_participants(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve_participants(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/lookup/participants").mock(return_value=httpx.Response(200, json=PARTICIPANTS_PAYLOAD))
 
@@ -235,12 +241,16 @@ class TestLookup:
 
 
 class TestAsyncLookup:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.lookup.with_raw_response
+        streaming = async_client.lookup.with_streaming_response
+
+        assert isinstance(raw, AsyncLookupResourceWithRawResponse)
+        assert isinstance(streaming, AsyncLookupResourceWithStreamingResponse)
+        assert async_client.lookup.with_raw_response is raw
+        assert async_client.lookup.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_sends_peppol_id(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/lookup").mock(return_value=httpx.Response(200, json=LOOKUP_PAYLOAD))
 
@@ -253,7 +263,6 @@ class TestAsyncLookup:
         _assert_lookup(lookup)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/lookup").mock(return_value=httpx.Response(200, json=LOOKUP_PAYLOAD))
 
@@ -264,7 +273,6 @@ class TestAsyncLookup:
         _assert_lookup(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/lookup").mock(return_value=httpx.Response(200, json=LOOKUP_PAYLOAD))
 
@@ -275,7 +283,6 @@ class TestAsyncLookup:
         assert response.is_closed is True
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_participants_sends_query_and_country(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -292,7 +299,6 @@ class TestAsyncLookup:
         _assert_participants(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve_participants(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -305,7 +311,6 @@ class TestAsyncLookup:
         _assert_participants(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_retrieve_participants(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:

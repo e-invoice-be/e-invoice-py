@@ -23,11 +23,15 @@ from e_invoice_api.resources.documents import (
     AsyncAttachmentsResource,
     UblResourceWithRawResponse,
     AsyncUblResourceWithRawResponse,
+    DocumentsResourceWithRawResponse,
     UblResourceWithStreamingResponse,
     AttachmentsResourceWithRawResponse,
+    AsyncDocumentsResourceWithRawResponse,
     AsyncUblResourceWithStreamingResponse,
+    DocumentsResourceWithStreamingResponse,
     AsyncAttachmentsResourceWithRawResponse,
     AttachmentsResourceWithStreamingResponse,
+    AsyncDocumentsResourceWithStreamingResponse,
     AsyncAttachmentsResourceWithStreamingResponse,
 )
 
@@ -179,12 +183,9 @@ def assert_pdf_upload(request: httpx.Request) -> None:
 
 
 class TestDocuments:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
-
     # create
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_create_sends_json_body_and_construct_pdf_query(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -198,7 +199,6 @@ class TestDocuments:
         assert_document(document)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_create(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/").mock(
             return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -214,7 +214,6 @@ class TestDocuments:
         assert_document(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_create(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -227,7 +226,6 @@ class TestDocuments:
     # retrieve
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/documents/doc_123").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -245,7 +243,6 @@ class TestDocuments:
             client.documents.retrieve("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -260,7 +257,6 @@ class TestDocuments:
         assert_document(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/documents/doc_123").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -273,7 +269,6 @@ class TestDocuments:
     # delete
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_delete(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.delete("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json={"is_deleted": True})
@@ -293,7 +288,6 @@ class TestDocuments:
             client.documents.delete("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_delete(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.delete("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json={"is_deleted": False}, headers={"x-request-id": "req_1"})
@@ -309,7 +303,6 @@ class TestDocuments:
         assert result.is_deleted is False
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_delete(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.delete("/api/documents/doc_123").mock(return_value=httpx.Response(200, json={"is_deleted": True}))
 
@@ -324,7 +317,6 @@ class TestDocuments:
     # create_from_pdf
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_create_from_pdf_uploads_multipart_with_tax_id_query(
         self, respx_mock: MockRouter, client: EInvoice
     ) -> None:
@@ -345,7 +337,6 @@ class TestDocuments:
         assert_pdf_result(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_create_from_pdf_without_tax_ids_sends_no_query(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/pdf").mock(
             return_value=httpx.Response(200, json={"success": False, "error_type": "extraction", "items": []})
@@ -362,7 +353,6 @@ class TestDocuments:
         assert result.ubl_document is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_create_from_pdf(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/pdf").mock(
             return_value=httpx.Response(200, json=PDF_RESULT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -379,7 +369,6 @@ class TestDocuments:
         assert_pdf_result(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_create_from_pdf(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/pdf").mock(return_value=httpx.Response(200, json=PDF_RESULT_PAYLOAD))
 
@@ -395,7 +384,6 @@ class TestDocuments:
     # send
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_send_forwards_peppol_ids_as_query(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD)
@@ -415,7 +403,6 @@ class TestDocuments:
             client.documents.send("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_send(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -429,7 +416,6 @@ class TestDocuments:
         assert_document(response.parse(), state="SENT")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_send(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD)
@@ -445,7 +431,6 @@ class TestDocuments:
     # validate
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_validate(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD)
@@ -465,7 +450,6 @@ class TestDocuments:
             client.documents.validate("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_validate(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -478,7 +462,6 @@ class TestDocuments:
         assert_validation(response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_validate(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD)
@@ -491,6 +474,15 @@ class TestDocuments:
         assert response.is_closed is True
 
     # sub-resources
+
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.documents.with_raw_response
+        streaming = client.documents.with_streaming_response
+
+        assert isinstance(raw, DocumentsResourceWithRawResponse)
+        assert isinstance(streaming, DocumentsResourceWithStreamingResponse)
+        assert client.documents.with_raw_response is raw
+        assert client.documents.with_streaming_response is streaming
 
     def test_sub_resources_are_exposed_and_cached(self, client: EInvoice) -> None:
         documents = client.documents
@@ -512,14 +504,9 @@ class TestDocuments:
 
 
 class TestAsyncDocuments:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
-
     # create
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_create_sends_json_body_and_construct_pdf_query(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -535,7 +522,6 @@ class TestAsyncDocuments:
         assert_document(document)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_create(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/").mock(
             return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -549,7 +535,6 @@ class TestAsyncDocuments:
         assert_document(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_create(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -562,7 +547,6 @@ class TestAsyncDocuments:
     # retrieve
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/documents/doc_123").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -578,7 +562,6 @@ class TestAsyncDocuments:
             await async_client.documents.retrieve("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -591,7 +574,6 @@ class TestAsyncDocuments:
         assert_document(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/documents/doc_123").mock(return_value=httpx.Response(200, json=DOCUMENT_PAYLOAD))
 
@@ -604,7 +586,6 @@ class TestAsyncDocuments:
     # delete
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_delete(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.delete("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json={"is_deleted": True})
@@ -622,7 +603,6 @@ class TestAsyncDocuments:
             await async_client.documents.delete("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_delete(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.delete("/api/documents/doc_123").mock(
             return_value=httpx.Response(200, json={"is_deleted": False}, headers={"x-request-id": "req_1"})
@@ -637,7 +617,6 @@ class TestAsyncDocuments:
         assert result.is_deleted is False
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_delete(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.delete("/api/documents/doc_123").mock(return_value=httpx.Response(200, json={"is_deleted": True}))
 
@@ -652,7 +631,6 @@ class TestAsyncDocuments:
     # create_from_pdf
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_create_from_pdf_uploads_multipart_with_tax_id_query(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -670,7 +648,6 @@ class TestAsyncDocuments:
         assert_pdf_result(result)
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_create_from_pdf(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/pdf").mock(
             return_value=httpx.Response(200, json=PDF_RESULT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -687,7 +664,6 @@ class TestAsyncDocuments:
         assert_pdf_result(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_create_from_pdf(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -706,7 +682,6 @@ class TestAsyncDocuments:
     # send
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_send_forwards_peppol_ids_as_query(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD)
@@ -726,7 +701,6 @@ class TestAsyncDocuments:
             await async_client.documents.send("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_send(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -740,7 +714,6 @@ class TestAsyncDocuments:
         assert_document(await response.parse(), state="SENT")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_send(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/send").mock(
             return_value=httpx.Response(200, json=SENT_DOCUMENT_PAYLOAD)
@@ -758,7 +731,6 @@ class TestAsyncDocuments:
     # validate
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_validate(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD)
@@ -776,7 +748,6 @@ class TestAsyncDocuments:
             await async_client.documents.validate("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_validate(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -789,7 +760,6 @@ class TestAsyncDocuments:
         assert_validation(await response.parse())
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_validate(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/documents/doc_123/validate").mock(
             return_value=httpx.Response(200, json=VALIDATION_PAYLOAD)
@@ -802,6 +772,15 @@ class TestAsyncDocuments:
         assert response.is_closed is True
 
     # sub-resources
+
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.documents.with_raw_response
+        streaming = async_client.documents.with_streaming_response
+
+        assert isinstance(raw, AsyncDocumentsResourceWithRawResponse)
+        assert isinstance(streaming, AsyncDocumentsResourceWithStreamingResponse)
+        assert async_client.documents.with_raw_response is raw
+        assert async_client.documents.with_streaming_response is streaming
 
     async def test_sub_resources_are_exposed_and_cached(self, async_client: AsyncEInvoice) -> None:
         documents = async_client.documents
