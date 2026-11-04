@@ -139,7 +139,7 @@ data_file = ".coverage"
 [tool.coverage.report]
 # a ratchet: the combined (pydantic v2 + v1) total of `COVERAGE=1 ./scripts/test`, rounded down.
 # Raise it when coverage goes up; never lower it to make a change pass.
-fail_under = 89
+fail_under = 91
 show_missing = true
 skip_covered = true
 skip_empty = true
