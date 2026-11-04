@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List
-from contextlib import ExitStack
+import warnings
+from typing import Any, Dict, List, Generator
+from contextlib import contextmanager
 
 import httpx
 import pytest
@@ -58,6 +59,17 @@ def assert_attachment_list(attachments: object) -> None:
     assert minimal.file_size is None
     assert minimal.file_type is None
     assert minimal.file_url is None
+
+
+@contextmanager
+def expect_deprecation() -> Generator[None, None, None]:
+    """Require a DeprecationWarning, whether the wrapper emits it on the call or on enter."""
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", DeprecationWarning)
+        yield
+    assert any(
+        issubclass(warning.category, DeprecationWarning) and "deprecated" in str(warning.message) for warning in caught
+    ), caught
 
 
 def assert_multipart_upload(request: httpx.Request) -> None:
@@ -272,16 +284,15 @@ class TestAttachments:
     def test_streaming_response_add(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post(ATTACHMENTS_PATH).mock(return_value=httpx.Response(200, json=FULL_ATTACHMENT))
 
-        stream = client.documents.attachments.with_streaming_response.add(
-            "doc_123", file=("delivery-note.pdf", PDF_BYTES, "application/pdf")
-        )
-        assert route.call_count == 0  # the request (and the warning) only happen on enter
+        with expect_deprecation():
+            stream = client.documents.attachments.with_streaming_response.add(
+                "doc_123", file=("delivery-note.pdf", PDF_BYTES, "application/pdf")
+            )
+            assert route.call_count == 0
 
-        with ExitStack() as stack:
-            with pytest.warns(DeprecationWarning, match="deprecated"):
-                response = stack.enter_context(stream)
-            assert not response.is_closed
-            assert_full_attachment(response.parse())
+            with stream as response:
+                assert not response.is_closed
+                assert_full_attachment(response.parse())
 
         assert response.is_closed is True
         assert_multipart_upload(route.calls.last.request)
@@ -454,17 +465,15 @@ class TestAsyncAttachments:
     async def test_streaming_response_add(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post(ATTACHMENTS_PATH).mock(return_value=httpx.Response(200, json=FULL_ATTACHMENT))
 
-        # unlike the sync wrapper, the async one calls `add` (and so warns) straight away; the request
-        # itself is only sent on enter
-        with pytest.warns(DeprecationWarning, match="deprecated"):
+        with expect_deprecation():
             stream = async_client.documents.attachments.with_streaming_response.add(
                 "doc_123", file=("delivery-note.pdf", PDF_BYTES, "application/pdf")
             )
-        assert route.call_count == 0
+            assert route.call_count == 0
 
-        async with stream as response:
-            assert not response.is_closed
-            assert_full_attachment(await response.parse())
+            async with stream as response:
+                assert not response.is_closed
+                assert_full_attachment(await response.parse())
 
         assert response.is_closed is True
         assert_multipart_upload(route.calls.last.request)

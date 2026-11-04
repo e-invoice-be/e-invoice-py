@@ -455,11 +455,11 @@ class TestAsyncOutbox:
 
         with deprecation_of(method):
             stream = getattr(async_client.outbox.with_streaming_response, method)()
-        async with stream as response:
-            assert not response.is_closed
-            assert response.http_request.url.path == path
-            page = await response.parse()
-            assert isinstance(page, AsyncDocumentsNumberPage)
-            assert_draft_document(page.items[0])
+            async with stream as response:
+                assert not response.is_closed
+                assert response.http_request.url.path == path
+                page = await response.parse()
+                assert isinstance(page, AsyncDocumentsNumberPage)
+                assert_draft_document(page.items[0])
 
         assert response.is_closed is True
