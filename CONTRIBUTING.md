@@ -115,6 +115,23 @@ run one file:
 $ ./scripts/test tests/api_resources/test_stats.py
 ```
 
+### Coverage
+
+CI measures test coverage with [coverage.py](https://coverage.readthedocs.io/) through `pytest-cov`. To measure it
+locally, run the whole suite with `COVERAGE=1`:
+
+```sh
+$ COVERAGE=1 ./scripts/test
+```
+
+This combines the data of the Pydantic v2 and v1 runs, prints a report of the files that are not fully covered, and
+writes `coverage.xml` and an HTML report to `htmlcov/`. The run fails when the total is below `fail_under` in the
+`[tool.coverage.report]` section of `pyproject.toml`. That threshold is a ratchet: when your change raises the total,
+raise `fail_under` to the new total rounded down. Do not lower it.
+
+Plain `pytest` and `./scripts/test` without `COVERAGE=1` do not measure coverage. To mark code that tests cannot
+reach, add `# pragma: no cover`. CI uploads the reports as the `coverage` artifact of the `test` job.
+
 ## Linting and formatting
 
 This repository uses [ruff](https://github.com/astral-sh/ruff) to lint and format the code, and

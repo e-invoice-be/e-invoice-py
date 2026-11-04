@@ -56,6 +56,7 @@ dev-dependencies = [
     "importlib-metadata>=6.7.0",
     "rich>=13.7.1",
     "pytest-xdist>=3.6.1",
+    "pytest-cov>=7.0.0",
 ]
 
 [tool.rye.scripts]
@@ -127,6 +128,37 @@ asyncio_default_fixture_loop_scope = "session"
 filterwarnings = [
   "error"
 ]
+
+[tool.coverage.run]
+source = ["e_invoice_api"]
+branch = true
+# one data file per process (pytest-xdist workers, the pydantic v1 nox session); `coverage combine` merges them
+parallel = true
+data_file = ".coverage"
+
+[tool.coverage.report]
+# a ratchet: the combined (pydantic v2 + v1) total of `COVERAGE=1 ./scripts/test`, rounded down.
+# Raise it when coverage goes up; never lower it to make a change pass.
+fail_under = 82
+show_missing = true
+skip_covered = true
+skip_empty = true
+precision = 2
+exclude_also = [
+  "if TYPE_CHECKING:",
+  "if typing\\.TYPE_CHECKING:",
+  "@(typing\\.)?overload",
+  "raise NotImplementedError",
+  "^\\s*\\.\\.\\.\\s*$",
+  "assert_never\\(",
+  "if __name__ == .__main__.:",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.ty.environment]
 python-version = "3.9"
