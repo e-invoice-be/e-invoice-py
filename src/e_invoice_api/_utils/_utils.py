@@ -89,7 +89,7 @@ def _extract_items(
         from .._files import assert_is_file_content
 
         # We have exhausted the path, return the entry we found.
-        assert flattened_key is not None
+        assert flattened_key is not None  # noqa: S101
 
         if is_list(obj):
             files: list[tuple[str, FileTypes]] = []
@@ -108,10 +108,7 @@ def _extract_items(
         try:
             # Remove the field if there are no more dict keys in the path,
             # only "<array>" traversal markers or end.
-            if all(p == "<array>" for p in path[index:]):
-                item = obj.pop(key)
-            else:
-                item = obj[key]
+            item = obj.pop(key) if all(p == "<array>" for p in path[index:]) else obj[key]
         except KeyError:
             # Key was not present in the dictionary, this is not indicative of an error
             # as the given path may not point to a required field. We also do not want
@@ -128,7 +125,7 @@ def _extract_items(
             flattened_key=flattened_key,
             array_format=array_format,
         )
-    elif is_list(obj):
+    if is_list(obj):
         if key != "<array>":
             return []
 
@@ -267,11 +264,11 @@ def required_args(*variants: Sequence[str]) -> Callable[[CallableT], CallableT]:
                         f"but {len(args)} were given"
                     ) from None
 
-            for key in kwargs.keys():
+            for key in kwargs:
                 given_params.add(key)
 
             for variant in variants:
-                matches = all((param in given_params for param in variant))
+                matches = all(param in given_params for param in variant)
                 if matches:
                     break
             else:  # no break
@@ -281,7 +278,7 @@ def required_args(*variants: Sequence[str]) -> Callable[[CallableT], CallableT]:
                     )
                     msg = f"Missing required arguments; Expected either {variations} arguments to be given"
                 else:
-                    assert len(variants) > 0
+                    assert len(variants) > 0  # noqa: S101
 
                     # TODO: this error message is not deterministic
                     missing = list(set(variants[0]) - given_params)

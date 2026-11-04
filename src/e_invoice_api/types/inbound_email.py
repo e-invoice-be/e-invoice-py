@@ -3,7 +3,7 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["InboundEmail", "Attachment"]
+__all__ = ["Attachment", "InboundEmail"]
 
 
 class Attachment(BaseModel):

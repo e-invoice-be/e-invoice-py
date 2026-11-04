@@ -20,7 +20,7 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.stats_retrieve_response import StatsRetrieveResponse
 
-__all__ = ["StatsResource", "AsyncStatsResource"]
+__all__ = ["AsyncStatsResource", "StatsResource"]
 
 
 class StatsResource(SyncAPIResource):

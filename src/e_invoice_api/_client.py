@@ -46,14 +46,14 @@ if TYPE_CHECKING:
     from .resources.documents.documents import DocumentsResource, AsyncDocumentsResource
 
 __all__ = [
-    "Timeout",
-    "Transport",
-    "ProxiesTypes",
-    "RequestOptions",
-    "EInvoice",
+    "AsyncClient",
     "AsyncEInvoice",
     "Client",
-    "AsyncClient",
+    "EInvoice",
+    "ProxiesTypes",
+    "RequestOptions",
+    "Timeout",
+    "Transport",
 ]
 
 
@@ -99,7 +99,7 @@ class EInvoice(SyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("E_INVOICE_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.e-invoice.be"
+            base_url = "https://api.e-invoice.be"
 
         custom_headers_env = os.environ.get("E_INVOICE_CUSTOM_HEADERS")
         if custom_headers_env is not None:
@@ -341,7 +341,7 @@ class AsyncEInvoice(AsyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("E_INVOICE_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.e-invoice.be"
+            base_url = "https://api.e-invoice.be"
 
         custom_headers_env = os.environ.get("E_INVOICE_CUSTOM_HEADERS")
         if custom_headers_env is not None:

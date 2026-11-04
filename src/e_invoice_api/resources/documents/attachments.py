@@ -22,7 +22,7 @@ from ...types.documents.document_attachment import DocumentAttachment
 from ...types.documents.attachment_list_response import AttachmentListResponse
 from ...types.documents.attachment_delete_response import AttachmentDeleteResponse
 
-__all__ = ["AttachmentsResource", "AsyncAttachmentsResource"]
+__all__ = ["AsyncAttachmentsResource", "AttachmentsResource"]
 
 
 class AttachmentsResource(SyncAPIResource):

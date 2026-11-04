@@ -185,19 +185,19 @@ class BaseAPIResponse(Generic[R]):
             return cast(R, None)
 
         response = self.http_response
-        if cast_to == str:
+        if cast_to is str:
             return cast(R, response.text)
 
-        if cast_to == bytes:
+        if cast_to is bytes:
             return cast(R, response.content)
 
-        if cast_to == int:
+        if cast_to is int:
             return cast(R, int(response.text))
 
-        if cast_to == float:
+        if cast_to is float:
             return cast(R, float(response.text))
 
-        if cast_to == bool:
+        if cast_to is bool:
             return cast(R, response.text.lower() == "true")
 
         if origin == APIResponse:
@@ -210,7 +210,7 @@ class BaseAPIResponse(Generic[R]):
             # the response class ourselves but that is something that should be supported directly in httpx
             # as it would be easy to incorrectly construct the Response object due to the multitude of arguments.
             if cast_to != httpx.Response:
-                raise ValueError(f"Subclasses of httpx.Response cannot be passed to `cast_to`")
+                raise ValueError("Subclasses of httpx.Response cannot be passed to `cast_to`")
             return cast(R, response)
 
         if inspect.isclass(origin) and not issubclass(origin, BaseModel) and issubclass(origin, pydantic.BaseModel):
@@ -220,9 +220,9 @@ class BaseAPIResponse(Generic[R]):
 
         if (
             cast_to is not object
-            and not origin is list
-            and not origin is dict
-            and not origin is Union
+            and origin is not list
+            and origin is not dict
+            and origin is not Union
             and not issubclass(origin, BaseModel)
         ):
             raise RuntimeError(
@@ -236,7 +236,7 @@ class BaseAPIResponse(Generic[R]):
             if is_basemodel(cast_to):
                 try:
                     data = response.json()
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     log.debug("Could not read JSON from response data due to %s - %s", type(exc), exc)
                 else:
                     return self._client._process_response_data(  # ty: ignore[invalid-return-type]
@@ -351,21 +351,18 @@ class APIResponse(BaseAPIResponse[R]):
 
         This automatically handles gzip, deflate and brotli encoded responses.
         """
-        for chunk in self.http_response.iter_bytes(chunk_size):
-            yield chunk
+        yield from self.http_response.iter_bytes(chunk_size)
 
     def iter_text(self, chunk_size: int | None = None) -> Iterator[str]:
         """A str-iterator over the decoded response content
         that handles both gzip, deflate, etc but also detects the content's
         string encoding.
         """
-        for chunk in self.http_response.iter_text(chunk_size):
-            yield chunk
+        yield from self.http_response.iter_text(chunk_size)
 
     def iter_lines(self) -> Iterator[str]:
         """Like `iter_text()` but will only yield chunks for each line"""
-        for chunk in self.http_response.iter_lines():
-            yield chunk
+        yield from self.http_response.iter_lines()
 
 
 class AsyncAPIResponse(BaseAPIResponse[R]):
@@ -559,7 +556,8 @@ class MissingStreamClassError(TypeError):
         )
 
 
-class StreamAlreadyConsumed(EInvoiceError):
+# public name, kept for backwards compatibility
+class StreamAlreadyConsumed(EInvoiceError):  # noqa: N818
     """
     Attempted to read or stream content, but the content has already
     been streamed.

@@ -153,36 +153,87 @@ redundant-condition-strict = "error"
 [tool.ruff]
 line-length = 120
 output-format = "grouped"
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.format]
 docstring-code-format = true
 
 [tool.ruff.lint]
 select = [
+  # pycodestyle errors and warnings
+  "E",
+  "W",
+  # pyflakes
+  "F",
   # isort
   "I",
   # bugbear rules
   "B",
-  # remove unused imports
-  "F401",
   # check for missing future annotations
   "FA102",
-  # bare except statements
-  "E722",
   # unused arguments
   "ARG",
   # print statements
   "T201",
   "T203",
+  # debugger breakpoints
+  "T10",
   # misuse of typing.TYPE_CHECKING
   "TC004",
   # import rules
   "TID251",
+  # pyupgrade
+  "UP",
+  # flake8-simplify
+  "SIM",
+  # flake8-comprehensions
+  "C4",
+  # flake8-pie
+  "PIE",
+  # flake8-return
+  "RET",
+  # ruff-specific rules
+  "RUF",
+  # perflint
+  "PERF",
+  # flake8-pytest-style
+  "PT",
+  # implicit string concatenation
+  "ISC",
+  # pygrep-hooks (blanket noqa / type: ignore)
+  "PGH",
+  # logging misuse
+  "LOG",
+  "G",
+  # naive datetimes
+  "DTZ",
+  # flake8-bandit (security)
+  "S",
+  # tryceratops
+  "TRY",
+  # pep8-naming
+  "N",
+  # blind except
+  "BLE",
 ]
 ignore = [
   # mutable defaults
   "B006",
+  # line length is left to `ruff format`; long docstrings and URLs come from the API spec
+  "E501",
+  # `X | None` / `X | Y` annotations are evaluated at runtime by pydantic and break on Python 3.9,
+  # even with `from __future__ import annotations`; keep `Optional` / `Union` everywhere for consistency
+  "UP007",
+  "UP045",
+  # keep the `typing.List` / `typing.Dict` style used throughout the SDK and its models
+  "UP006",
+  "UP035",
+  # SDK errors carry descriptive messages; a dedicated exception class per message is overkill
+  "TRY003",
+  # explicit try/except/pass reads clearer (and is cheaper) than contextlib.suppress
+  "SIM105",
+  # try/except in a loop is intentional (fallback parsing) and zero-cost on Python 3.11+
+  "PERF203",
 ]
 unfixable = [
   # disable auto fix for print statements
@@ -204,6 +255,13 @@ known-first-party = ["e_invoice_api", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "bin/**.py" = ["T201", "T203"]
-"scripts/**.py" = ["T201", "T203"]
-"tests/**.py" = ["T201", "T203"]
+# dev scripts shell out to trusted, fixed commands
+"scripts/**.py" = ["T201", "T203", "S603", "S607"]
+# tests use bare asserts, naive datetimes, fixed fake credentials, `dict(...)` payloads and
+# deliberately unbounded httpx timeouts; local type aliases/constants are named like globals
+"tests/**.py" = ["T201", "T203", "S101", "S105", "S106", "S113", "DTZ", "C408", "N806"]
 "examples/**.py" = ["T201", "T203"]
+# lenient, never-failing model construction; `!= False` checks guard pydantic v2-only kwargs in the v1 shim
+"src/e_invoice_api/_models.py" = ["BLE001", "S110", "S112", "E712"]
+# port of pydantic v1's datetime parsing, which deliberately returns naive datetimes when no offset is given
+"src/e_invoice_api/_utils/_datetime_parse.py" = ["DTZ"]

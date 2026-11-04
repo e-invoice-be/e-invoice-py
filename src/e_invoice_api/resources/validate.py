@@ -27,16 +27,12 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.currency_code import CurrencyCode
-from ..types.document_type import DocumentType
-from ..types.document_state import DocumentState
-from ..types.document_direction import DocumentDirection
 from ..types.ubl_document_validation import UblDocumentValidation
 from ..types.payment_detail_create_param import PaymentDetailCreateParam
 from ..types.document_attachment_create_param import DocumentAttachmentCreateParam
 from ..types.validate_validate_peppol_id_response import ValidateValidatePeppolIDResponse
 
-__all__ = ["ValidateResource", "AsyncValidateResource"]
+__all__ = ["AsyncValidateResource", "ValidateResource"]
 
 
 class ValidateResource(SyncAPIResource):

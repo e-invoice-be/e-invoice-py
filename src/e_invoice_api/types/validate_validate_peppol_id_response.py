@@ -3,7 +3,7 @@ from datetime import date
 
 from .._models import BaseModel
 
-__all__ = ["ValidateValidatePeppolIDResponse", "BusinessCard"]
+__all__ = ["BusinessCard", "ValidateValidatePeppolIDResponse"]
 
 
 class BusinessCard(BaseModel):

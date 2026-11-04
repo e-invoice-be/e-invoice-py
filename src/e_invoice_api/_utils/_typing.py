@@ -23,7 +23,7 @@ def is_annotated_type(typ: type) -> bool:
 
 
 def is_list_type(typ: type) -> bool:
-    return (get_origin(typ) or typ) == list
+    return (get_origin(typ) or typ) is list
 
 
 def is_sequence_type(typ: type) -> bool:
@@ -46,7 +46,7 @@ def is_required_type(typ: type) -> bool:
 
 
 def is_typevar(typ: type) -> bool:
-    return type(typ) == TypeVar
+    return type(typ) is TypeVar
 
 
 _TYPE_ALIAS_TYPES: tuple[type[typing_extensions.TypeAliasType], ...] = (typing_extensions.TypeAliasType,)

@@ -5,14 +5,14 @@ from typing_extensions import Literal
 import httpx
 
 __all__ = [
-    "BadRequestError",
     "AuthenticationError",
-    "PermissionDeniedError",
-    "NotFoundError",
+    "BadRequestError",
     "ConflictError",
-    "UnprocessableEntityError",
-    "RateLimitError",
     "InternalServerError",
+    "NotFoundError",
+    "PermissionDeniedError",
+    "RateLimitError",
+    "UnprocessableEntityError",
 ]
 
 
@@ -35,7 +35,7 @@ class APIError(EInvoiceError):
     If there was no response associated with this error then it will be `None`.
     """
 
-    def __init__(self, message: str, request: httpx.Request, *, body: object | None) -> None:  # noqa: ARG002
+    def __init__(self, message: str, request: httpx.Request, *, body: object | None) -> None:
         super().__init__(message)
         self.request = request
         self.message = message

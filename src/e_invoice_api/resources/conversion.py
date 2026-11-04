@@ -20,7 +20,7 @@ from .._base_client import make_request_options
 from ..types.conversion_pdf_task import ConversionPdfTask
 from ..types.document_create_from_pdf_response import DocumentCreateFromPdfResponse
 
-__all__ = ["ConversionResource", "AsyncConversionResource"]
+__all__ = ["AsyncConversionResource", "ConversionResource"]
 
 
 class ConversionResource(SyncAPIResource):

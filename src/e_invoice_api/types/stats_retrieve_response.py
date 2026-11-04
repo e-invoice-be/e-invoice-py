@@ -4,7 +4,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["StatsRetrieveResponse", "Action"]
+__all__ = ["Action", "StatsRetrieveResponse"]
 
 
 class Action(BaseModel):

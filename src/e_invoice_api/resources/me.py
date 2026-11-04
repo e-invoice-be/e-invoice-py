@@ -14,7 +14,7 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.me_retrieve_response import MeRetrieveResponse
 
-__all__ = ["MeResource", "AsyncMeResource"]
+__all__ = ["AsyncMeResource", "MeResource"]
 
 
 class MeResource(SyncAPIResource):

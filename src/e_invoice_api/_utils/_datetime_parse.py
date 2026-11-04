@@ -44,7 +44,7 @@ def _get_numeric(value: StrBytesIntFloat, native_expected_type: str) -> Union[No
 def _from_unix_seconds(seconds: Union[int, float]) -> datetime:
     if seconds > MAX_NUMBER:
         return datetime.max
-    elif seconds < -MAX_NUMBER:
+    if seconds < -MAX_NUMBER:
         return datetime.min
 
     while abs(seconds) > MS_WATERSHED:
@@ -56,14 +56,13 @@ def _from_unix_seconds(seconds: Union[int, float]) -> datetime:
 def _parse_timezone(value: Optional[str]) -> Union[None, int, timezone]:
     if value == "Z":
         return timezone.utc
-    elif value is not None:
+    if value is not None:
         offset_mins = int(value[-2:]) if len(value) > 3 else 0
         offset = 60 * int(value[1:3]) + offset_mins
         if value[0] == "-":
             offset = -offset
         return timezone(timedelta(minutes=offset))
-    else:
-        return None
+    return None
 
 
 def parse_datetime(value: Union[datetime, StrBytesIntFloat]) -> datetime:
@@ -86,7 +85,7 @@ def parse_datetime(value: Union[datetime, StrBytesIntFloat]) -> datetime:
     if isinstance(value, bytes):
         value = value.decode()
 
-    assert not isinstance(value, (float, int))
+    assert not isinstance(value, (float, int))  # noqa: S101
 
     match = datetime_re.match(value)
     if match is None:
@@ -113,8 +112,7 @@ def parse_date(value: Union[date, StrBytesIntFloat]) -> date:
     if isinstance(value, date):
         if isinstance(value, datetime):
             return value.date()
-        else:
-            return value
+        return value
 
     number = _get_numeric(value, "date")
     if number is not None:
@@ -123,7 +121,7 @@ def parse_date(value: Union[date, StrBytesIntFloat]) -> date:
     if isinstance(value, bytes):
         value = value.decode()
 
-    assert not isinstance(value, (float, int))
+    assert not isinstance(value, (float, int))  # noqa: S101
     match = date_re.match(value)
     if match is None:
         raise ValueError("invalid date format")

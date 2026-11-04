@@ -1,3 +1,4 @@
+import re
 import json
 from typing import Any, List, Union, cast
 from typing_extensions import Annotated
@@ -29,28 +30,30 @@ class ConcreteAsyncAPIResponse(APIResponse[httpx.Response]): ...
 
 
 def test_extract_response_type_direct_classes() -> None:
-    assert extract_response_type(BaseAPIResponse[str]) == str
-    assert extract_response_type(APIResponse[str]) == str
-    assert extract_response_type(AsyncAPIResponse[str]) == str
+    assert extract_response_type(BaseAPIResponse[str]) is str
+    assert extract_response_type(APIResponse[str]) is str
+    assert extract_response_type(AsyncAPIResponse[str]) is str
 
 
 def test_extract_response_type_direct_class_missing_type_arg() -> None:
     with pytest.raises(
         RuntimeError,
-        match="Expected type <class 'e_invoice_api._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not",
+        match=re.escape(
+            "Expected type <class 'e_invoice_api._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not"
+        ),
     ):
         extract_response_type(AsyncAPIResponse)
 
 
 def test_extract_response_type_concrete_subclasses() -> None:
-    assert extract_response_type(ConcreteBaseAPIResponse) == bytes
+    assert extract_response_type(ConcreteBaseAPIResponse) is bytes
     assert extract_response_type(ConcreteAPIResponse) == List[str]
     assert extract_response_type(ConcreteAsyncAPIResponse) == httpx.Response
 
 
 def test_extract_response_type_binary_response() -> None:
-    assert extract_response_type(BinaryAPIResponse) == bytes
-    assert extract_response_type(AsyncBinaryAPIResponse) == bytes
+    assert extract_response_type(BinaryAPIResponse) is bytes
+    assert extract_response_type(AsyncBinaryAPIResponse) is bytes
 
 
 class PydanticModel(pydantic.BaseModel): ...
@@ -68,7 +71,9 @@ def test_response_parse_mismatched_basemodel(client: EInvoice) -> None:
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from e_invoice_api import BaseModel`",
+        match=re.escape(
+            "Pydantic models must subclass our base model type, e.g. `from e_invoice_api import BaseModel`"
+        ),
     ):
         response.parse(to=PydanticModel)
 
@@ -86,7 +91,9 @@ async def test_async_response_parse_mismatched_basemodel(async_client: AsyncEInv
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from e_invoice_api import BaseModel`",
+        match=re.escape(
+            "Pydantic models must subclass our base model type, e.g. `from e_invoice_api import BaseModel`"
+        ),
     ):
         await response.parse(to=PydanticModel)
 
@@ -102,7 +109,7 @@ def test_response_parse_custom_stream(client: EInvoice) -> None:
     )
 
     stream = response.parse(to=Stream[int])
-    assert stream._cast_to == int
+    assert stream._cast_to is int
 
 
 @pytest.mark.asyncio
@@ -117,7 +124,7 @@ async def test_async_response_parse_custom_stream(async_client: AsyncEInvoice) -
     )
 
     stream = await response.parse(to=Stream[int])
-    assert stream._cast_to == int
+    assert stream._cast_to is int
 
 
 class CustomModel(BaseModel):
@@ -191,7 +198,7 @@ async def test_async_response_parse_annotated_type(async_client: AsyncEInvoice) 
 
 
 @pytest.mark.parametrize(
-    "content, expected",
+    ("content", "expected"),
     [
         ("false", False),
         ("true", True),
@@ -216,7 +223,7 @@ def test_response_parse_bool(client: EInvoice, content: str, expected: bool) -> 
 
 
 @pytest.mark.parametrize(
-    "content, expected",
+    ("content", "expected"),
     [
         ("false", False),
         ("true", True),

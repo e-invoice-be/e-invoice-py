@@ -43,12 +43,8 @@ from .attachments import (
     AsyncAttachmentsResourceWithStreamingResponse,
 )
 from ..._base_client import make_request_options
-from ...types.currency_code import CurrencyCode
-from ...types.document_type import DocumentType
-from ...types.document_state import DocumentState
 from ...types.document_response import DocumentResponse
 from ...types.document_timeline import DocumentTimeline
-from ...types.document_direction import DocumentDirection
 from ...types.document_lifecycle import DocumentLifecycle
 from ...types.ubl_document_validation import UblDocumentValidation
 from ...types.document_delete_response import DocumentDeleteResponse
@@ -56,7 +52,7 @@ from ...types.payment_detail_create_param import PaymentDetailCreateParam
 from ...types.document_attachment_create_param import DocumentAttachmentCreateParam
 from ...types.document_create_from_pdf_response import DocumentCreateFromPdfResponse
 
-__all__ = ["DocumentsResource", "AsyncDocumentsResource"]
+__all__ = ["AsyncDocumentsResource", "DocumentsResource"]
 
 
 class DocumentsResource(SyncAPIResource):
