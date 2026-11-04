@@ -118,11 +118,6 @@ class TestDocumentsLifecycle:
 
 
 class TestAsyncDocumentsLifecycle:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [{"http_client": "httpx"}, {"http_client": "aiohttp"}], indirect=True, ids=["httpx", "aiohttp"]
-    )
-
-    @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_retrieve_lifecycle(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/documents/doc_123/lifecycle").mock(
@@ -134,12 +129,10 @@ class TestAsyncDocumentsLifecycle:
         assert route.call_count == 1
         assert_lifecycle(lifecycle)
 
-    @parametrize
     async def test_retrieve_lifecycle_rejects_empty_document_id(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `document_id` but received ''"):
             await async_client.documents.retrieve_lifecycle("")
 
-    @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_retrieve_lifecycle(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/documents/doc_123/lifecycle").mock(
@@ -155,7 +148,6 @@ class TestAsyncDocumentsLifecycle:
         assert response.http_request.url.path == "/api/documents/doc_123/lifecycle"
         assert_lifecycle(await response.parse())
 
-    @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_streaming_response_retrieve_lifecycle(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice

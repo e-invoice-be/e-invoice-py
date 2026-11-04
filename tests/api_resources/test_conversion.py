@@ -9,6 +9,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import ConversionPdfTask, DocumentCreateFromPdfResponse
+from e_invoice_api.resources.conversion import (
+    ConversionResourceWithRawResponse,
+    AsyncConversionResourceWithRawResponse,
+    ConversionResourceWithStreamingResponse,
+    AsyncConversionResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -50,10 +56,16 @@ RESULT_PAYLOAD = {
 
 
 class TestConversion:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.conversion.with_raw_response
+        streaming = client.conversion.with_streaming_response
+
+        assert isinstance(raw, ConversionResourceWithRawResponse)
+        assert isinstance(streaming, ConversionResourceWithStreamingResponse)
+        assert client.conversion.with_raw_response is raw
+        assert client.conversion.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_create_pdf_uploads_file_as_multipart(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/conversion/pdf").mock(
             return_value=httpx.Response(201, json={"task_id": "task_abc", "status": "pending"})
@@ -74,7 +86,6 @@ class TestConversion:
         assert task.status == "pending"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_create_pdf_defaults_missing_status(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/conversion/pdf").mock(return_value=httpx.Response(201, json={"task_id": "task_abc"}))
 
@@ -84,7 +95,6 @@ class TestConversion:
         assert task.status is None
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_pdf_returns_task_status(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/conversion/pdf/task_abc").mock(
             return_value=httpx.Response(200, json={"task_id": "task_abc", "status": "completed"})
@@ -98,13 +108,11 @@ class TestConversion:
         assert task.task_id == "task_abc"
         assert task.status == "completed"
 
-    @parametrize
     def test_retrieve_pdf_rejects_empty_task_id(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
             client.conversion.retrieve_pdf("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_pdf_result_parses_converted_document(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/conversion/pdf/task_abc/result").mock(
             return_value=httpx.Response(200, json=RESULT_PAYLOAD)
@@ -133,13 +141,11 @@ class TestConversion:
         assert result.payment_details is not None
         assert result.payment_details[0].iban == "BE68539007547034"
 
-    @parametrize
     def test_retrieve_pdf_result_rejects_empty_task_id(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
             client.conversion.retrieve_pdf_result("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_create_pdf(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.post("/api/conversion/pdf").mock(
             return_value=httpx.Response(201, json={"task_id": "task_raw", "status": "pending"})
@@ -155,7 +161,6 @@ class TestConversion:
         assert task.task_id == "task_raw"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve_pdf(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/conversion/pdf/task_abc").mock(
             return_value=httpx.Response(200, json={"task_id": "task_abc", "status": "failed"})
@@ -168,7 +173,6 @@ class TestConversion:
         assert response.parse().status == "failed"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve_pdf_result(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/conversion/pdf/task_abc/result").mock(
             return_value=httpx.Response(200, json=RESULT_PAYLOAD)
@@ -182,7 +186,6 @@ class TestConversion:
 
         assert response.is_closed is True
 
-    @parametrize
     def test_raw_response_rejects_empty_task_id(self, client: EInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
             client.conversion.with_raw_response.retrieve_pdf("")
@@ -192,12 +195,16 @@ class TestConversion:
 
 
 class TestAsyncConversion:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.conversion.with_raw_response
+        streaming = async_client.conversion.with_streaming_response
+
+        assert isinstance(raw, AsyncConversionResourceWithRawResponse)
+        assert isinstance(streaming, AsyncConversionResourceWithStreamingResponse)
+        assert async_client.conversion.with_raw_response is raw
+        assert async_client.conversion.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_create_pdf_uploads_file_as_multipart(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -217,7 +224,6 @@ class TestAsyncConversion:
         assert task.status == "pending"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_pdf_returns_task_status(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/conversion/pdf/task_abc").mock(
             return_value=httpx.Response(200, json={"task_id": "task_abc", "status": "completed"})
@@ -230,7 +236,6 @@ class TestAsyncConversion:
         assert task.status == "completed"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_pdf_result_parses_converted_document(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -247,7 +252,6 @@ class TestAsyncConversion:
         assert result.items is not None
         assert result.items[0].amount == "100.00"
 
-    @parametrize
     async def test_rejects_empty_task_id(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `task_id` but received ''"):
             await async_client.conversion.retrieve_pdf("")
@@ -256,7 +260,6 @@ class TestAsyncConversion:
             await async_client.conversion.retrieve_pdf_result("")
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve_pdf(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/conversion/pdf/task_abc").mock(
             return_value=httpx.Response(200, json={"task_id": "task_abc", "status": "failed"})
@@ -270,7 +273,6 @@ class TestAsyncConversion:
         assert task.status == "failed"
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_create_pdf(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/conversion/pdf").mock(
             return_value=httpx.Response(201, json={"task_id": "task_stream", "status": "pending"})

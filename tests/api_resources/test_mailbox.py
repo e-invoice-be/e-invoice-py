@@ -18,6 +18,12 @@ from e_invoice_api._response import (
     AsyncStreamedBinaryAPIResponse,
 )
 from e_invoice_api.pagination import SyncDocumentsNumberPage, AsyncDocumentsNumberPage
+from e_invoice_api.resources.mailbox import (
+    MailboxResourceWithRawResponse,
+    AsyncMailboxResourceWithRawResponse,
+    MailboxResourceWithStreamingResponse,
+    AsyncMailboxResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -54,6 +60,15 @@ PDF_BYTES = b"%PDF-1.7\n\x00\x01\xff binary body"
 
 
 class TestMailbox:
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.mailbox.with_raw_response
+        streaming = client.mailbox.with_streaming_response
+
+        assert isinstance(raw, MailboxResourceWithRawResponse)
+        assert isinstance(streaming, MailboxResourceWithStreamingResponse)
+        assert client.mailbox.with_raw_response is raw
+        assert client.mailbox.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     def test_retrieve_parses_inbound_email(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/mailbox/ie_01").mock(return_value=httpx.Response(200, json=FULL_EMAIL))
@@ -300,6 +315,15 @@ class TestMailbox:
 
 
 class TestAsyncMailbox:
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.mailbox.with_raw_response
+        streaming = async_client.mailbox.with_streaming_response
+
+        assert isinstance(raw, AsyncMailboxResourceWithRawResponse)
+        assert isinstance(streaming, AsyncMailboxResourceWithStreamingResponse)
+        assert async_client.mailbox.with_raw_response is raw
+        assert async_client.mailbox.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     async def test_retrieve_parses_inbound_email(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/mailbox/ie_01").mock(return_value=httpx.Response(200, json=FULL_EMAIL))

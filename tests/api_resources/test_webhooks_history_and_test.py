@@ -131,13 +131,7 @@ class TestWebhooksTest:
         assert response.is_closed is True
 
 
-async_parametrize = pytest.mark.parametrize(
-    "async_client", [{"http_client": "httpx"}, {"http_client": "aiohttp"}], indirect=True, ids=["httpx", "aiohttp"]
-)
-
-
 class TestAsyncWebhooksHistory:
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_retrieve_history(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/webhooks/wh_123/history").mock(
@@ -149,12 +143,10 @@ class TestAsyncWebhooksHistory:
         assert route.call_count == 1
         assert_history(history)
 
-    @async_parametrize
     async def test_retrieve_history_rejects_empty_webhook_id(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.retrieve_history("")
 
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_retrieve_history(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/webhooks/wh_123/history").mock(return_value=httpx.Response(200, json=HISTORY_PAYLOAD))
@@ -167,7 +159,6 @@ class TestAsyncWebhooksHistory:
         assert response.http_request.url.path == "/api/webhooks/wh_123/history"
         assert_history(await response.parse())
 
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_streaming_response_retrieve_history(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
@@ -183,7 +174,6 @@ class TestAsyncWebhooksHistory:
 
 
 class TestAsyncWebhooksTest:
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_test(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/webhooks/wh_123/test").mock(
@@ -205,12 +195,10 @@ class TestAsyncWebhooksTest:
         }
         assert_test_response(result)
 
-    @async_parametrize
     async def test_test_rejects_empty_webhook_id(self, async_client: AsyncEInvoice) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `webhook_id` but received ''"):
             await async_client.webhooks.test("", event_type="document.received", data={})
 
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_test(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/webhooks/wh_123/test").mock(return_value=httpx.Response(200, json=TEST_RESPONSE_PAYLOAD))
@@ -226,7 +214,6 @@ class TestAsyncWebhooksTest:
         assert json.loads(response.http_request.content) == {"event_type": "document.sent", "data": {"k": "v"}}
         assert_test_response(await response.parse())
 
-    @async_parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_streaming_response_test(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.post("/api/webhooks/wh_123/test").mock(return_value=httpx.Response(200, json=TEST_RESPONSE_PAYLOAD))

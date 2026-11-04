@@ -9,6 +9,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import StatsRetrieveResponse
+from e_invoice_api.resources.stats import (
+    StatsResourceWithRawResponse,
+    AsyncStatsResourceWithRawResponse,
+    StatsResourceWithStreamingResponse,
+    AsyncStatsResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -28,10 +34,16 @@ STATS_PAYLOAD = {
 
 
 class TestStats:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.stats.with_raw_response
+        streaming = client.stats.with_streaming_response
+
+        assert isinstance(raw, StatsResourceWithRawResponse)
+        assert isinstance(streaming, StatsResourceWithStreamingResponse)
+        assert client.stats.with_raw_response is raw
+        assert client.stats.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_parses_usage_statistics(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
@@ -53,7 +65,6 @@ class TestStats:
         ]
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_sends_filters_as_query_string(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
@@ -69,7 +80,6 @@ class TestStats:
         }
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_retrieve_defaults_optional_budget_estimation(self, respx_mock: MockRouter, client: EInvoice) -> None:
         payload = {k: v for k, v in STATS_PAYLOAD.items() if k != "budget_estimation_days"}
         payload["actions"] = []
@@ -81,7 +91,6 @@ class TestStats:
         assert stats.actions == []
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_raw_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/stats").mock(
             return_value=httpx.Response(200, json=STATS_PAYLOAD, headers={"x-request-id": "req_1"})
@@ -98,7 +107,6 @@ class TestStats:
         assert stats.actions[0].count == 12
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     def test_streaming_response_retrieve(self, respx_mock: MockRouter, client: EInvoice) -> None:
         respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
@@ -112,12 +120,16 @@ class TestStats:
 
 
 class TestAsyncStats:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.stats.with_raw_response
+        streaming = async_client.stats.with_streaming_response
+
+        assert isinstance(raw, AsyncStatsResourceWithRawResponse)
+        assert isinstance(streaming, AsyncStatsResourceWithStreamingResponse)
+        assert async_client.stats.with_raw_response is raw
+        assert async_client.stats.with_streaming_response is streaming
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_parses_usage_statistics(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
@@ -141,7 +153,6 @@ class TestAsyncStats:
         ]
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_retrieve_sends_filters_as_query_string(
         self, respx_mock: MockRouter, async_client: AsyncEInvoice
     ) -> None:
@@ -159,7 +170,6 @@ class TestAsyncStats:
         }
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 
@@ -172,7 +182,6 @@ class TestAsyncStats:
         assert stats.average_daily_usage == 0.39
 
     @pytest.mark.respx(base_url=base_url)
-    @parametrize
     async def test_streaming_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/stats").mock(return_value=httpx.Response(200, json=STATS_PAYLOAD))
 

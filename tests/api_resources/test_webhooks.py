@@ -10,6 +10,12 @@ from respx import MockRouter
 
 from e_invoice_api import EInvoice, AsyncEInvoice
 from e_invoice_api.types import WebhookResponse, WebhookDeleteResponse
+from e_invoice_api.resources.webhooks import (
+    WebhooksResourceWithRawResponse,
+    AsyncWebhooksResourceWithRawResponse,
+    WebhooksResourceWithStreamingResponse,
+    AsyncWebhooksResourceWithStreamingResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -67,6 +73,15 @@ def assert_request(request: httpx.Request, method: str, path: str, body: Any = N
 
 
 class TestWebhooks:
+    def test_resource_exposes_wrapper_properties(self, client: EInvoice) -> None:
+        raw = client.webhooks.with_raw_response
+        streaming = client.webhooks.with_streaming_response
+
+        assert isinstance(raw, WebhooksResourceWithRawResponse)
+        assert isinstance(streaming, WebhooksResourceWithStreamingResponse)
+        assert client.webhooks.with_raw_response is raw
+        assert client.webhooks.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     def test_create_with_required_params_only(self, respx_mock: MockRouter, client: EInvoice) -> None:
         route = respx_mock.post("/api/webhooks/").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
@@ -319,6 +334,15 @@ class TestWebhooks:
 
 
 class TestAsyncWebhooks:
+    def test_resource_exposes_wrapper_properties(self, async_client: AsyncEInvoice) -> None:
+        raw = async_client.webhooks.with_raw_response
+        streaming = async_client.webhooks.with_streaming_response
+
+        assert isinstance(raw, AsyncWebhooksResourceWithRawResponse)
+        assert isinstance(streaming, AsyncWebhooksResourceWithStreamingResponse)
+        assert async_client.webhooks.with_raw_response is raw
+        assert async_client.webhooks.with_streaming_response is streaming
+
     @pytest.mark.respx(base_url=base_url)
     async def test_create_with_required_params_only(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.post("/api/webhooks/").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
@@ -396,6 +420,15 @@ class TestAsyncWebhooks:
         assert_webhook(webhook)
 
     @pytest.mark.respx(base_url=base_url)
+    async def test_retrieve_defaults_enabled_to_none(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        respx_mock.get("/api/webhooks/wh_456").mock(return_value=httpx.Response(200, json=WEBHOOK_WITHOUT_ENABLED))
+
+        webhook = await async_client.webhooks.retrieve("wh_456")
+
+        assert_webhook(webhook, WEBHOOK_WITHOUT_ENABLED)
+        assert webhook.enabled is None
+
+    @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_retrieve(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         respx_mock.get("/api/webhooks/wh_123").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
 
@@ -430,6 +463,14 @@ class TestAsyncWebhooks:
         assert_webhook(webhook)
 
     @pytest.mark.respx(base_url=base_url)
+    async def test_update_sends_only_given_fields(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        route = respx_mock.put("/api/webhooks/wh_123").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
+
+        await async_client.webhooks.update("wh_123", enabled=False)
+
+        assert_request(route.calls.last.request, "PUT", "/api/webhooks/wh_123", {"enabled": False})
+
+    @pytest.mark.respx(base_url=base_url)
     async def test_update_with_all_params(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
         route = respx_mock.put("/api/webhooks/wh_123").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
 
@@ -442,6 +483,19 @@ class TestAsyncWebhooks:
             "PUT",
             "/api/webhooks/wh_123",
             {"enabled": True, "events": ["document.sent"], "url": "https://example.com/new"},
+        )
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_update_sends_explicit_nulls(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        route = respx_mock.put("/api/webhooks/wh_123").mock(return_value=httpx.Response(200, json=WEBHOOK_PAYLOAD))
+
+        await async_client.webhooks.update("wh_123", enabled=None, events=None, url=None)
+
+        assert_request(
+            route.calls.last.request,
+            "PUT",
+            "/api/webhooks/wh_123",
+            {"enabled": None, "events": None, "url": None},
         )
 
     @pytest.mark.respx(base_url=base_url)
@@ -477,6 +531,12 @@ class TestAsyncWebhooks:
         assert route.call_count == 1
         assert_request(route.calls.last.request, "GET", "/api/webhooks/")
         assert_webhook_list(webhooks)
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_list_empty(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        respx_mock.get("/api/webhooks/").mock(return_value=httpx.Response(200, json=[]))
+
+        assert await async_client.webhooks.list() == []
 
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_list(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
