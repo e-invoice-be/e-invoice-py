@@ -114,9 +114,15 @@ class AsyncJsonPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
 
 
 def _serve_url_pages(request: httpx.Request) -> httpx.Response:
-    if request.url.params.get("cursor") == "two":
+    # The cursor check stops a client that ignores the next path from requesting page one forever.
+    if request.url.path == "/items/more" or request.url.params.get("cursor") == "two":
         return httpx.Response(200, json={"items": [{"id": "b"}], "next_url": None})
-    return httpx.Response(200, json={"items": [{"id": "a"}], "next_url": f"{base_url}/items?cursor=two"})
+    return httpx.Response(200, json={"items": [{"id": "a"}], "next_url": f"{base_url}/items/more?cursor=two"})
+
+
+def _mock_url_pages(respx_mock: MockRouter) -> None:
+    respx_mock.get("/items").mock(side_effect=_serve_url_pages)
+    respx_mock.get("/items/more").mock(side_effect=_serve_url_pages)
 
 
 def _serve_json_pages(request: httpx.Request) -> httpx.Response:
@@ -132,6 +138,10 @@ def _sent_bodies(respx_mock: MockRouter) -> List[Any]:
 
 def _sent_queries(respx_mock: MockRouter) -> List[Dict[str, str]]:
     return [dict(call.request.url.params) for call in cast(Any, respx_mock.calls)]
+
+
+def _sent_paths(respx_mock: MockRouter) -> List[str]:
+    return [call.request.url.path for call in cast(Any, respx_mock.calls)]
 
 
 class TestRetryDecisions:
@@ -227,13 +237,14 @@ class TestAsyncRetryDecisions:
 class TestPageInfoPagination:
     @pytest.mark.respx(base_url=base_url)
     def test_url_based_next_page(self, client: EInvoice, respx_mock: MockRouter) -> None:
-        respx_mock.get("/items").mock(side_effect=_serve_url_pages)
+        _mock_url_pages(respx_mock)
 
         page = client.get_api_list("/items", model=Item, page=SyncUrlPage[Item], options={"params": {"limit": 1}})
         ids = [item.id for item in page]
 
         assert ids == ["a", "b"]
-        # the next-page url's query is merged with the original params
+        # the next request uses the link's path, and the link's query is merged with the original params
+        assert _sent_paths(respx_mock) == ["/items", "/items/more"]
         assert _sent_queries(respx_mock) == [{"limit": "1"}, {"limit": "1", "cursor": "two"}]
 
     @pytest.mark.respx(base_url=base_url)
@@ -291,7 +302,7 @@ class TestPageInfoPagination:
 class TestAsyncPageInfoPagination:
     @pytest.mark.respx(base_url=base_url)
     async def test_url_based_next_page(self, async_client: AsyncEInvoice, respx_mock: MockRouter) -> None:
-        respx_mock.get("/items").mock(side_effect=_serve_url_pages)
+        _mock_url_pages(respx_mock)
 
         page = async_client.get_api_list(
             "/items", model=Item, page=AsyncUrlPage[Item], options={"params": {"limit": 1}}
@@ -299,6 +310,7 @@ class TestAsyncPageInfoPagination:
         ids = [item.id async for item in page]
 
         assert ids == ["a", "b"]
+        assert _sent_paths(respx_mock) == ["/items", "/items/more"]
         assert _sent_queries(respx_mock) == [{"limit": "1"}, {"limit": "1", "cursor": "two"}]
 
     @pytest.mark.respx(base_url=base_url)
