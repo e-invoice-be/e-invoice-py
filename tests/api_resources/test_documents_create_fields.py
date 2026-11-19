@@ -120,6 +120,40 @@ def test_create_from_pdf_response_parses_new_fields() -> None:
     assert second.date is None
 
 
+# A VATEX code and a unit of measure code that the API added after the first 62 and 1031 values.
+NEW_CODE_PARAMS: Dict[str, Any] = {
+    "vatex": "VATEX-FR-CGI275",
+    "items": [{"description": "Electricity", "quantity": 12, "unit": "KWH"}],
+}
+
+NEW_CODE_PAYLOAD: Dict[str, Any] = {
+    "id": "doc_456",
+    "created_at": "2026-11-19T08:30:00Z",
+    "vatex": "VATEX-FR-CGI275",
+    "items": [{"description": "Electricity", "quantity": "12", "unit": "KWH"}],
+}
+
+
+def assert_new_codes(document: DocumentResponse) -> None:
+    assert isinstance(document, DocumentResponse)
+    assert document.vatex == "VATEX-FR-CGI275"
+    assert document.items is not None
+    assert [item.unit for item in document.items] == ["KWH"]
+    dumped = document.to_dict()
+    assert dumped["vatex"] == "VATEX-FR-CGI275"
+    assert dumped["items"] == NEW_CODE_PAYLOAD["items"]
+
+
+def test_create_from_pdf_response_parses_new_codes() -> None:
+    payload = {key: value for key, value in NEW_CODE_PAYLOAD.items() if key not in ("id", "created_at")}
+
+    document = parse_obj(DocumentCreateFromPdfResponse, payload)
+
+    assert document.vatex == "VATEX-FR-CGI275"
+    assert document.items is not None
+    assert document.items[0].unit == "KWH"
+
+
 class TestDocumentsCreateFields:
     @pytest.mark.respx(base_url=base_url)
     def test_create_with_new_params(self, respx_mock: MockRouter, client: EInvoice) -> None:
@@ -153,6 +187,27 @@ class TestDocumentsCreateFields:
         assert route.call_count == 1
         assert route.calls.last.request.url.params["email"] == "billing@example.com"
 
+    @pytest.mark.respx(base_url=base_url)
+    def test_create_with_new_codes(self, respx_mock: MockRouter, client: EInvoice) -> None:
+        route = respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=NEW_CODE_PAYLOAD))
+
+        document = client.documents.create(**NEW_CODE_PARAMS)
+
+        assert route.call_count == 1
+        assert json.loads(route.calls.last.request.content) == NEW_CODE_PARAMS
+        assert_new_codes(document)
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_validate_json_with_new_codes(self, respx_mock: MockRouter, client: EInvoice) -> None:
+        route = respx_mock.post("/api/validate/json").mock(
+            return_value=httpx.Response(200, json={"id": "doc_456", "is_valid": True, "issues": []})
+        )
+
+        client.validate.validate_json(**NEW_CODE_PARAMS)
+
+        assert route.call_count == 1
+        assert json.loads(route.calls.last.request.content) == NEW_CODE_PARAMS
+
 
 class TestAsyncDocumentsCreateFields:
     @pytest.mark.respx(base_url=base_url)
@@ -175,3 +230,24 @@ class TestAsyncDocumentsCreateFields:
 
         assert route.call_count == 1
         assert json.loads(route.calls.last.request.content) == EXPECTED_BODY
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_create_with_new_codes(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        route = respx_mock.post("/api/documents/").mock(return_value=httpx.Response(200, json=NEW_CODE_PAYLOAD))
+
+        document = await async_client.documents.create(**NEW_CODE_PARAMS)
+
+        assert route.call_count == 1
+        assert json.loads(route.calls.last.request.content) == NEW_CODE_PARAMS
+        assert_new_codes(document)
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_validate_json_with_new_codes(self, respx_mock: MockRouter, async_client: AsyncEInvoice) -> None:
+        route = respx_mock.post("/api/validate/json").mock(
+            return_value=httpx.Response(200, json={"id": "doc_456", "is_valid": True, "issues": []})
+        )
+
+        await async_client.validate.validate_json(**NEW_CODE_PARAMS)
+
+        assert route.call_count == 1
+        assert json.loads(route.calls.last.request.content) == NEW_CODE_PARAMS
