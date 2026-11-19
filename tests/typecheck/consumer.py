@@ -49,8 +49,10 @@ def sync_usage() -> None:
                 "quantity": 2,
                 "price_base_quantity": 1,
                 "unit_price": "100.00",
+                "unit": "KWH",
             }
         ],
+        vatex="VATEX-FR-CGI275",
     )
     assert_type(document, DocumentResponse)
     assert_type(document.id, str)
@@ -84,7 +86,12 @@ def sync_usage() -> None:
         DocumentResponse,
     )
 
-    validation = client.validate.validate_json(document_type="INVOICE", invoice_id="INV-1")
+    validation = client.validate.validate_json(
+        document_type="INVOICE",
+        invoice_id="INV-1",
+        items=[{"description": "Electricity", "unit": "KWH"}],
+        vatex="VATEX-EU-153",
+    )
     assert_type(validation, UblDocumentValidation)
     assert_type(validation.is_valid, bool)
     for issue in validation.issues:
